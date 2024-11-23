@@ -566,7 +566,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2050924840}
         m_TargetAssemblyTypeName: 
-        m_MethodName: PanelBtClick
+        m_MethodName: LockPanelBtClick
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1127,7 +1127,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 106567817}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 112175434}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: OnLockBtClk
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &109603098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1308,6 +1320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinText: {fileID: 350058963}
+  lockText: {fileID: 1571175902}
 --- !u!1 &121319738
 GameObject:
   m_ObjectHideFlags: 0
@@ -4051,7 +4064,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2050924840}
         m_TargetAssemblyTypeName: 
-        m_MethodName: PanelBtClick
+        m_MethodName: LockPanelBtClick
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6754,7 +6767,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 995064538}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 112175434}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: OnLockBtClk
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1001380390
 GameObject:
   m_ObjectHideFlags: 0
@@ -6842,7 +6867,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2050924840}
         m_TargetAssemblyTypeName: 
-        m_MethodName: PanelBtClick
+        m_MethodName: LockPanelBtClick
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10182,7 +10207,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1524164410}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 112175434}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: OnLockBtClk
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1524173262
 GameObject:
   m_ObjectHideFlags: 0
@@ -10583,7 +10620,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
+  m_spriteAsset: {fileID: 11400000, guid: 160f962d48aa2f141897e8ca953fb659, type: 2}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class AchiveManager : MonoBehaviour
@@ -10,73 +11,39 @@ public class AchiveManager : MonoBehaviour
 
     public enum Achive
     {
-        UnlockWorkShop, UnlockCards, UnlockLabs
+        UnlockWorkShop, 
+        UnlockCards,
+        UnlockLabs,
+        Length
     }
-
-    Achive[] achives;
 
     private void Awake()
     {
-        // Enum.GetValue -> 주어진 열거형의 모든 데이터를 가져오는 함수
-        achives = (Achive[])Enum.GetValues(typeof(Achive));
-
-        if (!PlayerPrefs.HasKey("MyData")) Init();
-    }
-
-    void Init()
-    {
-        PlayerPrefs.SetInt("MyData", 1);
-
-        foreach (Achive achive in achives)
+        for (int i = 0; i < (int)Achive.Length; i++)
         {
-            PlayerPrefs.SetInt(achive.ToString(), 0);
-        }
-        // 해금이 안 되었으므로 0으로 초기화
-        //PlayerPrefs.SetInt("UnlockWorkShop", 0);
-        //PlayerPrefs.SetInt("UnlockCards", 0);
-        //PlayerPrefs.SetInt("UnlockLabs", 0);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        UnlockPanel();
-    }
-
-    void UnlockPanel()
-    {
-        for (int i = 0; i < lockPanels.Length; i++)
-        {
-            string achiveName = achives[i].ToString();
-            bool isUnlock = PlayerPrefs.GetInt(achiveName) == 1;
-
-            lockPanels[i].SetActive(!isUnlock);
-            unlockPanels[i].SetActive(isUnlock);
+            CheckAchive((Achive)i);
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        foreach (Achive achive in achives)
-        {
-            CheckAchive(achive);
-        }
-    }
-
+    /// <summary>
+    /// 업적 체크해주는 함수
+    /// </summary>
+    /// <param name="achive">체크할 업적</param>
     void CheckAchive(Achive achive)
     {
-        bool isAchive = false;
+        bool winAchive = false;
+
+        int achiveIndex = (int)achive;
 
         switch (achive)
         {
             case Achive.UnlockWorkShop:
-                // 10웨이브 이상 달성 시 언락
-                isAchive = PlayData.Instance.BestWave > 10;
+                if (PlayDataManager.Instance.BestWave >= 10)
+                    winAchive = true;
                 break;
             case Achive.UnlockCards:
-                // 획득 코인이 100 이상 시 언락
-                //isAchive = GameManager.instance.earnCoin >= 100;
+                if (PlayDataManager.Instance.playData.totalEarnCoin >= 100)
+                    winAchive = true;
                 break;
             case Achive.UnlockLabs:
                 //isAchive =
@@ -84,5 +51,27 @@ public class AchiveManager : MonoBehaviour
             default:
                 break;
         }
+        if (winAchive)
+        {
+            ChangeAchive(achiveIndex);
+        }
+    }
+
+    //업적값을 바꾸는 함수
+    //매개변수 어떤업적인가?
+    /// <summary>
+    /// 달성으로 바꿔주는 함수
+    /// </summary>
+    /// <param name="index">바꿔줄 업적(index)</param>
+    void ChangeAchive(int index)
+    {
+        // index번째 업적이 달성돼있다면 return;
+        if ((PlayDataManager.Instance.playData.achive >> index) % 2 == 1)
+            return;
+
+        PlayDataManager.Instance.playData.achive += 1 << index;
+
+        lockPanels[index].SetActive(false);
+        unlockPanels[index].SetActive(true);
     }
 }

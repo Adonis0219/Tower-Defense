@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Transform wavePoint;
 
-    int wave;
+    int wave = 1;
 
     [HideInInspector]
     public float waveBonusDollar = 0;
@@ -130,9 +130,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        PlayData.Instance.LoadData();
+        PlayDataManager.Instance.LoadData();
 
-        CurCoin = PlayData.Instance.goodsData.coin;
+        CurCoin = PlayDataManager.Instance.playData.coin;
         // 게임 시작 시 초기 코인에 현재 코인 초기화
         initCoin = curCoin;
 
@@ -190,7 +190,7 @@ public class GameManager : MonoBehaviour
 
             Vector3 spawnPos = circlePos * 7 + player.transform.position;
 
-            spawnIndex = waveDatas[Wave].spawnIndex;
+            spawnIndex = waveDatas[Wave-1].spawnIndex;
 
             Transform tempEnemy = PoolManager.instance.GetPool((PoolObejectType)spawnIndex).transform;
 
@@ -219,8 +219,7 @@ public class GameManager : MonoBehaviour
             case ButtonType.exit:
                 puasePanel.SetActive(false);
                 ResultPanelSetActive(false);
-                SceneManager.LoadScene(0);
-                
+                ChangeScene(0);
                 break;
             case ButtonType.resume:
                 puasePanel.SetActive(false);
@@ -246,11 +245,12 @@ public class GameManager : MonoBehaviour
         {
             earnCoin = CurCoin - initCoin;
             TextMeshProUGUI[] texts = resultPanel.GetComponentsInChildren<TextMeshProUGUI>();
-            texts[0].text = "티어 1\n웨이브 " + Wave + "\n최고 웨이브 : 10";
-            texts[1].text = "코인 획득량 : " + earnCoin + "<sprite=12>";
+            // 현재 웨이브가 최고기록을 넘겼는가를 검사
+            PlayDataManager.Instance.BestWave = Wave;
+            PlayDataManager.Instance.playData.totalEarnCoin += earnCoin;
 
-            // 현재 웨이브가 최고기록을 넘겼다면
-            PlayData.Instance.BestWave = Wave;
+            texts[0].text = "티어 1\n웨이브 " + Wave + "\n최고 웨이브 : " + PlayDataManager.Instance.BestWave;
+            texts[1].text = "코인 획득량 : " + earnCoin + "<sprite=12>";
         }
 
         resultPanel.SetActive(isActive);
@@ -299,7 +299,7 @@ public class GameManager : MonoBehaviour
 
     void ChangeScene(int sceneIndex)
     {
-        PlayData.Instance.SaveData(CurCoin);
+        PlayDataManager.Instance.SaveData(CurCoin);
         SceneManager.LoadScene(sceneIndex);
     }
 

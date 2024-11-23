@@ -7724,6 +7724,16 @@ MonoBehaviour:
     spawnIndex: 2
   - spawnTime: 1
     spawnIndex: 3
+  - spawnTime: 1
+    spawnIndex: 3
+  - spawnTime: 1
+    spawnIndex: 3
+  - spawnTime: 1
+    spawnIndex: 3
+  - spawnTime: 1
+    spawnIndex: 3
+  - spawnTime: 1
+    spawnIndex: 3
   wavePoint: {fileID: 206747260}
   waveBonusDollar: 0
   waveTime: 10

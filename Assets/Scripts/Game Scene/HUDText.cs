@@ -33,7 +33,7 @@ public class HUDText : MonoBehaviour
                 myText.text = GameManager.instance.player.Damage.ToString();
                 break;
             case InfoType.Wave:
-                myText.text = GameManager.instance.Wave + 1 + "웨이브";
+                myText.text = GameManager.instance.Wave + "웨이브";
                 break;
             case InfoType.EnemyHealth:
                 break;
