@@ -2570,7 +2570,7 @@ MonoBehaviour:
   regenHp: 0
   def: 0
   absDef: 0
-  damage: 10
+  damage: 3
   critChance: 1
   critFactor: 1.2
   atkSpd: 1

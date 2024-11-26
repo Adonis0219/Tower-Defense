@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEditor;
+using System.Security.Cryptography;
+using UnityEngine.UIElements;
 
 public class MAtkUpgradeButton : MonoBehaviour
 {
@@ -11,7 +13,8 @@ public class MAtkUpgradeButton : MonoBehaviour
         데미지,
         공격속도,
         치명타확률,
-        치명타계수
+        치명타계수,
+        Length
     }   
 
     [SerializeField]
@@ -23,6 +26,8 @@ public class MAtkUpgradeButton : MonoBehaviour
     [SerializeField]
     float upFactor;
 
+    int[] coinLevel = new int[(int)UpgradeType.Length];
+
     [Header("# TextObjects")]
     [SerializeField]
     TextMeshProUGUI upNameText;
@@ -30,19 +35,18 @@ public class MAtkUpgradeButton : MonoBehaviour
     TextMeshProUGUI curValueText;
     [SerializeField]
     TextMeshProUGUI costText;
-
+   
     private void Update()
     {
-        costText.text = "$" + upCost;
+        costText.text = "<sprite=12>" + upCost;
 
         switch (upType)
         {
             case UpgradeType.데미지:
-                //curValueText.text = "" + 3 * (PlayData.instance.goodsData.atkCoinLevels[1] + 1);
-                //curValueText.text = 3(기본 데미지) + mUpLevel * 3;
+                curValueText.text = (3 * (coinLevel[(int)upType]+1)).ToString();
                 break;
             case UpgradeType.공격속도:
-                //curValueText.text = GameManager.instance.player.atkSpd.ToString();
+                curValueText.text = (1 + .05f * coinLevel[(int)upType]).ToString("F2");
                 break;
             case UpgradeType.치명타확률:
                 //curValueText.text = GameManager.instance.player.critChance.ToString("F2") + "%";
@@ -55,30 +59,41 @@ public class MAtkUpgradeButton : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 업그레이드 버튼의 기본 데이터를 Set해주는 함수
+    /// </summary>
+    /// <param name="name">버튼의 이름</param>
+    /// <param name="cost">버튼의 비용</param>
+    /// <param name="factor">버튼의 배율</param>
     public void SetData(string name, int cost, float factor)
     {
         upNameText.text = name;
         upCost = cost;
         upFactor = factor;
 
-        costText.text = "$" + cost;       
+        costText.text = "$" + cost;
+
+        for (int i = 0; i < coinLevel.Length; i++)
+        {
+            coinLevel[i] = PlayDataManager.Instance.playData.atkCoinLevels[(int)upType];
+        }
     }
 
     public void OnUpBtClk()
     {
-        if (GameManager.instance.CurDollar >= upCost)
+        if (PlayDataManager.Instance.playData.curCoin >= upCost)
         {
-            GameManager.instance.CurDollar -= upCost;
+            PlayDataManager.Instance.playData.curCoin -= upCost;
 
             switch (upType)
             {
                 case UpgradeType.데미지:
-                    GameManager.instance.player.Damage += 3;
+                    coinLevel[(int)upType] += 1;
                     // 업그레이드 비용 .2배씩 올려주기
                     upCost = Mathf.RoundToInt(upCost * upFactor);
                     break;
                 case UpgradeType.공격속도:
-                    GameManager.instance.player.atkSpd += .05f;
+                    coinLevel[(int)upType] += 1;
                     upCost = Mathf.RoundToInt(upCost * upFactor);
                     break;
                 case UpgradeType.치명타확률:
@@ -95,7 +110,7 @@ public class MAtkUpgradeButton : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GameManager.instance.LackDollar());
+            //StartCoroutine(GameManager.instance.LackDollar());
         }
     }
 }

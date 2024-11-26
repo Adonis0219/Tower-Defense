@@ -19,7 +19,7 @@ public class MGameManager : MonoBehaviour
 
     private void Start()
     {
-        coinText.text = PlayDataManager.Instance.playData.coin.ToString();        
+        coinText.text = PlayDataManager.Instance.playData.curCoin.ToString();        
     }
 
     public void OnLockBtClk(int index)

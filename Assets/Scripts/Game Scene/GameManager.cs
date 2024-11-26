@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
     {
         PlayDataManager.Instance.LoadData();
 
-        CurCoin = PlayDataManager.Instance.playData.coin;
+        CurCoin = PlayDataManager.Instance.playData.curCoin;
         // 게임 시작 시 초기 코인에 현재 코인 초기화
         initCoin = curCoin;
 

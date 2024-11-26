@@ -11,7 +11,8 @@ public class AtkUpgradeButton : MonoBehaviour
         데미지,
         공격속도,
         치명타확률,
-        치명타계수
+        치명타계수,
+        Length
     }   
 
     [SerializeField]
@@ -23,6 +24,8 @@ public class AtkUpgradeButton : MonoBehaviour
     [SerializeField]
     float upFactor;
 
+    int[] dollarLevel = new int[(int)UpgradeType.Length];
+
     [Header("# TextObjects")]
     [SerializeField]
     TextMeshProUGUI upNameText;
@@ -31,6 +34,14 @@ public class AtkUpgradeButton : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI costText;
 
+    private void Start()
+    {
+        for (int i = 0; i < dollarLevel.Length; i++)
+        {
+            dollarLevel[i] = 0;
+        }
+    }
+
     private void Update()
     {
         costText.text = "$" + upCost;
@@ -38,11 +49,10 @@ public class AtkUpgradeButton : MonoBehaviour
         switch (upType)
         {
             case UpgradeType.데미지:
-                curValueText.text = GameManager.instance.player.Damage.ToString();
-                //curValueText.text = 3(기본 데미지) + (mUpLevel + upLevel) * 3; 
+                //curValueText.text = (GameManager.instance.player.Damage + 3 * (GameManager.instance.atkCoinLevel[(int)upType]+ dollarLevel[(int)upType])).ToString();                
                 break;
-            case UpgradeType.공격속도:
-                curValueText.text = GameManager.instance.player.atkSpd.ToString();
+            case UpgradeType.공격속도:              
+                //curValueText.text = (GameManager.instance.player.atkSpd + .05f *(GameManager.instance.atkCoinLevel[(int)upType] + dollarLevel[(int)upType])) .ToString();
                 break;
             case UpgradeType.치명타확률:
                 curValueText.text = GameManager.instance.player.critChance.ToString("F2") + "%";
@@ -62,7 +72,7 @@ public class AtkUpgradeButton : MonoBehaviour
         upCost = cost;
         upFactor = factor;
 
-        costText.text = "$" + cost;       
+        costText.text = "$" + cost;
     }
 
     public void OnUpBtClk()

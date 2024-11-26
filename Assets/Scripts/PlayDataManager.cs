@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class PlayData
 {
-    public float coin = 0;
+    public float curCoin = 0;
     public int dia = 0;
     public int bestWave = 0;
     public int achive = 0;
     // 메인화면의 판넬 해제를 위한 총 벌어들인 코인 수
     public float totalEarnCoin = 0;
-    //public int[] atkCoinLevels;
+    // 공격 업그레이드 타입의 개수만큼 배열 
+    public int[] atkCoinLevels = new int[10] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 }
 
 
@@ -65,7 +66,6 @@ public class PlayDataManager : MonoBehaviour
 
     private void Awake()
     {
-
         if( instance == null)
         {
             instance = this;
@@ -98,7 +98,7 @@ public class PlayDataManager : MonoBehaviour
 
     public void SaveData(float coin)
     {
-        playData.coin = coin;
+        playData.curCoin = coin;
 
         string saveJD = JsonUtility.ToJson(playData);
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);
