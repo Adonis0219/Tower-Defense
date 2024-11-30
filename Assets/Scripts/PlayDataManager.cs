@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayData
 {
-    public float curCoin = 0;
+    // 플레이어가 가진 코인수
+    public int haveCoin = 0;
+
     public int dia = 0;
     public int bestWave = 0;
     public int achive = 0;
@@ -64,6 +68,18 @@ public class PlayDataManager : MonoBehaviour
         }
     }
 
+    public int MainCoin
+    {
+        get { return playData.haveCoin; }
+        set 
+        { 
+            playData.haveCoin = value;
+            onChangedCoin?.Invoke(MainCoin);
+        }
+    }
+
+    public Action<int> onChangedCoin;
+
     private void Awake()
     {
         if( instance == null)
@@ -96,9 +112,9 @@ public class PlayDataManager : MonoBehaviour
         }
     }
 
-    public void SaveData(float coin)
+    public void SaveData(int coin)
     {
-        playData.curCoin = coin;
+        MainCoin = coin;
 
         string saveJD = JsonUtility.ToJson(playData);
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);
