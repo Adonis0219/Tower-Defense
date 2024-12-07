@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayData
@@ -12,12 +14,19 @@ public class PlayData
     public int dia = 0;
     public int bestWave = 0;
     public int achive = 0;
+
     // 메인화면의 판넬 해제를 위한 총 벌어들인 코인 수
     public float totalEarnCoin = 0;
+    
     // 공격 업그레이드 타입의 개수만큼 배열 
-    public int[] atkCoinLevels = new int[10] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    public int[] atkCoinLevels = new int[(int)AtkUpgradeType.Length];
 }
 
+public class UnlockConditions
+{
+   public const int BEST_WAVE = 2;
+   public const float TOTAL_EARN_COIN = 10;
+}
 
 // 어떤 씬에서든 PlayData 참조 가능하도록
 public class PlayDataManager : MonoBehaviour
@@ -62,11 +71,18 @@ public class PlayDataManager : MonoBehaviour
         set
         {
             // 들어온 값이 현재의 최고 웨이브 보다 높다면
-            if( playData.bestWave < value)
+            if (playData.bestWave < value)
+            {
                 // 최고 웨이브를 들어온 값으로 설정
                 playData.bestWave = value ;
+
+                if (playData.bestWave >= UnlockConditions.BEST_WAVE)
+                    playData.achive |= 1 << (int)Achive.UnlockWorkShop;
+            }
         }
     }
+
+    public Action<int> onChangedCoin;
 
     public int MainCoin
     {
@@ -78,7 +94,17 @@ public class PlayDataManager : MonoBehaviour
         }
     }
 
-    public Action<int> onChangedCoin;
+    public float TotalEarnCoin
+    {
+        get { return playData.totalEarnCoin; }
+        set
+        {
+            playData.totalEarnCoin = value;
+
+            if (playData.totalEarnCoin >= UnlockConditions.TOTAL_EARN_COIN)
+                playData.achive |= 1 << (int)Achive.UnlockCards;
+        }
+    }
 
     private void Awake()
     {
@@ -101,6 +127,11 @@ public class PlayDataManager : MonoBehaviour
         LoadData();
     }
 
+
+    ////// MainScene의 PlayDataManager GOBJ가 활성화 됐을 때(메인 씬 시작하자마자), 
+    ////// GameScene의 GameManager가 활성화 됐을 때(게임씬으로 넘어가자마자)
+
+    // 제이선데이터로된 정보들을 playData에 초기화 시켜준다.
     public void LoadData()
     {
         string loadJD = PlayerPrefs.GetString(SAVE_DATA_KEY, "");

@@ -43,12 +43,11 @@ public class MAtkUpgradeButton : MonoBehaviour
         switch (upType)
         {
             case UpgradeType.데미지:
-                //curValueText.text = (3 * (coinLevel[(int)upType]+1)).ToString();
                 curValueText.text = (3 * (PlayDataManager.Instance.playData.atkCoinLevels[(int)upType]+1)).ToString();
 
                 break;
             case UpgradeType.공격속도:
-                //curValueText.text = (1 + .05f * coinLevel[(int)upType]).ToString("F2");
+                curValueText.text = (1 + .05f * PlayDataManager.Instance.playData.atkCoinLevels[(int)upType]).ToString("F2");
                 break;
             case UpgradeType.치명타확률:
                 //curValueText.text = GameManager.instance.player.critChance.ToString("F2") + "%";
@@ -82,33 +81,12 @@ public class MAtkUpgradeButton : MonoBehaviour
         {
             PlayDataManager.Instance.MainCoin -= upCost;
 
-            switch (upType)
-            {
-                case UpgradeType.데미지:
-                    coinLevel[(int)upType] += 1;
-                    PlayDataManager.Instance.playData.atkCoinLevels[(int)upType]++;
-                    // 업그레이드 비용 .2배씩 올려주기
-                    upCost = Mathf.RoundToInt(upCost * upFactor);
-                    break;
-                case UpgradeType.공격속도:
-                    coinLevel[(int)upType] += 1;
-                    upCost = Mathf.RoundToInt(upCost * upFactor);
-                    break;
-                case UpgradeType.치명타확률:
-                    GameManager.instance.player.critChance += 1f;
-                    upCost = Mathf.RoundToInt(upCost * upFactor);
-                    break;
-                case UpgradeType.치명타계수:
-                    GameManager.instance.player.critFactor += .1f;
-                    upCost = Mathf.RoundToInt(upCost * upFactor);
-                    break;
-                default:
-                    break;
-            }
+            PlayDataManager.Instance.playData.atkCoinLevels[(int)upType]++;
+            upCost = Mathf.RoundToInt(upCost * upFactor);           
         }
         else
         {
-            //StartCoroutine(GameManager.instance.LackDollar());
+            StartCoroutine(MainSceneManager.instance.LackCoin());
         }
     }
 }

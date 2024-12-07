@@ -7719,7 +7719,7 @@ MonoBehaviour:
   initCoin: 0
   earnCoin: 0
   coinBonusFactor: 1
-  atkCoinLevels: 0
+  atkCoinLevels: 
   puasePanel: {fileID: 1924416009}
   resultPanel: {fileID: 1102044550}
   waveDatas:

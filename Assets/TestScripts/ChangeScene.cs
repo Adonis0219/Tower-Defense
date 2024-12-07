@@ -11,8 +11,8 @@ public class ChangeScene : MonoBehaviour
     }
 
 
-    public void OnClick()
+    public void OnClick(int index)
     {
-        SceneManager.LoadScene("Test2");
+        SceneManager.LoadScene(index);
     }
 }

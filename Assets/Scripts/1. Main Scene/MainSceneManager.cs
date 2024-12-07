@@ -5,14 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class MainSceneManager : MonoBehaviour
 {
+    public static MainSceneManager instance;
+
     [SerializeField]
     TextMeshProUGUI coinText;
 
     [SerializeField]
     TextMeshProUGUI lockText;
 
+    [SerializeField]
+    GameObject lackCoin;
+
     private void Start()
     {
+        instance = this;
         coinText.text = PlayDataManager.Instance.MainCoin.ToString();
     }
 
@@ -39,13 +45,20 @@ public class MainSceneManager : MonoBehaviour
                 break;
         }
 
-        StartCoroutine(lockTextActive());
+        StartCoroutine(LockTextActive());
     }
 
-    IEnumerator lockTextActive()
+    IEnumerator LockTextActive()
     {
         lockText.gameObject.SetActive(true);
         yield return new WaitForSeconds(.1f);
         lockText.gameObject.SetActive(false);
+    }
+
+    public IEnumerator LackCoin()
+    {
+        lackCoin.SetActive(true);
+        yield return new WaitForSeconds(.1f);
+        lackCoin.SetActive(false);
     }
 }

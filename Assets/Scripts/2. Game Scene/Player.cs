@@ -55,12 +55,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
+            damage = 3 * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.데미지] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.데미지] + 1);
             return damage;
-        }
-
-        set
-        {
-            damage = value;
         }
     }
 
@@ -71,7 +67,16 @@ public class Player : MonoBehaviour, IHit
     public float critFactor = 1.2f;
 
     [SerializeField]
-    public float atkSpd;
+    float atkSpd;
+
+    public float AtkSpd
+    {
+        get
+        {
+            atkSpd = 1 + .05f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.공격속도] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.공격속도]);
+            return atkSpd;
+        }
+    }
 
 
     [Header("# Bullet")]
@@ -145,7 +150,7 @@ public class Player : MonoBehaviour, IHit
                 // 첫번째 적에게 총알 발사
                 Shoot(nearestTarget.position);              
 
-                yield return new WaitForSeconds(1/atkSpd);
+                yield return new WaitForSeconds(1/AtkSpd);
             }
 
             yield return null;

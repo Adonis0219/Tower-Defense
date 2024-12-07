@@ -368,6 +368,7 @@ MonoBehaviour:
   upNameText: {fileID: 7381101252100108205}
   curValueText: {fileID: 7381101250869650376}
   costText: {fileID: 7381101251660478806}
+  bt: {fileID: 7381101250550880930}
 --- !u!1 &7381101251586252257
 GameObject:
   m_ObjectHideFlags: 0

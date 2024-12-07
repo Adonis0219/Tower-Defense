@@ -61,14 +61,18 @@ public class GameManager : MonoBehaviour
 
     public float coinBonusFactor = 1f;
 
-    public int atkCoinLevels;
+    [HideInInspector]
+    public int[] atkCoinLevels;
+
+    [HideInInspector]
+    public int[] atkDollarLevels;
 
     [Header("##  ManageMent")]
     [Header("# GamePuase")]
     [SerializeField]
     GameObject puasePanel;
     [SerializeField]
-    public GameObject resultPanel;    
+    public GameObject resultPanel;
 
     [Header("# Wave Control")]
     public WaveData[] waveDatas;
@@ -132,8 +136,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        PlayDataManager.Instance.LoadData();
-
+        atkCoinLevels = new int[(int)AtkUpgradeType.Length];
+        atkDollarLevels = new int[(int)AtkUpgradeType.Length];
 
         CurCoin = PlayDataManager.Instance.MainCoin;
 
@@ -141,7 +145,11 @@ public class GameManager : MonoBehaviour
         initCoin = CurCoin;
 
         PlayData playData = PlayDataManager.Instance.playData;
-        atkCoinLevels = playData.atkCoinLevels[0];
+
+        for (int i = 0; i < playData.atkCoinLevels.Length; i++)
+        {
+            atkCoinLevels[i] = playData.atkCoinLevels[i];
+        }
 
         StartCoroutine(SpawnEnemy());
     }
@@ -254,7 +262,7 @@ public class GameManager : MonoBehaviour
             TextMeshProUGUI[] texts = resultPanel.GetComponentsInChildren<TextMeshProUGUI>();
             // 현재 웨이브가 최고기록을 넘겼는가를 검사
             PlayDataManager.Instance.BestWave = Wave;
-            PlayDataManager.Instance.playData.totalEarnCoin += earnCoin;
+            PlayDataManager.Instance.TotalEarnCoin += earnCoin;
 
             texts[0].text = "티어 1\n웨이브 " + Wave + "\n최고 웨이브 : " + PlayDataManager.Instance.BestWave;
             texts[1].text = "코인 획득량 : " + earnCoin + "<sprite=12>";

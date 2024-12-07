@@ -138,7 +138,7 @@ public class PanelManager : MonoBehaviour
 
             temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
             // curValue를 위한 초기화
-            temp.upType = (AtkUpgradeButton.UpgradeType)i;
+            temp.upType = (AtkUpgradeType)i;
         }
     }
 
