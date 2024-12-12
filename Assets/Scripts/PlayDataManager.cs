@@ -20,6 +20,8 @@ public class PlayData
     
     // 공격 업그레이드 타입의 개수만큼 배열 
     public int[] atkCoinLevels = new int[(int)AtkUpgradeType.Length];
+    public int[] defCoinLevels = new int[(int)DefUpgradeType.Length];
+    public int[] utilCoinLevels = new int[(int)UtilUpgradeType.Length];
 }
 
 public class UnlockConditions
@@ -145,7 +147,8 @@ public class PlayDataManager : MonoBehaviour
 
     public void SaveData(int coin)
     {
-        MainCoin = coin;
+       //MainCoin = coin;
+        MainCoin = 999999;
 
         string saveJD = JsonUtility.ToJson(playData);
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);

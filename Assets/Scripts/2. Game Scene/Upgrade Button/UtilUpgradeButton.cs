@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEditor;
+public enum UtilUpgradeType
+{
+    달러웨이브,
+    달러보너스,
+    Length
+}
 
 public class UtilUpgradeButton : MonoBehaviour
 {
-    public enum UpgradeType
-    {
-        달러웨이브,
-        달러보너스
-    }   
-
     [SerializeField]
-    public UpgradeType upType;
+    public UtilUpgradeType upType;
 
     [SerializeField]
     int upCost;
@@ -35,10 +35,10 @@ public class UtilUpgradeButton : MonoBehaviour
 
         switch (upType)
         {
-            case UpgradeType.달러웨이브:
+            case UtilUpgradeType.달러웨이브:
                 curValueText.text = GameManager.instance.waveBonusDollar.ToString();
                 break;
-            case UpgradeType.달러보너스:
+            case UtilUpgradeType.달러보너스:
                 curValueText.text = GameManager.instance.dollarBonusFactor.ToString();
                 break;
             default:
@@ -62,12 +62,12 @@ public class UtilUpgradeButton : MonoBehaviour
 
             switch (upType)
             {
-                case UpgradeType.달러웨이브:
+                case UtilUpgradeType.달러웨이브:
                     GameManager.instance.waveBonusDollar += 4;
                     // 업그레이드 비용 .1배씩 올려주기
                     upCost = Mathf.RoundToInt(upCost * upFactor);
                     break;
-                case UpgradeType.달러보너스:
+                case UtilUpgradeType.달러보너스:
 
                     GameManager.instance.dollarBonusFactor += .5f;
                     upCost = Mathf.RoundToInt(upCost * upFactor);

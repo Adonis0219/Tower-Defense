@@ -9,6 +9,57 @@ public class Player : MonoBehaviour, IHit
     bool isShoot = false;
 
     [Header("# Player Status")]
+    [Header("  # ATTACK")]
+    [SerializeField]
+    float damage;
+
+    public float Damage
+    {
+        get
+        {
+            damage = 3 * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.데미지] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.데미지] + 1);
+            return damage;
+        }
+        // 외부에선 설정할 수 없으므로 Set은 없다
+    }
+
+    [SerializeField]    // 크리티컬 확률
+    float critChance;
+
+    public float CritChance
+    {
+        get
+        {
+            critChance = GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.치명타확률] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.치명타확률] + 1;
+            return critChance;
+        }
+    }
+
+    [SerializeField]    // 크리티컬 배율
+    float critFactor;
+
+    public float CritFactor
+    {
+        get
+        {
+            critFactor = 1.2f + .1f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.치명타계수] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.치명타계수]);
+            return critFactor;
+        }
+    }
+
+    [SerializeField]
+    float atkSpd;
+
+    public float AtkSpd
+    {
+        get
+        {
+            atkSpd = 1 + .05f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.공격속도] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.공격속도]);
+            return atkSpd;
+        }
+    }
+
+
     [Header("  # Def")]
     [SerializeField]
     float maxHp;
@@ -16,9 +67,9 @@ public class Player : MonoBehaviour, IHit
     public float MaxHp
     {
         get { return maxHp; }
-        set 
-        { 
-            maxHp = value; 
+        set
+        {
+            maxHp = value;
         }
     }
 
@@ -28,8 +79,8 @@ public class Player : MonoBehaviour, IHit
     public float CurrentHp
     {
         get { return currentHp; }
-        set 
-        { 
+        set
+        {
             currentHp = value;
 
             // 체력회복으로 인해 최대체력보다 현재체력이 커지면 다시 초기화
@@ -44,37 +95,25 @@ public class Player : MonoBehaviour, IHit
 
     public float regenHp;
 
-    public float def;
-    public float absDef;
-
-    [Header("  # ATTACK")]
     [SerializeField]
-    float damage;
+    float def;
 
-    public float Damage
+    public float Def
     {
         get
         {
-            damage = 3 * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.데미지] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.데미지] + 1);
-            return damage;
+            def = .5f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.방어력] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.방어력]);
+            return def;
         }
     }
 
-    [SerializeField]    // 크리티컬 확률
-    public float critChance = 1;
-
-    [SerializeField]    // 크리티컬 배율
-    public float critFactor = 1.2f;
-
-    [SerializeField]
-    float atkSpd;
-
-    public float AtkSpd
+    float absDef;
+    public float AbsDef
     {
         get
         {
-            atkSpd = 1 + .05f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.공격속도] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.공격속도]);
-            return atkSpd;
+            absDef = .5f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.절대방어] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.절대방어]);
+            return absDef; 
         }
     }
 
@@ -171,7 +210,7 @@ public class Player : MonoBehaviour, IHit
 
     public void Hit(float damage)
     {
-        CurrentHp -= (damage * (1 - def / 100)) - absDef;
+        CurrentHp -= (damage * (1 - Def / 100)) - AbsDef;
         //CurrentHp -= damage;
     }
 
@@ -180,7 +219,7 @@ public class Player : MonoBehaviour, IHit
     {
         while (CurrentHp > 0)
         {
-            CurrentHp -= (damage * (1 - def / 100)) - absDef;
+            CurrentHp -= (damage * (1 - Def / 100)) - AbsDef;
 
             yield return new WaitForSeconds(2f);
         }

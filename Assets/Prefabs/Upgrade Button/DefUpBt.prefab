@@ -39,8 +39,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 121, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchoredPosition: {x: 110, y: 0}
+  m_SizeDelta: {x: 220, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4737350710624528441
 CanvasRenderer:
@@ -503,6 +503,7 @@ MonoBehaviour:
   upNameText: {fileID: 4737350712036409436}
   curValueText: {fileID: 4737350711160312593}
   costText: {fileID: 4737350711756250422}
+  bt: {fileID: 4737350710624528423}
 --- !u!1 &4737350711946612728
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,7 +540,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -20}
-  m_SizeDelta: {x: 198.7, y: 15.086}
+  m_SizeDelta: {x: 220, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4737350711946612733
 CanvasRenderer:

@@ -77,28 +77,6 @@ public class PanelManager : MonoBehaviour
         }
     }
 
-    //void SetUpPanels(int type)
-    //{
-    //    // 버튼 켜주기
-    //    activeUpPanel.SetActive(false);
-    //    activeUpPanel = upPanels[(int)type];
-    //    activeUpPanel.SetActive(true);
-
-    //    //////// 색 바꿔주기
-    //    Color baseColor = activeUpBt.color;
-
-    //    baseColor.a = .15f;
-
-    //    activeUpBt.color = baseColor;
-
-    //    activeUpBt = upPanelBts[(int)type];
-    //    baseColor = activeUpBt.color;
-
-    //    baseColor.a = 1;
-
-    //    upPanelBts[type].color = baseColor;
-    //}
-
     [SerializeField]
     Image[] btIcons;
 
@@ -152,7 +130,7 @@ public class PanelManager : MonoBehaviour
 
             temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
             // curValue를 위한 초기화
-            temp.upType = (DefUpgradeButton.UpgradeType)i;
+            temp.upType = (DefUpgradeType)i;
         }
     }
 
@@ -166,7 +144,7 @@ public class PanelManager : MonoBehaviour
 
             temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
             // curValue를 위한 초기화
-            temp.upType = (UtilUpgradeButton.UpgradeType)i;
+            temp.upType = (UtilUpgradeType)i;
         }
     }    
 }

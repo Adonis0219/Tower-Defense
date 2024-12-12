@@ -24,9 +24,9 @@ public class Bullet : PoolObject
     // Start is called before the first frame update
     void Start()
     {
-        isCritBullet = IsCritical(player.critChance);
+        isCritBullet = IsCritical(player.CritChance);
         StartCoroutine(Delete());
-        bulletDamage = isCritBullet ? player.Damage * player.critFactor : player.Damage;
+        bulletDamage = isCritBullet ? player.Damage * player.CritFactor : player.Damage;
     }
 
     // Update is called once per frame

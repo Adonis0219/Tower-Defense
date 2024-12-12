@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 [System.Serializable]
 public class WaveData
@@ -63,9 +64,17 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public int[] atkCoinLevels;
+    [HideInInspector]
+    public int[] defCoinLevels;
+    [HideInInspector]
+    public int[] utilCoinLevels;
 
     [HideInInspector]
     public int[] atkDollarLevels;
+    [HideInInspector]
+    public int[] defDollarLevels;
+    [HideInInspector]
+    public int[] utilDollarLevels;
 
     [Header("##  ManageMent")]
     [Header("# GamePuase")]
@@ -136,22 +145,45 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        atkCoinLevels = new int[(int)AtkUpgradeType.Length];
-        atkDollarLevels = new int[(int)AtkUpgradeType.Length];
+        InitLevelSet();
 
         CurCoin = PlayDataManager.Instance.MainCoin;
 
         // 게임 시작 시 초기 코인에 현재 코인 초기화
+        // 게임 종료 시 벌어들인 코인개수 계산을 위해 미리 초기화
         initCoin = CurCoin;
 
+        StartCoroutine(SpawnEnemy());
+    }
+
+    void InitLevelSet()
+    {
+
         PlayData playData = PlayDataManager.Instance.playData;
+
+        atkCoinLevels = new int[(int)AtkUpgradeType.Length];
+        atkDollarLevels = new int[(int)AtkUpgradeType.Length];
+
+        defCoinLevels = new int[(int)DefUpgradeType.Length];
+        defDollarLevels = new int[(int)DefUpgradeType.Length];
+
+        utilCoinLevels = new int[(int)UtilUpgradeType.Length];
+        utilDollarLevels = new int[(int)UtilUpgradeType.Length];
 
         for (int i = 0; i < playData.atkCoinLevels.Length; i++)
         {
             atkCoinLevels[i] = playData.atkCoinLevels[i];
         }
 
-        StartCoroutine(SpawnEnemy());
+        for (int i = 0; i < playData.defCoinLevels.Length; i++)
+        {
+            defCoinLevels[i] = playData.defCoinLevels[i];
+        }
+
+        for (int i = 0; i < playData.utilCoinLevels.Length; i++)
+        {
+            utilCoinLevels[i] = playData.utilCoinLevels[i];
+        }
     }
 
     private void Update()
