@@ -27,7 +27,7 @@ public class HUDText : MonoBehaviour
                 myText.text = GameManager.instance.player.CurrentHp.ToString("F0") + "  /  " + GameManager.instance.player.MaxHp.ToString("F0");
                 break;
             case InfoType.MyHealthRegen:
-                myText.text = GameManager.instance.player.regenHp.ToString("F2") + "/sec";
+                myText.text = GameManager.instance.player.RegenHp.ToString("F2") + "/sec";
                 break;
             case InfoType.MyDamage:
                 myText.text = GameManager.instance.player.Damage.ToString();

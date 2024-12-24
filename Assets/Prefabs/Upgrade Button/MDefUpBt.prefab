@@ -124,7 +124,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4737350711876595370}
+      - m_Target: {fileID: 5521492322543524298}
         m_TargetAssemblyTypeName: UpgradeButton, Assembly-CSharp
         m_MethodName: OnUpBtClk
         m_Mode: 1
@@ -229,8 +229,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 57.7
-  m_fontSizeBase: 57.7
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -356,7 +356,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
+  m_spriteAsset: {fileID: 11400000, guid: 160f962d48aa2f141897e8ca953fb659, type: 2}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901
@@ -417,7 +417,7 @@ GameObject:
   - component: {fileID: 4737350711876595542}
   - component: {fileID: 4737350711876595371}
   - component: {fileID: 4737350711876595368}
-  - component: {fileID: 4737350711876595370}
+  - component: {fileID: 5521492322543524298}
   m_Layer: 5
   m_Name: MDefUpBt
   m_TagString: Untagged
@@ -485,7 +485,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4737350711876595370
+--- !u!114 &5521492322543524298
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -494,12 +494,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4737350711876595543}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a752ddba3de8c72498d04e2b3f24b996, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d3db3c379cfeb342a39f0c1c98922b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   upType: 0
-  upCost: 10
-  upFactor: 0
+  upCost: 0
+  bt: {fileID: 4737350710624528423}
   upNameText: {fileID: 4737350712036409436}
   curValueText: {fileID: 4737350711160312593}
   costText: {fileID: 4737350711756250422}

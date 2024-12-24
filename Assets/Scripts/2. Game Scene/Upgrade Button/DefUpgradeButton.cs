@@ -48,7 +48,7 @@ public class DefUpgradeButton : MonoBehaviour
                 curValueText.text = GameManager.instance.player.MaxHp.ToString();
                 break;
             case DefUpgradeType.체력회복:
-                curValueText.text = GameManager.instance.player.regenHp.ToString("F2") + "/sec";
+                curValueText.text = GameManager.instance.player.RegenHp.ToString("F2") + "/sec";
                 break;
             case DefUpgradeType.방어력:
                 curValueText.text = GameManager.instance.player.Def.ToString("F2") + "%";
@@ -77,25 +77,10 @@ public class DefUpgradeButton : MonoBehaviour
 
         GameManager.instance.defDollarLevels[(int)upType] ++;
 
-        //switch (upType)
-        //{
-        //    case UpgradeType.체력:
-        //        GameManager.instance.player.MaxHp += 5;
-        //        GameManager.instance.player.CurrentHp += 5;
-        //        // 업그레이드 비용 .2배씩 올려주기
-        //        break;
-        //    case UpgradeType.체력회복:
-        //        GameManager.instance.player.regenHp += .1f;
-        //        break;
-        //    case UpgradeType.방어력:
-        //        GameManager.instance.player.def += .5f;
-        //        break;
-        //    case UpgradeType.절대방어:
-        //        GameManager.instance.player.absDef += .5f;
-        //        break;
-        //    default:
-        //        break;
-        //}
+        // 업그레이드 버튼이 체력타입일 경우 현재 체력 올려주기
+        if (upType == DefUpgradeType.체력)
+            GameManager.instance.player.CurrentHp += 5;
+
         upCost = Mathf.RoundToInt(upCost * upFactor);
     }
 }

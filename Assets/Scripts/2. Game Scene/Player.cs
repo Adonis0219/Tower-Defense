@@ -42,7 +42,7 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            critFactor = 1.2f + .1f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.치명타계수] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.치명타계수]);
+            critFactor = 1.2f + .1f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.치명타데미지] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.치명타데미지]);
             return critFactor;
         }
     }
@@ -66,7 +66,11 @@ public class Player : MonoBehaviour, IHit
 
     public float MaxHp
     {
-        get { return maxHp; }
+        get 
+        { 
+            maxHp = 5 * (1 + GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.체력]);
+            return maxHp; 
+        }
         set
         {
             maxHp = value;
@@ -93,7 +97,17 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    public float regenHp;
+    [SerializeField]
+    float regenHp;
+
+    public float RegenHp
+    {
+        get
+        {
+            regenHp = .04f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력회복] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.체력회복]);
+            return regenHp; 
+        }
+    }
 
     [SerializeField]
     float def;
@@ -132,16 +146,18 @@ public class Player : MonoBehaviour, IHit
 
     private void Awake()
     {
-        CurrentHp = MaxHp;
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        CurrentHp = MaxHp;
+
         if (isShoot)
             StartCoroutine(OnShoot());
 
-        StartCoroutine(RegenHp());
+        StartCoroutine(OnRegenHp());
     }
 
     // Update is called once per frame
@@ -196,7 +212,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    IEnumerator RegenHp()
+    IEnumerator OnRegenHp()
     {
         while (true)
         {
@@ -204,13 +220,13 @@ public class Player : MonoBehaviour, IHit
 
             // 현재의 체력과 최대 체력이 같지 않을 때만
             if (CurrentHp != MaxHp)
-                CurrentHp += regenHp;
+                CurrentHp += RegenHp;
         }
     }    
 
     public void Hit(float damage)
     {
-        CurrentHp -= (damage * (1 - Def / 100)) - AbsDef;
+        CurrentHp -= (damage * (1 - Def)) - AbsDef;
         //CurrentHp -= damage;
     }
 

@@ -10,10 +10,9 @@ public enum AtkUpgradeType
     데미지,
     공격속도,
     치명타확률,
-    치명타계수,
+    치명타데미지,
     Length
 }   
-
 
 public class AtkUpgradeButton : MonoBehaviour
 {
@@ -58,7 +57,7 @@ public class AtkUpgradeButton : MonoBehaviour
             case AtkUpgradeType.치명타확률:
                 curValueText.text = GameManager.instance.player.CritChance.ToString("F2") + "%";
                 break;
-            case AtkUpgradeType.치명타계수:
+            case AtkUpgradeType.치명타데미지:
                 curValueText.text = "x" + GameManager.instance.player.CritFactor.ToString("F2");
                 break;
             default:

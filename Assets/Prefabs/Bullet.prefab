@@ -101,6 +101,7 @@ MonoBehaviour:
   poolType: 0
   speed: 10
   damageText: {fileID: 6856817730066217418, guid: 2d9c9ba71c8ce134e80afea6b535bb0b, type: 3}
+  lineSize: 10
 --- !u!58 &-3723234465551356680
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -141,12 +141,12 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         CurDollar = initDollar;
+
+        InitLevelSet();
     }
 
     private void Start()
     {
-        InitLevelSet();
-
         CurCoin = PlayDataManager.Instance.MainCoin;
 
         // 게임 시작 시 초기 코인에 현재 코인 초기화
@@ -156,35 +156,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SpawnEnemy());
     }
 
-    void InitLevelSet()
-    {
-
-        PlayData playData = PlayDataManager.Instance.playData;
-
-        atkCoinLevels = new int[(int)AtkUpgradeType.Length];
-        atkDollarLevels = new int[(int)AtkUpgradeType.Length];
-
-        defCoinLevels = new int[(int)DefUpgradeType.Length];
-        defDollarLevels = new int[(int)DefUpgradeType.Length];
-
-        utilCoinLevels = new int[(int)UtilUpgradeType.Length];
-        utilDollarLevels = new int[(int)UtilUpgradeType.Length];
-
-        for (int i = 0; i < playData.atkCoinLevels.Length; i++)
-        {
-            atkCoinLevels[i] = playData.atkCoinLevels[i];
-        }
-
-        for (int i = 0; i < playData.defCoinLevels.Length; i++)
-        {
-            defCoinLevels[i] = playData.defCoinLevels[i];
-        }
-
-        for (int i = 0; i < playData.utilCoinLevels.Length; i++)
-        {
-            utilCoinLevels[i] = playData.utilCoinLevels[i];
-        }
-    }
 
     private void Update()
     {
@@ -217,6 +188,38 @@ public class GameManager : MonoBehaviour
             {
                 Time.timeScale = i + 1;
             }
+        }
+    }
+
+    void InitLevelSet()
+    {
+
+        PlayData playData = PlayDataManager.Instance.playData;
+
+        // 각 업그레이드 레벨들 길이 초기화해주기
+        atkCoinLevels = new int[(int)AtkUpgradeType.Length];
+        atkDollarLevels = new int[(int)AtkUpgradeType.Length];
+
+        defCoinLevels = new int[(int)DefUpgradeType.Length];
+        defDollarLevels = new int[(int)DefUpgradeType.Length];
+
+        utilCoinLevels = new int[(int)UtilUpgradeType.Length];
+        utilDollarLevels = new int[(int)UtilUpgradeType.Length];
+
+        // PlayData에서 받아온 Coin레벨을 GameManager에서 사용할 수 있도록 초기화
+        for (int i = 0; i < playData.atkCoinLevels.Length; i++)
+        {
+            atkCoinLevels[i] = playData.atkCoinLevels[i];
+        }
+
+        for (int i = 0; i < playData.defCoinLevels.Length; i++)
+        {
+            defCoinLevels[i] = playData.defCoinLevels[i];
+        }
+
+        for (int i = 0; i < playData.utilCoinLevels.Length; i++)
+        {
+            utilCoinLevels[i] = playData.utilCoinLevels[i];
         }
     }
 

@@ -2565,15 +2565,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isShoot: 1
+  damage: 3
+  critChance: 1
+  critFactor: 1.2
+  atkSpd: 3
   maxHp: 5
   currentHp: 0
   regenHp: 0
   def: 0
-  absDef: 0
-  damage: 3
-  critChance: 1
-  critFactor: 1.2
-  atkSpd: 1
   range: {fileID: 347042891}
   radius: 2.5
   enemyMask:
@@ -7720,6 +7719,11 @@ MonoBehaviour:
   earnCoin: 0
   coinBonusFactor: 1
   atkCoinLevels: 
+  defCoinLevels: 
+  utilCoinLevels: 
+  atkDollarLevels: 
+  defDollarLevels: 
+  utilDollarLevels: 
   puasePanel: {fileID: 1924416009}
   resultPanel: {fileID: 1102044550}
   waveDatas:

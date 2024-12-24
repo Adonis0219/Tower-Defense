@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 939701466053972914}
   - component: {fileID: 939701466053972913}
   - component: {fileID: 939701466053972912}
-  - component: {fileID: 939701466053972918}
+  - component: {fileID: 2015306520232843548}
   m_Layer: 5
   m_Name: MUtilUpBt
   m_TagString: Untagged
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &939701466053972918
+--- !u!114 &2015306520232843548
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -223,12 +223,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 939701466053972925}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af39b668b8e2d234782dfe7682c32df2, type: 3}
+  m_Script: {fileID: 11500000, guid: f29b50c7f49f2a543ab569428293616d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   upType: 0
-  upCost: 0
-  upFactor: 0
+  bt: {fileID: 939701466532349009}
   upNameText: {fileID: 939701465646884840}
   curValueText: {fileID: 939701466749344742}
   costText: {fileID: 939701467126586099}
@@ -356,7 +355,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 939701466053972918}
+      - m_Target: {fileID: 2015306520232843548}
         m_TargetAssemblyTypeName: UpgradeButton, Assembly-CSharp
         m_MethodName: OnUpBtClk
         m_Mode: 1
@@ -461,8 +460,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 57.7
-  m_fontSizeBase: 57.7
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -664,7 +663,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
+  m_spriteAsset: {fileID: 11400000, guid: 160f962d48aa2f141897e8ca953fb659, type: 2}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901

@@ -54,15 +54,25 @@ public class MPanelManager : MonoBehaviour
 
     [SerializeField]
     MAtkUpgradeButton atkUpBt;
+    [SerializeField]
+    MDefUpgradeButton defUpBt;
+    [SerializeField]
+    MUtilUpgradeButton utilUpBt;
 
     [SerializeField]
-    public Transform atkContent;
+    Transform atkContent;
+    [SerializeField]
+    Transform defContent;
+    [SerializeField]
+    Transform utilContent;
 
     const string UPGRADE_NAME = "이름";
     const string UPGRADE_COST = "비용";
     const string UPGRADE_FACTOR = "계수";
 
     const string ATK_UPGRADE = "AtkUpgrade";
+    const string DEF_UPGRADE = "DefUpgrade";
+    const string UTIL_UPGRADE = "UtilUpgrade";
 
     private void Start()
     {
@@ -73,6 +83,8 @@ public class MPanelManager : MonoBehaviour
         activeUpBt = upBts[0];
 
         AtkUpgradeSet(ATK_UPGRADE, atkUpBt, atkContent);
+        DefUpgradeSet(DEF_UPGRADE, defUpBt, defContent);
+        UtilUpgradeSet(UTIL_UPGRADE, utilUpBt, utilContent);
     }
 
 
@@ -167,9 +179,37 @@ public class MPanelManager : MonoBehaviour
             // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
             temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
             // curValue를 위한 초기화
-            temp.upType = (MAtkUpgradeButton.UpgradeType)i;
+            temp.upType = (AtkUpgradeType)i;
+        }
+    }
 
-            //PlayData.instance.goodsData.atkCoinLevels[i] = 0;
+    public void DefUpgradeSet(string csv, MDefUpgradeButton defBt, Transform content)
+    {
+        List<Dictionary<string, object>> datas = CSVReader.Read(csv);
+
+        for (int i = 0; i < datas.Count; i++)
+        {
+            MDefUpgradeButton temp = Instantiate(defBt, content);
+
+            // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
+            temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
+            // curValue를 위한 초기화
+            temp.upType = (DefUpgradeType)i;
+        }
+    }
+
+    public void UtilUpgradeSet(string csv, MUtilUpgradeButton utilBt, Transform content)
+    {
+        List<Dictionary<string, object>> datas = CSVReader.Read(csv);
+
+        for (int i = 0; i < datas.Count; i++)
+        {
+            MUtilUpgradeButton temp = Instantiate(utilBt, content);
+
+            // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
+            temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
+            // curValue를 위한 초기화
+            temp.upType = (UtilUpgradeType)i;
         }
     }
 }

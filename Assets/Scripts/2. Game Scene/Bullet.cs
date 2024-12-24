@@ -24,15 +24,29 @@ public class Bullet : PoolObject
     // Start is called before the first frame update
     void Start()
     {
-        isCritBullet = IsCritical(player.CritChance);
         StartCoroutine(Delete());
+
+        isCritBullet = IsCritical(player.CritChance);
         bulletDamage = isCritBullet ? player.Damage * player.CritFactor : player.Damage;
     }
+
+    [SerializeField]
+    float lineSize = 1000f;
 
     // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector3.up * speed * Time.deltaTime);
+
+        Debug.DrawRay(transform.position, transform.up, Color.yellow, lineSize);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, lineSize);
+
+        if (!hit)
+        {
+            Debug.Log("noawd");
+            //PoolManager.instance.SetPool(gameObject, PoolObejectType.bullet);
+        }
     }
 
     bool IsCritical(float chance)
