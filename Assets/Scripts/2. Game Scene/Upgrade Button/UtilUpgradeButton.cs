@@ -56,29 +56,22 @@ public class UtilUpgradeButton : MonoBehaviour
 
     public void OnUpBtClk()
     {
-        if (GameManager.instance.CurDollar >= upCost)
-        {
-            GameManager.instance.CurDollar -= upCost;
+        GameManager.instance.CurDollar -= upCost;
 
-            switch (upType)
-            {
-                case UtilUpgradeType.달러웨이브:
-                    GameManager.instance.waveBonusDollar += 4;
-                    // 업그레이드 비용 .1배씩 올려주기
-                    upCost = Mathf.RoundToInt(upCost * upFactor);
-                    break;
-                case UtilUpgradeType.달러보너스:
-
-                    GameManager.instance.dollarBonusFactor += .5f;
-                    upCost = Mathf.RoundToInt(upCost * upFactor);
-                    break;
-                default:
-                    break;
-            }
-        }
-        else
+        switch (upType)
         {
-            StartCoroutine(GameManager.instance.LackDollar());
+            case UtilUpgradeType.달러웨이브:
+                GameManager.instance.waveBonusDollar += 4;
+                // 업그레이드 비용 .1배씩 올려주기
+                upCost = Mathf.RoundToInt(upCost * upFactor);
+                break;
+            case UtilUpgradeType.달러보너스:
+
+                GameManager.instance.dollarBonusFactor += .5f;
+                upCost = Mathf.RoundToInt(upCost * upFactor);
+                break;
+            default:
+                break;
         }
     }
 }

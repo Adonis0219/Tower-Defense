@@ -70,7 +70,7 @@ public class MPanelManager : MonoBehaviour
     const string UPGRADE_COST = "비용";
     const string UPGRADE_FACTOR = "계수";
 
-    const string ATK_UPGRADE = "AtkUpgrade";
+    const string ATK_UPGRADE = "AtkCoinUpgrade";
     const string DEF_UPGRADE = "DefUpgrade";
     const string UTIL_UPGRADE = "UtilUpgrade";
 

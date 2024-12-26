@@ -74,6 +74,20 @@ public class Enemy : PoolObject, IHit
         yield return null;
     }
 
+    /// <summary>
+    /// 웨이브가 지나면 체력을 배율만큼 곱해주는 함수
+    /// </summary>
+    /// <param name="factor">곱해줄 배율</param>
+    public void WaveHpFactor(float factor)
+    {
+        CurrentHp *= factor;
+    }
+
+    public void WaveDamFactor(float factor)
+    {
+        collDamage *= factor;
+    }
+
     protected virtual void OnDead()
     {
         // Dollar 획득

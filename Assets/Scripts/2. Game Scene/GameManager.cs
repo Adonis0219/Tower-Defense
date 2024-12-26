@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Xml.Serialization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -83,6 +84,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject resultPanel;
 
+    [Header("# GameTimeScale")]
+    [SerializeField]
+    TextMeshProUGUI timeScaleText;
+
     [Header("# Wave Control")]
     public WaveData[] waveDatas;
 
@@ -90,6 +95,9 @@ public class GameManager : MonoBehaviour
     Transform wavePoint;
 
     int wave = 1;
+
+    [SerializeField]
+    float waveHpFactor = 1.12f;
 
     [HideInInspector]
     public float waveBonusDollar = 0;
@@ -101,7 +109,7 @@ public class GameManager : MonoBehaviour
     public float gameTime;
     float maxGameTime = 5 * 10f;
 
-    //// 프로퍼티
+    ////// 프로퍼티
     public float CurDollar
     {
         get
@@ -126,14 +134,36 @@ public class GameManager : MonoBehaviour
             curCoinText.text = curCoin.ToString();
         }
     }
+
     public int Wave
     {
         get { return wave; }
         set
         {
             wave = value;
+
+            // 웨이브가 10의 배수인가 ? 1.5f : 1.2
+
+
+            //WaveHpFactor(wave % 10 == 0 ? 1.5f : 1.2f);
+            //.WaveDamFactor(wave % 10 == 0 ? 1.5f : 1.15f);
+
             if (waveBonusDollar != 0) GoodsFactor(waveBonusDollar, wavePoint, true);
         }
+    }
+
+    float curTimeScale = 1.0f;
+
+    public float CurTimeScale
+    {
+        get { return curTimeScale; }
+        set
+        {
+            curTimeScale = value;
+            timeScaleText.text = "x" + curTimeScale;
+            Time.timeScale = curTimeScale;
+        }
+
     }
 
     private void Awake()
@@ -147,6 +177,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        curTimeScale = 1.5f;
+
         CurCoin = PlayDataManager.Instance.MainCoin;
 
         // 게임 시작 시 초기 코인에 현재 코인 초기화
@@ -155,7 +187,6 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(SpawnEnemy());
     }
-
 
     private void Update()
     {
@@ -186,14 +217,15 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
-                Time.timeScale = i + 1;
+                CurTimeScale = i + 1;
+                //Time.timeScale = i + 1;
+                //timeScaleText.text = "x" + (i + 1);
             }
         }
     }
 
     void InitLevelSet()
     {
-
         PlayData playData = PlayDataManager.Instance.playData;
 
         // 각 업그레이드 레벨들 길이 초기화해주기
@@ -306,16 +338,6 @@ public class GameManager : MonoBehaviour
         resultPanel.SetActive(isActive);
     }
 
-
-
-    // 돈 부족 시 실행하는 코루틴
-    public IEnumerator LackDollar()
-    {
-        lackDollar.SetActive(true);
-        yield return new WaitForSeconds(.1f);
-        lackDollar.SetActive(false);
-    }
-
     // 웨이브
     public void GoodsFactor(float basicGoods, bool isDollar)
     {
@@ -353,8 +375,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
-    //void SaveData()
-    //{
-    //    PlayData.instance.SaveData(CurCoin);
-    //}
+    public void OnScaleUpClick(bool isUp)
+    {
+        // isUp(Plus) 버튼이면 .5를 더해주고, 아니면 .5를 빼준다
+        CurTimeScale += isUp ? .5f : -.5f;
+        Time.timeScale = CurTimeScale;
+    }
 }

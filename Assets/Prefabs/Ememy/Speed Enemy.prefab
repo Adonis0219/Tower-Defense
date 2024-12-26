@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -6047925908189175987}
   m_Layer: 7
   m_Name: Speed Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 4377328187883335764}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.37244, y: 0.37244, z: 0.37244}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 25407836e8af08e46bc9496c5ebf678e, type: 3}
-  m_Color: {r: 0.44579715, g: 1, b: 0.3803922, a: 1}
+  m_Color: {r: 0.9308525, g: 1, b: 0.25, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -100,11 +100,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolType: 2
-  killedDollar: 15
+  killedDollar: 2
   moveSpd: 6
-  maxHp: 3
+  maxHp: 2.35
   currentHp: 0
-  collDamage: 0
+  collDamage: 1.1
+  killedCoin: 2
 --- !u!61 &3082797800593604026
 BoxCollider2D:
   m_ObjectHideFlags: 0

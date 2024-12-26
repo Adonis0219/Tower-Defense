@@ -12,7 +12,7 @@ public class PoolObjectData
 // 생성할 풀 오브젝트의 타입 열거형
 public enum PoolObejectType
 {
-    bullet, normal, speed, range, dollarText, coinText, damageText
+    bullet, normal, speed, range, tank, dollarText, coinText, damageText
 }
 
 public class PoolManager : MonoBehaviour
