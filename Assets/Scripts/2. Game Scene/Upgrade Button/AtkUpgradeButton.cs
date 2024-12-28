@@ -7,10 +7,11 @@ using UnityEngine.UI;
 
 public enum AtkUpgradeType
 {
-    데미지,
-    공격속도,
-    치명타확률,
-    치명타데미지,
+    데미지, 공격속도,
+    치명타확률, 치명타데미지,
+    범위, 거리당데미지,
+    멀티샷확률, 멀티샷표적,
+    바운스샷확률, 바운스샷표적, 바운스샷범위,
     Length
 }   
 
@@ -42,6 +43,7 @@ public class AtkUpgradeButton : MonoBehaviour
 
     private void Update()
     {
+        curValueText.text  = ParseNumber.Parse(1000);
         bt.interactable = GameManager.instance.CurDollar < upCost ? false : true;   
 
         costText.text = "$" + upCost;

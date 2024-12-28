@@ -6,10 +6,11 @@ using UnityEditor;
 using UnityEngine.UI;
 public enum DefUpgradeType
 {
-    체력,
-    체력회복,
-    방어력,
-    절대방어,
+    체력, 체력회복,
+    방어력, 절대방어,
+    반사데미지, 흡혈,
+    넉백확률, 넉백강도,
+    오브속도, 오브,
     Length
 }   
 

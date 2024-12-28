@@ -22,6 +22,9 @@ public class PlayData
     public int[] atkCoinLevels = new int[(int)AtkUpgradeType.Length];
     public int[] defCoinLevels = new int[(int)DefUpgradeType.Length];
     public int[] utilCoinLevels = new int[(int)UtilUpgradeType.Length];
+
+    public int[] createCounts = new int[3] { 4, 2, 0 };
+    public int[] openCounts = new int[3];
 }
 
 public class UnlockConditions

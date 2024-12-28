@@ -60,6 +60,11 @@ public class MPanelManager : MonoBehaviour
     MUtilUpgradeButton utilUpBt;
 
     [SerializeField]
+    Transform oriLine;
+    [SerializeField]
+    UnlockBt oriUnlockBt;
+
+    [SerializeField]
     Transform atkContent;
     [SerializeField]
     Transform defContent;
@@ -69,10 +74,18 @@ public class MPanelManager : MonoBehaviour
     const string UPGRADE_NAME = "이름";
     const string UPGRADE_COST = "비용";
     const string UPGRADE_FACTOR = "계수";
+    /// <summary>
+    /// 새로 만들어줄 개수
+    /// </summary>
+    const string CREATE_COUNT = "해금개수";
 
     const string ATK_UPGRADE = "AtkCoinUpgrade";
     const string DEF_UPGRADE = "DefUpgrade";
     const string UTIL_UPGRADE = "UtilUpgrade";
+
+    const string ATK_UNLOCK = "AtkUnlock";
+    const string DEF_UNLOCK = "DefUnlock";
+    const string UTIL_UNLOCK = "UtilUnlock";
 
     private void Start()
     {
@@ -82,9 +95,9 @@ public class MPanelManager : MonoBehaviour
         activeUpPanel = upPanels[0];
         activeUpBt = upBts[0];
 
-        AtkUpgradeSet(ATK_UPGRADE, atkUpBt, atkContent);
-        DefUpgradeSet(DEF_UPGRADE, defUpBt, defContent);
-        UtilUpgradeSet(UTIL_UPGRADE, utilUpBt, utilContent);
+        UpgradeBtSet(ATK_UPGRADE, ATK_UNLOCK, 0, atkUpBt, atkContent);
+        UpgradeBtSet(DEF_UPGRADE, DEF_UNLOCK, 1, defUpBt, defContent);
+        UpgradeBtSet(UTIL_UPGRADE, UTIL_UNLOCK, 2, utilUpBt, utilContent);
     }
 
 
@@ -166,50 +179,60 @@ public class MPanelManager : MonoBehaviour
     /// 어택 판넬의 업그레이드 버튼을 세팅해주는 함수
     /// </summary>
     /// <param name="csv">불러올 csv 파일</param>
-    /// <param name="atkBt">복제해줄 버튼 타입</param>
+    /// <param name="oriBt">복제해줄 버튼 타입</param>
     /// <param name="content">복제해줄 버튼의 위치 장소</param>
-    public void AtkUpgradeSet(string csv, MAtkUpgradeButton atkBt, Transform content)
+    public void UpgradeBtSet(string csv, string unlockCsv, int myType, MUpgradeButton oriBt, Transform content)
     {
         List<Dictionary<string, object>> datas = CSVReader.Read(csv);
 
-        for (int i = 0; i < datas.Count; i++)
+        /* // LineCount 활용
+        //홀수면 보정
+        int lineCount = datas.Count % 2 == 1 ? datas.Count / 2 + 1 : datas.Count;
+
+        for (int i = 1; i <= lineCount; i++)
         {
-            MAtkUpgradeButton temp = Instantiate(atkBt, content);
+            GameObject tempLine = new GameObject();
+            tempLine.transform.SetParent(content);
+
+            int createCount = datas.Count - 2 * i > 1 ? 2 : 1;
+
+            for (int j = 0; j < createCount; j++)
+            {
+                MAtkUpgradeButton temp = Instantiate(atkBt, tempLine.transform);
+            }
+        }*/
+
+        Transform btTargetLine = null;
+
+        for (int i = 0; i < PlayDataManager.Instance.playData.createCounts[myType]; i++)
+        {
+            if (i % 2 == 0)
+            {
+                btTargetLine = Instantiate(oriLine, content);
+            }
+            MUpgradeButton temp = Instantiate(oriBt, btTargetLine);
 
             // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
             temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
             // curValue를 위한 초기화
-            temp.upType = (AtkUpgradeType)i;
+            // 자식이 가진 ISetUpType을 사용할 수 있도록
+            temp.GetComponent<ISetUpType>().SetUpType(i);
         }
+
+        btTargetLine = Instantiate(oriLine, content);
+
+        UnlockBtSet(unlockCsv, myType, btTargetLine);
     }
 
-    public void DefUpgradeSet(string csv, MDefUpgradeButton defBt, Transform content)
+    // 공격 5개, 방어 8개, 유틸 7개
+    public void UnlockBtSet(string unlockCsv, int myType, Transform content)
     {
-        List<Dictionary<string, object>> datas = CSVReader.Read(csv);
+        List<Dictionary<string, object>> datas = CSVReader.Read(unlockCsv);
 
-        for (int i = 0; i < datas.Count; i++)
-        {
-            MDefUpgradeButton temp = Instantiate(defBt, content);
+        UnlockBt tempUnlockBt = Instantiate(oriUnlockBt, content);
 
-            // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
-            temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
-            // curValue를 위한 초기화
-            temp.upType = (DefUpgradeType)i;
-        }
-    }
+        int unlockCount = PlayDataManager.Instance.playData.openCounts[myType];
 
-    public void UtilUpgradeSet(string csv, MUtilUpgradeButton utilBt, Transform content)
-    {
-        List<Dictionary<string, object>> datas = CSVReader.Read(csv);
-
-        for (int i = 0; i < datas.Count; i++)
-        {
-            MUtilUpgradeButton temp = Instantiate(utilBt, content);
-
-            // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
-            temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
-            // curValue를 위한 초기화
-            temp.upType = (UtilUpgradeType)i;
-        }
+        tempUnlockBt.SetData(datas[unlockCount][UPGRADE_NAME].ToString(), (int)datas[unlockCount][UPGRADE_COST], (int)datas[unlockCount][CREATE_COUNT]);
     }
 }

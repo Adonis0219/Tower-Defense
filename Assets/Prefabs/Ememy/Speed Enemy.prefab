@@ -102,9 +102,9 @@ MonoBehaviour:
   poolType: 2
   killedDollar: 2
   moveSpd: 6
-  maxHp: 2.35
+  maxHp: 1
   currentHp: 0
-  collDamage: 1.1
+  collDamage: 1
   killedCoin: 2
 --- !u!61 &3082797800593604026
 BoxCollider2D:

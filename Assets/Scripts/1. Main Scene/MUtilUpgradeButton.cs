@@ -4,33 +4,18 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class MUtilUpgradeButton : MonoBehaviour
+public class MUtilUpgradeButton : MUpgradeButton, ISetUpType
 {
     [SerializeField]
-    public UtilUpgradeType upType;
+    public UtilUpgradeType myUpType;
 
-    int upCost;
-
-    float upFactor;
-
-    [SerializeField]
-    Button bt;
-
-    [Header("# TextObjects")]
-    [SerializeField]
-    TextMeshProUGUI upNameText;
-    [SerializeField]
-    TextMeshProUGUI curValueText;
-    [SerializeField]
-    TextMeshProUGUI costText;
-   
     private void Update()
     {
         bt.interactable = PlayDataManager.Instance.MainCoin > upCost ? true : false;
 
         costText.text = "<sprite=12>" + upCost;
 
-        switch (upType)
+        switch (myUpType)
         {
             case UtilUpgradeType.달러웨이브:
                 // Main화면으로 시작했을 때 게임매니저에 접근할 수 없으므로 계산식으로 넣어주기
@@ -44,27 +29,17 @@ public class MUtilUpgradeButton : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 업그레이드 버튼의 기본 데이터를 Set해주는 함수
-    /// </summary>
-    /// <param name="name">버튼의 이름</param>
-    /// <param name="cost">버튼의 비용</param>
-    /// <param name="factor">버튼의 배율</param>
-    public void SetData(string name, int cost, float factor)
-    {
-        upNameText.text = name;
-        upCost = cost;
-        upFactor = factor;
-
-        costText.text = "$" + cost;
-    }
-
     public void OnUpBtClk()
     {
         PlayDataManager.Instance.MainCoin -= upCost;
 
-        PlayDataManager.Instance.playData.utilCoinLevels[(int)upType]++;
+        PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]++;
 
         upCost = Mathf.RoundToInt(upCost * upFactor);
+    }
+
+    public void SetUpType(int upType)
+    {
+        myUpType = (UtilUpgradeType)upType;
     }
 }

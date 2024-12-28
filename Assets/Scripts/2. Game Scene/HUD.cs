@@ -31,7 +31,7 @@ public class HUD : MonoBehaviour
                 mySlider.value = curHealth / maxHealth;
                 break;
             case InfoType.Wave:
-                mySlider.value = GameManager.instance.gameTime / GameManager.instance.waveTime;
+                mySlider.value = GameManager.instance.gameTime / GameManager.instance.WaveTime;
                 break;
             default:
                 break;

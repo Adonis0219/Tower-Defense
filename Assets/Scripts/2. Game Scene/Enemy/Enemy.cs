@@ -12,14 +12,14 @@ public class Enemy : PoolObject, IHit
     public float moveSpd;
 
     [SerializeField]
-    float maxHp;
+    float baseMaxHp;
     
-    float MaxHp
+    float BaseMaxHp
     {
-        get { return maxHp; }
+        get { return baseMaxHp; }
         set
         {
-            maxHp = value;
+            baseMaxHp = value;
         }
     }
 
@@ -39,9 +39,14 @@ public class Enemy : PoolObject, IHit
             }
         }
     }
-
+    
+    /// <summary>
+    /// 기본 충돌 데미지
+    /// </summary>
     [SerializeField]
-    float collDamage;       // 충돌 데미지
+    float baseCollDamage;
+
+    float collDamage;
 
     public void Hit(float damage)
     {
@@ -50,7 +55,9 @@ public class Enemy : PoolObject, IHit
 
     private void OnEnable()
     {
-        CurrentHp = MaxHp;
+        // 소환될 때 배수만큼 곱해주기
+        CurrentHp = BaseMaxHp * GameManager.instance.waveHpFactor;
+        collDamage = baseCollDamage * GameManager.instance.waveDmgFactor;
     }
 
     // Update is called once per frame
@@ -72,20 +79,6 @@ public class Enemy : PoolObject, IHit
     public IEnumerator OnCollisionHit(float damage)
     {
         yield return null;
-    }
-
-    /// <summary>
-    /// 웨이브가 지나면 체력을 배율만큼 곱해주는 함수
-    /// </summary>
-    /// <param name="factor">곱해줄 배율</param>
-    public void WaveHpFactor(float factor)
-    {
-        CurrentHp *= factor;
-    }
-
-    public void WaveDamFactor(float factor)
-    {
-        collDamage *= factor;
     }
 
     protected virtual void OnDead()

@@ -476,7 +476,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 77cee8a601b19c24db7a1dd6274a0b78, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -497,12 +497,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3db3c379cfeb342a39f0c1c98922b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upType: 0
-  upCost: 0
   bt: {fileID: 4737350710624528423}
   upNameText: {fileID: 4737350712036409436}
   curValueText: {fileID: 4737350711160312593}
   costText: {fileID: 4737350711756250422}
+  upType: 0
+  myUpType: 0
 --- !u!1 &4737350711946612728
 GameObject:
   m_ObjectHideFlags: 0

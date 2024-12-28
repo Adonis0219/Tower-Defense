@@ -97,13 +97,19 @@ public class GameManager : MonoBehaviour
     int wave = 1;
 
     [SerializeField]
-    float waveHpFactor = 1.12f;
+    TextMeshProUGUI waveHpFactorText;
+    [SerializeField]
+    TextMeshProUGUI waveDmgFactorText;
+
+    [SerializeField]
+    public float waveHpFactor = 2.5f;
+    [SerializeField]
+    public float waveDmgFactor = 1.2f;
 
     [HideInInspector]
     public float waveBonusDollar = 0;
 
-    [HideInInspector]
-    public int waveTime = 20;
+    public int WaveTime { get; private set; } = 10;
 
     [HideInInspector]
     public float gameTime;
@@ -142,11 +148,12 @@ public class GameManager : MonoBehaviour
         {
             wave = value;
 
-            // 웨이브가 10의 배수인가 ? 1.5f : 1.2
+            // 웨이브가 10의 배수인가 ? 1.5f : 1.2f
+            waveDmgFactor *= wave % 10 == 0 ? 1.5f : 1.15f;
+            waveHpFactor *= wave % 10 == 0 ? 1.5f : 1.20f;
 
-
-            //WaveHpFactor(wave % 10 == 0 ? 1.5f : 1.2f);
-            //.WaveDamFactor(wave % 10 == 0 ? 1.5f : 1.15f);
+            waveDmgFactorText.text = waveDmgFactor.ToString("F2");
+            waveHpFactorText.text = waveHpFactor.ToString("F2");
 
             if (waveBonusDollar != 0) GoodsFactor(waveBonusDollar, wavePoint, true);
         }
@@ -192,10 +199,11 @@ public class GameManager : MonoBehaviour
     {
         gameTime += Time.deltaTime;
 
-        if (gameTime > waveTime)
+        if (gameTime > WaveTime)
         {
             Wave++;
-            gameTime = 0;
+            // 렉 방지 (초과시간 손실 방지)
+            gameTime -= WaveTime;
         }
 
         if (puasePanel.activeSelf)

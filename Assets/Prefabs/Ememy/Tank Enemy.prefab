@@ -102,7 +102,7 @@ MonoBehaviour:
   poolType: 4
   killedDollar: 3
   moveSpd: 1.5
-  maxHp: 30
+  maxHp: 2
   currentHp: 0
   collDamage: 1.5
   killedCoin: 4
