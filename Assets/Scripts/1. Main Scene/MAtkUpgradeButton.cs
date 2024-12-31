@@ -30,6 +30,19 @@ public class MAtkUpgradeButton : MUpgradeButton, ISetUpType
             case AtkUpgradeType.치명타데미지:
                 curValueText.text = "x" + (1.2f + .1f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType]).ToString("F2");
                 break;
+            case AtkUpgradeType.범위:
+                curValueText.text = (30 + (.5f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType])).ToString("F2")+ "m";
+                break;
+            case AtkUpgradeType.거리당데미지:
+                curValueText.fontSize = 40;
+                curValueText.text = "x" + (1 + (.0008f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType])).ToString("F4") + " / m";
+                break;
+            case AtkUpgradeType.멀티샷확률:
+                curValueText.text = (.5f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType]).ToString("F2") + "%";
+                break;
+            case AtkUpgradeType.멀티샷표적:
+                curValueText.text = 2 + PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType] + "";
+                break;
             default:
                 break;
         }

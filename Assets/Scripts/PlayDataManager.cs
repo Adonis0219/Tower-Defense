@@ -23,8 +23,14 @@ public class PlayData
     public int[] defCoinLevels = new int[(int)DefUpgradeType.Length];
     public int[] utilCoinLevels = new int[(int)UtilUpgradeType.Length];
 
-    public int[] createCounts = new int[3] { 4, 2, 0 };
-    public int[] openCounts = new int[3];
+    /// <summary>
+    /// 총 만들어야 할 버튼의 개수
+    /// </summary>
+    public int[] totalCreatCounts = new int[3] { 4, 2, 0 };
+    /// <summary>
+    /// 열어야 할 Unlock버튼의 인덱스
+    /// </summary>
+    public int[] lineOpenCounts = new int[3];
 }
 
 public class UnlockConditions
@@ -151,7 +157,7 @@ public class PlayDataManager : MonoBehaviour
     public void SaveData(int coin)
     {
        //MainCoin = coin;
-        MainCoin = 999999;
+        MainCoin = 99999;
 
         string saveJD = JsonUtility.ToJson(playData);
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);

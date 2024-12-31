@@ -3,8 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// 메인화면 작업장 부분의 판넬 타입
+public enum UpPanelType
+{
+    Attack,
+    Defense,
+    Utility
+}
+
 public class MPanelManager : MonoBehaviour
 {
+    public static MPanelManager instance;
+
     // 메인 화면의 업그레이드 판넬
     public enum MainPanelType 
     {
@@ -12,14 +22,6 @@ public class MPanelManager : MonoBehaviour
     }
 
     MainPanelType mainPanelType;
-
-    // 메인화면 작업장 부분의 판넬 타입
-    public enum UpPanelType
-    {
-        Attack,
-        Defense,
-        Utility
-    }
 
     UpPanelType upPanelType;
 
@@ -80,12 +82,17 @@ public class MPanelManager : MonoBehaviour
     const string CREATE_COUNT = "해금개수";
 
     const string ATK_UPGRADE = "AtkCoinUpgrade";
-    const string DEF_UPGRADE = "DefUpgrade";
+    const string DEF_UPGRADE = "DefCoinUpgrade";
     const string UTIL_UPGRADE = "UtilUpgrade";
 
     const string ATK_UNLOCK = "AtkUnlock";
     const string DEF_UNLOCK = "DefUnlock";
     const string UTIL_UNLOCK = "UtilUnlock";
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
@@ -95,9 +102,9 @@ public class MPanelManager : MonoBehaviour
         activeUpPanel = upPanels[0];
         activeUpBt = upBts[0];
 
-        UpgradeBtSet(ATK_UPGRADE, ATK_UNLOCK, 0, atkUpBt, atkContent);
-        UpgradeBtSet(DEF_UPGRADE, DEF_UNLOCK, 1, defUpBt, defContent);
-        UpgradeBtSet(UTIL_UPGRADE, UTIL_UNLOCK, 2, utilUpBt, utilContent);
+        UpgradeBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)UpPanelType.Attack, atkUpBt, atkContent);
+        UpgradeBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)UpPanelType.Defense, defUpBt, defContent);
+        UpgradeBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)UpPanelType.Utility, utilUpBt, utilContent);
     }
 
 
@@ -176,11 +183,13 @@ public class MPanelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 어택 판넬의 업그레이드 버튼을 세팅해주는 함수
+    /// 각 버튼들을 개수에 맞게 세팅해주는 함수 (UnlockLine에 따라)
     /// </summary>
-    /// <param name="csv">불러올 csv 파일</param>
-    /// <param name="oriBt">복제해줄 버튼 타입</param>
-    /// <param name="content">복제해줄 버튼의 위치 장소</param>
+    /// <param name="csv">참고할 csv파일명</param>
+    /// <param name="unlockCsv">참고할 Unlock csv파일명</param>
+    /// <param name="myType">Set할 Upgrade버튼의 타입(int형)</param>
+    /// <param name="oriBt">복제할 원본 버튼</param>
+    /// <param name="content">복제할 원본을 둘 위치</param>
     public void UpgradeBtSet(string csv, string unlockCsv, int myType, MUpgradeButton oriBt, Transform content)
     {
         List<Dictionary<string, object>> datas = CSVReader.Read(csv);
@@ -204,7 +213,7 @@ public class MPanelManager : MonoBehaviour
 
         Transform btTargetLine = null;
 
-        for (int i = 0; i < PlayDataManager.Instance.playData.createCounts[myType]; i++)
+        for (int i = 0; i < PlayDataManager.Instance.playData.totalCreatCounts[myType]; i++)
         {
             if (i % 2 == 0)
             {
@@ -224,15 +233,100 @@ public class MPanelManager : MonoBehaviour
         UnlockBtSet(unlockCsv, myType, btTargetLine);
     }
 
-    // 공격 5개, 방어 8개, 유틸 7개
+    /// <summary>
+    /// Unlock 버튼을 생성해주고 데이터를 넘겨주는 함수
+    /// </summary>
+    /// <param name="unlockCsv">참고할 csv</param>
+    /// <param name="myType">Unlock 버튼의 타입</param>
+    /// <param name="content">Unlock 버튼을 생성해줄 부모</param>
     public void UnlockBtSet(string unlockCsv, int myType, Transform content)
     {
         List<Dictionary<string, object>> datas = CSVReader.Read(unlockCsv);
 
         UnlockBt tempUnlockBt = Instantiate(oriUnlockBt, content);
 
-        int unlockCount = PlayDataManager.Instance.playData.openCounts[myType];
+        int unlockCount = PlayDataManager.Instance.playData.lineOpenCounts[myType];
 
-        tempUnlockBt.SetData(datas[unlockCount][UPGRADE_NAME].ToString(), (int)datas[unlockCount][UPGRADE_COST], (int)datas[unlockCount][CREATE_COUNT]);
+        tempUnlockBt.SetUnlockData(datas[unlockCount][UPGRADE_NAME].ToString(), (int)datas[unlockCount][UPGRADE_COST], (int)datas[unlockCount][CREATE_COUNT] , myType);
+    }
+
+    /// <summary>
+    /// UnlockBt을 클릭했을 때 버튼들을 만들어주는 함수
+    /// </summary>
+    /// <param name="myType">업그레이드 버튼의 타입</param>
+    /// <param name="createCount">만들 버튼의 개수</param>
+    public void OnUnlockClickCreate(int myType, int createCount)
+    {
+        switch (myType)
+        {   
+            case (int)UpPanelType.Attack:
+                AddUpBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)UpPanelType.Attack, createCount, atkUpBt, atkContent);
+                break;
+            case (int)UpPanelType.Defense:
+                AddUpBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)UpPanelType.Defense, createCount, defUpBt, defContent);
+                break;
+            case (int)UpPanelType.Utility:
+                AddUpBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)UpPanelType.Utility, createCount, utilUpBt, utilContent);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Unlock Bt 클릭 시 추가해줄 버튼 셋
+    /// </summary>
+    /// <param name="csv">버튼을 만들 때 참고할 csv</param>
+    /// <param name="unlockCsv">Unlock 버튼을 만들 때 참고할 csv</param>
+    /// <param name="myType">만들어줄 버튼의 타입</param>
+    /// <param name="createCount">만들 버튼의 개수</param>
+    /// <param name="oriBt">만들어줄 버튼의 원본</param>
+    /// <param name="content">버튼을 넣어줄 부모</param>
+    public void AddUpBtSet(string csv, string unlockCsv, int myType, int createCount, MUpgradeButton oriBt, Transform content)
+    {
+        List<Dictionary<string, object>> datas = CSVReader.Read(csv);
+
+        Transform btTargetLine = null;
+
+        int totalCreateCount = PlayDataManager.Instance.playData.totalCreatCounts[myType];
+
+        // 넣어줄 content의 자식들 중 마지막 자식(자식의 갯수번째 - 1)의 자식(버튼)의 개수가 1개일 때
+        if (content.GetChild(content.childCount - 1).childCount == 1)
+        {
+            // 타겟 라인을 마지막 줄로
+            btTargetLine = content.GetChild(content.childCount - 1);
+
+            // 버튼 하나만 만들어주기
+            MUpgradeButton temp = Instantiate(oriBt, btTargetLine);
+
+            // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
+            temp.SetData(datas[totalCreateCount - createCount][UPGRADE_NAME].ToString(), (int)datas[totalCreateCount - createCount][UPGRADE_COST], (float)datas[totalCreateCount - createCount][UPGRADE_FACTOR]);
+            // curValue를 위한 초기화
+            // 자식이 가진 ISetUpType을 사용할 수 있도록
+            temp.GetComponent<ISetUpType>().SetUpType(createCount);
+
+            // 만들 버튼의 개수
+            createCount--;
+        }
+
+        for (int i = totalCreateCount - createCount; i < totalCreateCount; i++)
+        {
+            if (i % 2 == 0)
+            {
+                btTargetLine = Instantiate(oriLine, content);
+            }
+
+            MUpgradeButton temp = Instantiate(oriBt, btTargetLine);
+
+            // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
+            temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
+            // curValue를 위한 초기화
+            // 자식이 가진 ISetUpType을 사용할 수 있도록
+            temp.GetComponent<ISetUpType>().SetUpType(i);
+        }
+
+        btTargetLine = Instantiate(oriLine, content);
+
+        UnlockBtSet(unlockCsv, myType, btTargetLine);
     }
 }

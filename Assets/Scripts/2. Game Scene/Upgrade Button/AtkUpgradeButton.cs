@@ -83,6 +83,7 @@ public class AtkUpgradeButton : MonoBehaviour
 
         // 해당 업그레이드 버튼에 해당하는 달러 레벨 올려주기
         GameManager.instance.atkDollarLevels[(int)upType]++;
+
         // 업그레이드 비용 .2배씩 올려주기
         upCost = Mathf.RoundToInt(upCost * upFactor);
     }

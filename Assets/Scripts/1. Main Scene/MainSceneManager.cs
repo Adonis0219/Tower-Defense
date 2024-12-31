@@ -13,9 +13,6 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI lockText;
 
-    [SerializeField]
-    GameObject lackCoin;
-
     private void Start()
     {
         instance = this;
@@ -53,12 +50,5 @@ public class MainSceneManager : MonoBehaviour
         lockText.gameObject.SetActive(true);
         yield return new WaitForSeconds(.1f);
         lockText.gameObject.SetActive(false);
-    }
-
-    public IEnumerator LackCoin()
-    {
-        lackCoin.SetActive(true);
-        yield return new WaitForSeconds(.1f);
-        lackCoin.SetActive(false);
     }
 }
