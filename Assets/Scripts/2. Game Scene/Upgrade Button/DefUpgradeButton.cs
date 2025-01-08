@@ -15,27 +15,10 @@ public enum DefUpgradeType
 }   
 
 
-public class DefUpgradeButton : MonoBehaviour
+public class DefUpgradeButton : UpgradeButton, ISetUpType
 {
     [SerializeField]
-    public DefUpgradeType upType;
-
-    [SerializeField]
-    int upCost;
-
-    [SerializeField]
-    float upFactor;
-
-    [Header("# TextObjects")]
-    [SerializeField]
-    TextMeshProUGUI upNameText;
-    [SerializeField]
-    TextMeshProUGUI curValueText;
-    [SerializeField]
-    TextMeshProUGUI costText;
-
-    [SerializeField]
-    Button bt;
+    public DefUpgradeType myUpType;
 
     private void Update()
     {
@@ -43,7 +26,7 @@ public class DefUpgradeButton : MonoBehaviour
 
         costText.text = "$" + upCost;
 
-        switch (upType)
+        switch (myUpType)
         {
             case DefUpgradeType.체력:
                 curValueText.text = GameManager.instance.player.MaxHp.ToString();
@@ -63,25 +46,21 @@ public class DefUpgradeButton : MonoBehaviour
 
     }
 
-    public void SetData(string name, int cost, float factor)
-    {
-        upNameText.text = name;
-        upCost = cost;
-        upFactor = factor;
-
-        costText.text = "$" + cost;
-    }
-
     public void OnUpBtClk()
     {
         GameManager.instance.CurDollar -= upCost;
 
-        GameManager.instance.defDollarLevels[(int)upType] ++;
+        GameManager.instance.defDollarLevels[(int)myUpType] ++;
 
         // 업그레이드 버튼이 체력타입일 경우 현재 체력 올려주기
-        if (upType == DefUpgradeType.체력)
+        if (myUpType == DefUpgradeType.체력)
             GameManager.instance.player.CurrentHp += 5;
 
         upCost = Mathf.RoundToInt(upCost * upFactor);
+    }
+
+    public void SetUpType(int upType)
+    {
+        myUpType = (DefUpgradeType)upType;
     }
 }

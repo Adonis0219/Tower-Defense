@@ -10,30 +10,16 @@ public enum UtilUpgradeType
     Length
 }
 
-public class UtilUpgradeButton : MonoBehaviour
+public class UtilUpgradeButton : UpgradeButton, ISetUpType
 {
     [SerializeField]
-    public UtilUpgradeType upType;
-
-    [SerializeField]
-    int upCost;
-
-    [SerializeField]
-    float upFactor;
-
-    [Header("# TextObjects")]
-    [SerializeField]
-    TextMeshProUGUI upNameText;
-    [SerializeField]
-    TextMeshProUGUI curValueText;
-    [SerializeField]
-    TextMeshProUGUI costText;
+    public UtilUpgradeType myUpType;
 
     private void Update()
     {
         costText.text = "$" + upCost;
 
-        switch (upType)
+        switch (myUpType)
         {
             case UtilUpgradeType.달러웨이브:
                 curValueText.text = GameManager.instance.waveBonusDollar.ToString();
@@ -46,19 +32,12 @@ public class UtilUpgradeButton : MonoBehaviour
         }
 
     }
-    public void SetData(string name, int cost, float factor)
-    {
-        upNameText.text = name;
-        upCost = cost;
-        upFactor = factor;
-        costText.text = "$" + cost;
-    }
 
     public void OnUpBtClk()
     {
         GameManager.instance.CurDollar -= upCost;
 
-        switch (upType)
+        switch (myUpType)
         {
             case UtilUpgradeType.달러웨이브:
                 GameManager.instance.waveBonusDollar += 4;
@@ -73,5 +52,10 @@ public class UtilUpgradeButton : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void SetUpType(int upType)
+    {
+        myUpType = (UtilUpgradeType)upType;
     }
 }

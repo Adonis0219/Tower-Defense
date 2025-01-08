@@ -59,6 +59,29 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
+    float range;
+
+    public float Range
+    {
+        get 
+        {
+            range = 35 + .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.범위] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.범위]);
+            return range; 
+        }
+    }
+
+    [SerializeField]
+    float dmgPerMeter;
+
+    public float DmgPerMeter
+    {
+        get
+        {
+            dmgPerMeter = 1 + .008f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.거리당데미지] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.거리당데미지]);
+            return dmgPerMeter;
+        }
+    }
 
     [Header("  # Def")]
     [SerializeField]
@@ -134,20 +157,12 @@ public class Player : MonoBehaviour, IHit
 
     [Header("# Bullet")]
     [SerializeField]
-    Transform range;
-
-    [SerializeField]
-    float radius;
+    Transform rangeObject;
 
     [SerializeField]
     LayerMask enemyMask;
 
     Transform nearestTarget;
-
-    private void Awake()
-    {
-
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -164,7 +179,7 @@ public class Player : MonoBehaviour, IHit
     void Update()
     {
         // 범위 조정
-        range.localScale = Vector3.one * radius * 2;
+        rangeObject.localScale = Vector3.one * (Range + .5f) / 10;
     }
 
     void Shoot(Vector3 targetPos)
@@ -182,9 +197,9 @@ public class Player : MonoBehaviour, IHit
         while (true)
         {
             // 범위 내의 collider 모두 가져오기
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius, enemyMask);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, (Range + .5f) / 20, enemyMask);
             // 콜라이더가 있다면 -> 적이 있다면
-            if (colliders.Length > 0 && Vector3.Distance(colliders[0].transform.position, this.transform.position) <= radius)
+            if (colliders.Length > 0 && Vector3.Distance(colliders[0].transform.position, this.transform.position) <= (Range + .5f) / 20)
             {
                 // 가장 가까운 타겟
                 nearestTarget = colliders[0].transform;
@@ -227,7 +242,6 @@ public class Player : MonoBehaviour, IHit
     public void Hit(float damage)
     {
         CurrentHp -= (damage * (1 - Def)) - AbsDef;
-        //CurrentHp -= damage;
     }
 
     // 피격데미지

@@ -15,40 +15,19 @@ public enum AtkUpgradeType
     Length
 }   
 
-public class AtkUpgradeButton : MonoBehaviour
+public class AtkUpgradeButton : UpgradeButton, ISetUpType
 {
 
     [SerializeField]
-    public AtkUpgradeType upType;
-
-    [SerializeField]
-    int upCost;
-
-    [SerializeField]
-    float upFactor;
-
-    //int[] dollarLevel = new int[(int)UpgradeType.Length];
-    int dollarLevel = 0;
-
-    [Header("# TextObjects")]
-    [SerializeField]
-    TextMeshProUGUI upNameText;
-    [SerializeField]
-    TextMeshProUGUI curValueText;
-    [SerializeField]
-    TextMeshProUGUI costText;
-
-    [SerializeField]
-    Button bt;
+    public AtkUpgradeType myUpType;
 
     private void Update()
     {
-        curValueText.text  = ParseNumber.Parse(1000);
         bt.interactable = GameManager.instance.CurDollar < upCost ? false : true;   
 
         costText.text = "$" + upCost;
 
-        switch (upType)
+        switch (myUpType)
         {
             case AtkUpgradeType.데미지:
                 curValueText.text = GameManager.instance.player.Damage.ToString();                
@@ -62,18 +41,26 @@ public class AtkUpgradeButton : MonoBehaviour
             case AtkUpgradeType.치명타데미지:
                 curValueText.text = "x" + GameManager.instance.player.CritFactor.ToString("F2");
                 break;
+            case AtkUpgradeType.범위:
+                curValueText.text = GameManager.instance.player.Range.ToString("F2") + "m";
+                break;
+            case AtkUpgradeType.거리당데미지:
+                curValueText.fontSize = 40;
+                curValueText.text = "x" + GameManager.instance.player.DmgPerMeter.ToString("F4") + " / m";
+                break;
+            case AtkUpgradeType.멀티샷확률:
+                break;
+            case AtkUpgradeType.멀티샷표적:
+                break;
+            case AtkUpgradeType.바운스샷확률:
+                break;
+            case AtkUpgradeType.바운스샷표적:
+                break;
+            case AtkUpgradeType.바운스샷범위:
+                break;
             default:
                 break;
         }
-    }
-
-    public void SetData(string name, int cost, float factor)
-    {
-        upNameText.text = name;
-        upCost = cost;
-        upFactor = factor;
-
-        costText.text = "$" + cost;
     }
 
     public void OnUpBtClk()
@@ -82,9 +69,14 @@ public class AtkUpgradeButton : MonoBehaviour
         GameManager.instance.CurDollar -= upCost;
 
         // 해당 업그레이드 버튼에 해당하는 달러 레벨 올려주기
-        GameManager.instance.atkDollarLevels[(int)upType]++;
+        GameManager.instance.atkDollarLevels[(int)myUpType]++;
 
         // 업그레이드 비용 .2배씩 올려주기
         upCost = Mathf.RoundToInt(upCost * upFactor);
+    }
+
+    public void SetUpType(int upType)
+    {
+        myUpType = (AtkUpgradeType)upType;
     }
 }

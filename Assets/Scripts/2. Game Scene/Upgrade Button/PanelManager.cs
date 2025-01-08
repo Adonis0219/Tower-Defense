@@ -34,6 +34,9 @@ public class PanelManager : MonoBehaviour
     [SerializeField]
     RectTransform infoPanel;
 
+    [SerializeField]
+    GameObject utilLock;
+
     const string ATK_UPGRADE = "AtkUpgrade";
     const string DEF_UPGRADE = "DefUpgrade";
     const string UTIL_UPGRADE = "UtilUpgrade";
@@ -47,9 +50,9 @@ public class PanelManager : MonoBehaviour
         activePanel = panels[0];
         activeIcon = btIcons[0];
 
-        AtkUpgradeSet(ATK_UPGRADE, atkUpBt, atkContent);
-        DefUpgradeSet(DEF_UPGRADE, defUpBt, defContent);
-        UtilUpgradeSet(UTIL_UPGRADE, utilUpBt, utilContent);
+        UpgradeBtSet(ATK_UPGRADE, PlayDataManager.Instance.playData.totalCreatCounts[(int)PanelType.Attack], atkUpBt, atkContent);
+        UpgradeBtSet(DEF_UPGRADE, PlayDataManager.Instance.playData.totalCreatCounts[(int)PanelType.Defense], defUpBt, defContent);
+        UpgradeBtSet(UTIL_UPGRADE, PlayDataManager.Instance.playData.totalCreatCounts[(int)PanelType.Utility], utilUpBt, utilContent);
     }
 
     [SerializeField]
@@ -106,45 +109,22 @@ public class PanelManager : MonoBehaviour
         btIcons[type].color = baseColor;
     }
 
-    public void AtkUpgradeSet(string csv, AtkUpgradeButton atkBt, Transform content)
+    public void UpgradeBtSet(string csv, int createCount, UpgradeButton oriBt, Transform content)
     {
         List<Dictionary<string, object>> datas = CSVReader.Read(csv);
 
-        for (int i = 0; i < datas.Count; i++)
+        if (oriBt == utilUpBt && createCount != 0)
         {
-            AtkUpgradeButton temp = Instantiate(atkBt, content);
-
-            temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
-            // curValue를 위한 초기화
-            temp.upType = (AtkUpgradeType)i;
+            utilLock.SetActive(false);
         }
-    }
 
-    public void DefUpgradeSet(string csv, DefUpgradeButton defBt, Transform content)
-    {
-        List<Dictionary<string, object>> datas = CSVReader.Read(csv);
-
-        for (int i = 0; i < datas.Count; i++)
+        for (int i = 0; i < createCount; i++)
         {
-            DefUpgradeButton temp = Instantiate(defBt, content);
+            UpgradeButton tempBt = Instantiate(oriBt, content);
 
-            temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
-            // curValue를 위한 초기화
-            temp.upType = (DefUpgradeType)i;
+            tempBt.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
+
+            tempBt.GetComponent<ISetUpType>().SetUpType(i);
         }
-    }
-
-    public void UtilUpgradeSet(string csv, UtilUpgradeButton utilBt, Transform content)
-    {
-        List<Dictionary<string, object>> datas = CSVReader.Read(csv);
-
-        for (int i = 0; i < datas.Count; i++)
-        {
-            UtilUpgradeButton temp = Instantiate(utilBt, content);
-
-            temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
-            // curValue를 위한 초기화
-            temp.upType = (UtilUpgradeType)i;
-        }
-    }    
+    }   
 }

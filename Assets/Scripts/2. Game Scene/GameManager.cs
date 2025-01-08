@@ -265,12 +265,12 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SpawnEnemy()
     {
-        int spawnIndex;
+        int spawnIndex;     // 소환해줄 적의 index(타입)
 
+        // 웨이브 데이터의 길이 -> 총 웨이브 수
         while (Wave < waveDatas.Length)
         {
-            //spawnWFS = new WaitForSeconds(GameManager.instance.waveDatas[GameManager.instance.Wave].spawnTime);           
-
+            // 원형 소환
             float t = Random.Range(0f, 2 * Mathf.PI);
 
             Vector3 circlePos;
@@ -290,7 +290,6 @@ public class GameManager : MonoBehaviour
             // 적이 플레이어 방향 바라보게
             tempEnemy.up = player.transform.position - spawnPos;
 
-            //yield return spawnWFS;
             yield return new WaitForSeconds(3);
         }
     }
