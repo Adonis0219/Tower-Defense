@@ -31,7 +31,7 @@ public class MAtkUpgradeButton : MUpgradeButton, ISetUpType
                 curValueText.text = "x" + (1.2f + .1f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType]).ToString("F2");
                 break;
             case AtkUpgradeType.범위:
-                curValueText.text = (35 + (.5f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType])).ToString("F2")+ "m";
+                curValueText.text = (20 + (.5f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType])).ToString("F2")+ "m";
                 break;
             case AtkUpgradeType.거리당데미지:
                 curValueText.fontSize = 40;

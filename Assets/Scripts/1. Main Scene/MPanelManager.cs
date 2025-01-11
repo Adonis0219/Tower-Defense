@@ -231,24 +231,7 @@ public class MPanelManager : MonoBehaviour
         btTargetLine = Instantiate(oriLine, content);
 
         UnlockBtSet(unlockCsv, myType, btTargetLine);
-    }
-
-    /// <summary>
-    /// Unlock 버튼을 생성해주고 데이터를 넘겨주는 함수
-    /// </summary>
-    /// <param name="unlockCsv">참고할 csv</param>
-    /// <param name="myType">Unlock 버튼의 타입</param>
-    /// <param name="content">Unlock 버튼을 생성해줄 부모</param>
-    public void UnlockBtSet(string unlockCsv, int myType, Transform content)
-    {
-        List<Dictionary<string, object>> datas = CSVReader.Read(unlockCsv);
-
-        UnlockBt tempUnlockBt = Instantiate(oriUnlockBt, content);
-
-        int unlockCount = PlayDataManager.Instance.playData.lineOpenCounts[myType];
-
-        tempUnlockBt.SetUnlockData(datas[unlockCount][UPGRADE_NAME].ToString(), (int)datas[unlockCount][UPGRADE_COST], (int)datas[unlockCount][CREATE_COUNT] , myType);
-    }
+    }    
 
     /// <summary>
     /// UnlockBt을 클릭했을 때 버튼들을 만들어주는 함수
@@ -290,8 +273,9 @@ public class MPanelManager : MonoBehaviour
 
         int totalCreateCount = PlayDataManager.Instance.playData.totalCreatCounts[myType];
 
-        // 넣어줄 content의 자식들 중 마지막 자식(자식의 갯수번째 - 1)의 자식(버튼)의 개수가 1개일 때
-        if (content.GetChild(content.childCount - 1).childCount == 1)
+        // TotalCreateCount == 2 -> Utility 첫 업그레이드 -> 검사할 필요 X
+        // 넣어줄 content의 자식들 중 마지막 라인(자식의 갯수번째 - 1)의 자식(버튼)의 개수가 1개일 때
+        if (totalCreateCount > 2 && content.GetChild(content.childCount - 1).childCount == 1)
         {
             // 타겟 라인을 마지막 줄로
             btTargetLine = content.GetChild(content.childCount - 1);
@@ -328,5 +312,22 @@ public class MPanelManager : MonoBehaviour
         btTargetLine = Instantiate(oriLine, content);
 
         UnlockBtSet(unlockCsv, myType, btTargetLine);
+    }
+
+    /// <summary>
+    /// Unlock 버튼을 생성해주고 데이터를 넘겨주는 함수
+    /// </summary>
+    /// <param name="unlockCsv">참고할 csv</param>
+    /// <param name="myType">Unlock 버튼의 타입</param>
+    /// <param name="content">Unlock 버튼을 생성해줄 부모</param>
+    public void UnlockBtSet(string unlockCsv, int myType, Transform content)
+    {
+        List<Dictionary<string, object>> datas = CSVReader.Read(unlockCsv);
+
+        UnlockBt tempUnlockBt = Instantiate(oriUnlockBt, content);
+
+        int unlockCount = PlayDataManager.Instance.playData.lineOpenCounts[myType];
+
+        tempUnlockBt.SetUnlockData(datas[unlockCount][UPGRADE_NAME].ToString(), (int)datas[unlockCount][UPGRADE_COST], (int)datas[unlockCount][CREATE_COUNT], myType);
     }
 }

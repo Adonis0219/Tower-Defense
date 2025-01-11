@@ -2537,6 +2537,7 @@ MonoBehaviour:
   critFactor: 1.2
   atkSpd: 3
   range: 35
+  dmgPerMeter: 0
   maxHp: 5
   currentHp: 0
   regenHp: 0
@@ -3779,7 +3780,7 @@ MonoBehaviour:
   defContent: {fileID: 612294810}
   utilContent: {fileID: 1826243038}
   infoPanel: {fileID: 83519843}
-  utilLock: {fileID: 0}
+  utilLock: {fileID: 1900253136}
   panels:
   - {fileID: 477360857}
   - {fileID: 1328673234}

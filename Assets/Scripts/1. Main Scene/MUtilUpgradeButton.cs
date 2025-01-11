@@ -17,12 +17,25 @@ public class MUtilUpgradeButton : MUpgradeButton, ISetUpType
 
         switch (myUpType)
         {
-            case UtilUpgradeType.달러웨이브:
-                // Main화면으로 시작했을 때 게임매니저에 접근할 수 없으므로 계산식으로 넣어주기
-                //curValueText.text = (3 * (PlayDataManager.Instance.playData.atkCoinLevels[(int)upType]+1)).ToString();
+            case UtilUpgradeType.캐시보너스:
+                curValueText.text = "x" + (1 + .01f * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString("F2");
                 break;
-            case UtilUpgradeType.달러보너스:
-                //curValueText.text = (1 + .05f * PlayDataManager.Instance.playData.atkCoinLevels[(int)upType]).ToString("F2");
+            case UtilUpgradeType.캐시웨이브:
+                curValueText.text = (4 * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString();
+                break;
+            case UtilUpgradeType.코인보너스:
+                break;
+            case UtilUpgradeType.코인웨이브:
+                break;
+            case UtilUpgradeType.무료공격업:
+                break;
+            case UtilUpgradeType.무료방어업:
+                break;
+            case UtilUpgradeType.무료유틸업:
+                break;
+            case UtilUpgradeType.이자웨이브:
+                break;
+            case UtilUpgradeType.Length:
                 break;
             default:
                 break;

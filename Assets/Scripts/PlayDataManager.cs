@@ -14,7 +14,7 @@ public class PlayData
     public int dia = 0;
     public int bestWave = 0;
     public int achive = 0;
-
+    
     // 메인화면의 판넬 해제를 위한 총 벌어들인 코인 수
     public float totalEarnCoin = 0;
     

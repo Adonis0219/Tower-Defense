@@ -66,7 +66,7 @@ public class Player : MonoBehaviour, IHit
     {
         get 
         {
-            range = 35 + .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.범위] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.범위]);
+            range = 20 + .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.범위] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.범위]);
             return range; 
         }
     }
@@ -154,6 +154,9 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [Header("  # Def")]
+   // [SerializeField]
+   
 
     [Header("# Bullet")]
     [SerializeField]
@@ -179,7 +182,7 @@ public class Player : MonoBehaviour, IHit
     void Update()
     {
         // 범위 조정
-        rangeObject.localScale = Vector3.one * (Range + .5f) / 10;
+        rangeObject.localScale = Vector3.one * Range / 5;        
     }
 
     void Shoot(Vector3 targetPos)
@@ -188,8 +191,6 @@ public class Player : MonoBehaviour, IHit
         tempBullet.SetParent(GameManager.instance.poolManager.GetChild(0));
         tempBullet.position = transform.position;
         tempBullet.up = targetPos - transform.position;
-
-        //Transform tempBullet = Instantiate(oriBullet, transform.position, Quaternion.identity);
     }
 
     IEnumerator OnShoot()
@@ -197,9 +198,9 @@ public class Player : MonoBehaviour, IHit
         while (true)
         {
             // 범위 내의 collider 모두 가져오기
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, (Range + .5f) / 20, enemyMask);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, Range / 10, enemyMask);
             // 콜라이더가 있다면 -> 적이 있다면
-            if (colliders.Length > 0 && Vector3.Distance(colliders[0].transform.position, this.transform.position) <= (Range + .5f) / 20)
+            if (colliders.Length > 0 && Vector3.Distance(colliders[0].transform.position, this.transform.position) <= Range / 10)
             {
                 // 가장 가까운 타겟
                 nearestTarget = colliders[0].transform;

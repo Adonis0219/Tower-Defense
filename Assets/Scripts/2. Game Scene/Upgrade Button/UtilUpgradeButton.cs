@@ -5,8 +5,14 @@ using TMPro;
 using UnityEditor;
 public enum UtilUpgradeType
 {
-    달러웨이브,
-    달러보너스,
+    캐시보너스,
+    캐시웨이브,
+    코인보너스,
+    코인웨이브,
+    무료공격업,
+    무료방어업,
+    무료유틸업,
+    이자웨이브,
     Length
 }
 
@@ -17,41 +23,44 @@ public class UtilUpgradeButton : UpgradeButton, ISetUpType
 
     private void Update()
     {
+        bt.interactable = GameManager.instance.CurDollar < upCost ? false : true;
+
         costText.text = "$" + upCost;
 
         switch (myUpType)
         {
-            case UtilUpgradeType.달러웨이브:
-                curValueText.text = GameManager.instance.waveBonusDollar.ToString();
+            case UtilUpgradeType.캐시보너스:
+                curValueText.text = "x" + GameManager.instance.DollarBonusFactor.ToString("F2");
                 break;
-            case UtilUpgradeType.달러보너스:
-                curValueText.text = GameManager.instance.dollarBonusFactor.ToString();
+            case UtilUpgradeType.캐시웨이브:
+                curValueText.text = GameManager.instance.DollarWaveBonus.ToString();
+                break;
+            case UtilUpgradeType.코인보너스:
+                break;
+            case UtilUpgradeType.코인웨이브:
+                break;
+            case UtilUpgradeType.무료공격업:
+                break;
+            case UtilUpgradeType.무료방어업:
+                break;
+            case UtilUpgradeType.무료유틸업:
+                break;
+            case UtilUpgradeType.이자웨이브:
+                break;
+            case UtilUpgradeType.Length:
                 break;
             default:
                 break;
         }
-
     }
 
     public void OnUpBtClk()
     {
         GameManager.instance.CurDollar -= upCost;
 
-        switch (myUpType)
-        {
-            case UtilUpgradeType.달러웨이브:
-                GameManager.instance.waveBonusDollar += 4;
-                // 업그레이드 비용 .1배씩 올려주기
-                upCost = Mathf.RoundToInt(upCost * upFactor);
-                break;
-            case UtilUpgradeType.달러보너스:
+        GameManager.instance.utilDollarLevels[(int)myUpType]++;
 
-                GameManager.instance.dollarBonusFactor += .5f;
-                upCost = Mathf.RoundToInt(upCost * upFactor);
-                break;
-            default:
-                break;
-        }
+        upCost = Mathf.RoundToInt(upCost * upFactor);
     }
 
     public void SetUpType(int upType)

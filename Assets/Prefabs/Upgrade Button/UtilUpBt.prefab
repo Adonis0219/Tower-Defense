@@ -226,12 +226,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af39b668b8e2d234782dfe7682c32df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upType: 0
-  upCost: 0
-  upFactor: 0
+  bt: {fileID: 939701466532349009}
   upNameText: {fileID: 939701465646884840}
   curValueText: {fileID: 939701466749344742}
   costText: {fileID: 939701467126586099}
+  upType: 0
+  myUpType: 0
 --- !u!1 &939701466532349011
 GameObject:
   m_ObjectHideFlags: 0

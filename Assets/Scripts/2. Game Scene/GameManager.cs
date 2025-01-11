@@ -42,14 +42,31 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI curDollarText;
 
     [SerializeField]
-    GameObject lackDollar;
-
-    [SerializeField]
     float initDollar = 80;
     
     float curDollar;
 
-    public float dollarBonusFactor = 1f;
+    int dollarWaveBonus;
+
+    public int DollarWaveBonus
+    {
+        get
+        {
+            dollarWaveBonus = 4 * (utilCoinLevels[(int)UtilUpgradeType.캐시웨이브] + utilDollarLevels[(int)UtilUpgradeType.캐시웨이브]);
+            return dollarWaveBonus;
+        }
+    }
+
+    float dollarBonusFactor;
+
+    public float DollarBonusFactor
+    {
+        get
+        {
+            dollarBonusFactor = 1 + .01f * (utilCoinLevels[(int)UtilUpgradeType.캐시보너스] + utilDollarLevels[(int)UtilUpgradeType.캐시보너스]);
+            return dollarBonusFactor;
+        }
+    }
 
     [Header("# Coin")]
     [SerializeField]
@@ -106,9 +123,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public float waveDmgFactor = 1.2f;
 
-    [HideInInspector]
-    public float waveBonusDollar = 0;
-
     public int WaveTime { get; private set; } = 10;
 
     [HideInInspector]
@@ -125,7 +139,7 @@ public class GameManager : MonoBehaviour
         set
         {
             curDollar = value;
-            curDollarText.text = "$" + curDollar;
+            curDollarText.text = "$" + curDollar.ToString("F0");
         }
     }
     public int CurCoin
@@ -155,7 +169,10 @@ public class GameManager : MonoBehaviour
             waveDmgFactorText.text = waveDmgFactor.ToString("F2");
             waveHpFactorText.text = waveHpFactor.ToString("F2");
 
-            if (waveBonusDollar != 0) GoodsFactor(waveBonusDollar, wavePoint, true);
+            curDollar += DollarWaveBonus;
+
+            // 달러 위치에 Uptext
+            //if (waveBonusDollar != 0) GoodsFactor(waveBonusDollar, wavePoint, true);
         }
     }
 
@@ -221,13 +238,12 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        // 누르는 숫자에 따라 게임 속도 변경
         for (int i = 0; i < 10; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
                 CurTimeScale = i + 1;
-                //Time.timeScale = i + 1;
-                //timeScaleText.text = "x" + (i + 1);
             }
         }
     }
@@ -348,7 +364,16 @@ public class GameManager : MonoBehaviour
     // 웨이브
     public void GoodsFactor(float basicGoods, bool isDollar)
     {
-        CurDollar += basicGoods * (isDollar ? dollarBonusFactor : coinBonusFactor);
+        if (isDollar)
+        {
+            curDollar += basicGoods * DollarBonusFactor;
+        }
+        else
+        {
+            curCoin += (int)(basicGoods * coinBonusFactor);
+        }
+
+        CurDollar += basicGoods * (isDollar ? DollarBonusFactor : coinBonusFactor);
     }
 
     // 적
@@ -364,15 +389,15 @@ public class GameManager : MonoBehaviour
 
         if (isDollar)
         {
-            CurDollar += basicGoods * dollarBonusFactor;
+            CurDollar += basicGoods * DollarBonusFactor;
             tempUpText.transform.position = enenyPos.position + new Vector3(0, .1f, 0);
-            tempUpTextMesh.text = "$" + basicGoods * dollarBonusFactor;
+            tempUpTextMesh.text = "$" + basicGoods * DollarBonusFactor;
         }
         else
         {
             CurCoin += (int)(basicGoods * coinBonusFactor);
             tempUpText.transform.position = enenyPos.position + new Vector3(0, .5f, 0);
-            tempUpTextMesh.text = "<sprite=12>" + basicGoods * dollarBonusFactor;
+            tempUpTextMesh.text = "<sprite=12>" + basicGoods * DollarBonusFactor;
         }
     }
 
