@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IHit
 {
     [Header("# Debug")]
-    [SerializeField]
-    bool isShoot = false;
+
+    //bool isShoot = false;
 
     [Header("# Player Status")]
     [Header("  # ATTACK")]
-    [SerializeField]
     float damage;
 
     public float Damage
@@ -23,7 +23,6 @@ public class Player : MonoBehaviour, IHit
         // 외부에선 설정할 수 없으므로 Set은 없다
     }
 
-    [SerializeField]    // 크리티컬 확률
     float critChance;
 
     public float CritChance
@@ -35,7 +34,6 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    [SerializeField]    // 크리티컬 배율
     float critFactor;
 
     public float CritFactor
@@ -47,7 +45,6 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    [SerializeField]
     float atkSpd;
 
     public float AtkSpd
@@ -59,7 +56,6 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    [SerializeField]
     float range;
 
     public float Range
@@ -71,7 +67,6 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    [SerializeField]
     float dmgPerMeter;
 
     public float DmgPerMeter
@@ -83,6 +78,32 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    float multiChance;
+
+    public float MultiChance
+    {
+        get
+        {
+            multiChance = .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.멀티샷확률] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.멀티샷확률]);
+            return multiChance;
+        }
+    }
+
+    int multiCount;
+
+    public int MultiCount
+    {
+        get
+        {
+            multiCount = 2 + GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.멀티샷표적] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.멀티샷표적];
+            return multiCount;
+        }
+    }
+
+    public float bounceChance = 100;
+    public int bounceCount = 2;
+    public float bounceRange = 1;
+    
     [Header("  # Def")]
     [SerializeField]
     float maxHp;
@@ -163,7 +184,7 @@ public class Player : MonoBehaviour, IHit
     Transform rangeObject;
 
     [SerializeField]
-    LayerMask enemyMask;
+    public LayerMask enemyMask;
 
     Transform nearestTarget;
 
@@ -172,8 +193,7 @@ public class Player : MonoBehaviour, IHit
     {
         CurrentHp = MaxHp;
 
-        if (isShoot)
-            StartCoroutine(OnShoot());
+        StartCoroutine(OnShoot());
 
         StartCoroutine(OnRegenHp());
     }
@@ -185,12 +205,17 @@ public class Player : MonoBehaviour, IHit
         rangeObject.localScale = Vector3.one * Range / 5;        
     }
 
-    void Shoot(Vector3 targetPos)
-    {       
-        Transform tempBullet = PoolManager.instance.GetPool(PoolObejectType.bullet).transform;
-        tempBullet.SetParent(GameManager.instance.poolManager.GetChild(0));
-        tempBullet.position = transform.position;
-        tempBullet.up = targetPos - transform.position;
+    bool IsMultishot(float chance)
+    {
+        float randNum = Random.Range(0f, 100f);
+
+        // 랜덤으로 돌린값이 chance보다 작다면
+        // 참 반환 -> 크리티컬이다
+        if (chance >= randNum)
+        {
+            return true;
+        }
+        else return false;
     }
 
     IEnumerator OnShoot()
@@ -198,35 +223,49 @@ public class Player : MonoBehaviour, IHit
         while (true)
         {
             // 범위 내의 collider 모두 가져오기
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, Range / 10, enemyMask);
-            // 콜라이더가 있다면 -> 적이 있다면
-            if (colliders.Length > 0 && Vector3.Distance(colliders[0].transform.position, this.transform.position) <= Range / 10)
-            {
-                // 가장 가까운 타겟
-                nearestTarget = colliders[0].transform;
-                // 가장 가까운 타겟과의 거리
-                float nearestDist = Vector3.Distance(colliders[0].transform.position, this.transform.position);
+            Collider2D[] colls = Physics2D.OverlapCircleAll(transform.position, Range / 10, enemyMask);
 
-                for (int i = 1; i < colliders.Length; i++)
+            List<Target> targets = new List<Target>();
+
+            foreach (var coll in colls)
+            {
+                targets.Add(new Target(coll, Vector3.Distance(transform.position, coll.transform.position)));
+            }
+
+            List<Target> sortedTraget = targets.OrderBy(x => x.distance).ToList();
+
+
+            if (sortedTraget.Count > 0)
+            {
+                int shootCount = IsMultishot(MultiChance) ? MultiCount : 1;
+
+                if (shootCount > sortedTraget.Count) shootCount = sortedTraget.Count;
+               
+                // 가까운 순으로 발사수(멀티샷 수)만큼 발사
+                for (int i = 0; i < shootCount; i++)
                 {
-                    // 가장 가까운 타겟과의 거리보다 i번째와의 거리가 더 짧으면
-                    if (Vector3.Distance(colliders[i].transform.position, this.transform.position) < nearestDist)
-                    {
-                        nearestDist = Vector3.Distance(colliders[i].transform.position, this.transform.position);
-                        // 가장 가까운 타겟은 i이다
-                        nearestTarget = colliders[i].transform;
-                    }
+                    Shoot(sortedTraget[i].collider.transform.position);
                 }
 
-                // 첫번째 적에게 총알 발사
-                Shoot(nearestTarget.position);              
+                targets.Clear();
+                sortedTraget.Clear();
 
-                yield return new WaitForSeconds(1/AtkSpd);
+                yield return new WaitForSeconds(1 / AtkSpd);
             }
 
             yield return null;
         }
     }
+
+    void Shoot(Vector3 targetPos)
+    {
+        Transform tempBullet = PoolManager.instance.GetPool(PoolObejectType.bullet).transform;
+        tempBullet.SetParent(GameManager.instance.poolManager.GetChild(0));
+        tempBullet.position = transform.position;
+        tempBullet.up = targetPos - transform.position;
+    }
+
+
 
     IEnumerator OnRegenHp()
     {
@@ -262,4 +301,16 @@ public class Player : MonoBehaviour, IHit
         Destroy(gameObject);
         Time.timeScale = 0;
     }
+}
+
+public class Target
+{
+    public Collider2D collider;
+    public float distance;
+
+    public Target(Collider2D collider, float distance)
+    {
+        this.collider = collider;
+        this.distance = distance;
+    } 
 }
