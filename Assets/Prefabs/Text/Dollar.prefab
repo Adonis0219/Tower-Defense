@@ -185,6 +185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ce49853a3226f24ebdd81e91500fba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolType: 4
+  poolType: 5
   upSpeed: 1
   deleteTime: 1

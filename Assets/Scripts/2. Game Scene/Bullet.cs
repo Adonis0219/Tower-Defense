@@ -19,6 +19,8 @@ public class Bullet : PoolObject
 
     float bulletDmg;
 
+    public Transform target;
+
     private void Awake()
     {
         player = GameManager.instance.player;
@@ -29,12 +31,14 @@ public class Bullet : PoolObject
     {
         StartCoroutine(Delete());
 
-        isBouncBullet = IsChanceTrue(player.bounceChance);
+        speed = 15;
+
+        isBouncBullet = IsChanceTrue(player.BounceChance);
         // 매개변수로 크확을 넣었으므로 -> 크리티컬인가?
         isCritBullet = IsChanceTrue(player.CritChance);
         bulletDmg = player.Damage;
 
-        bounceCount = player.bounceCount;
+        bounceCount = player.BounceCount;
     }
 
     [SerializeField]
@@ -43,16 +47,8 @@ public class Bullet : PoolObject
     // Update is called once per frame
     void Update()
     {
+        transform.up = target.position - transform.position;
         transform.Translate(Vector3.up * speed * Time.deltaTime);
-
-        Debug.DrawRay(transform.position, transform.up, Color.yellow, lineSize);
-
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, lineSize);
-
-        if (!hit)
-        { 
-            PoolManager.instance.SetPool(gameObject, PoolObejectType.bullet);
-        }
     }
 
     /// <summary>
@@ -76,10 +72,11 @@ public class Bullet : PoolObject
     // 2초 뒤에 자신을 삭제
     IEnumerator Delete()
     {
-        yield return new WaitForSeconds(2f);
-
-        PoolManager.instance.SetPool(gameObject, PoolObejectType.bullet);
+        yield return new WaitForSeconds(4f);
+        ReturnPool();
     }
+
+    Collider2D[] colliders;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {       
@@ -101,64 +98,47 @@ public class Bullet : PoolObject
         // hitObj의 Hit함수 실행
         hitObj.Hit(finalDmg);
 
-        SpawnUpText(finalDmg);
+        player.LifeSteal(finalDmg);
 
-        Transform nearestTarget;
+        // 부딪힌 적의 액티브가 꺼져있지 않다면 -> 살아있다면
+        if (collision.transform.gameObject.activeSelf == true) SpawnUpText(finalDmg);
 
-        // 적이 살아 있을 때 논리 추가
-        
         // 바운스 총알이고
-        if (isBouncBullet)
+        if (isBouncBullet && bounceCount > 0)
         {
-            if (bounceCount > 0)
-            {
                 bounceCount--;
 
                 // 바운스범위 내의 적 모두 찾기
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, player.bounceRange, player.enemyMask);
+                colliders = Physics2D.OverlapCircleAll(transform.position, player.BounceRange / 10, player.enemyMask);
+                    
+                // 가까운 순으로 정렬
+                SortArrayByNearest();
 
-                for (int i = 0; i < colliders.Length; i++)
+                if (colliders.Length == 0)
                 {
-                    Debug.Log(colliders[i]);
+                    ReturnPool();
+                    return;
                 }
 
-                if (colliders.Length > 1)
+                if (colliders[0] == collision)
                 {
-                    // 가장 가까운 타겟
-                    nearestTarget = colliders[0].transform;
-                    // 가장 가까운 타겟과의 거리
-                    float nearestDist = Vector3.Distance(colliders[0].transform.position, this.transform.position);
-
-                    for (int j = 1; j < colliders.Length; j++)
+                    if (colliders.Length == 1)
                     {
-                        // 가장 가까운 타겟과의 거리보다 j번째와의 거리가 더 짧으면
-                        if (Vector3.Distance(colliders[j].transform.position, this.transform.position) < nearestDist)
-                        {
-                            nearestDist = Vector3.Distance(colliders[j].transform.position, this.transform.position);
-                            // 가장 가까운 타겟은 i이다
-                            nearestTarget = colliders[j].transform;
-                        }
+                        ReturnPool();
                     }
-
-                    transform.up = nearestTarget.position - this.transform.position;
+                    else
+                    {
+                        target = colliders[1].transform;
+                    }
                 }
                 else
                 {
-                    PoolManager.instance.SetPool(gameObject, PoolObejectType.bullet);
-                    isBouncBullet = false;
-                }
-                colliders = new Collider2D[0];
-            }
-            else
-            {
-                isBouncBullet = false;
-                PoolManager.instance.SetPool(gameObject, PoolObejectType.bullet);
-            }            
+                    target = colliders[0].transform;
+                }          
         }
         else
         {
-            isBouncBullet= false;
-            PoolManager.instance.SetPool(gameObject, PoolObejectType.bullet);
+            ReturnPool();
         }
     }
 
@@ -172,8 +152,32 @@ public class Bullet : PoolObject
         tempDamageTextMesh.color = isCritBullet ? Color.red : Color.white;
     }
 
-    void FindNearestTarget(Collider2D[] colliders)
+    void SortArrayByNearest()
     {
+        if (colliders.Length == 0)
+            return;
 
+        Transform nearestTarget = colliders[0].transform;
+        float nearestDist = Vector3.Distance(nearestTarget.position, transform.position);
+        float checkDist;
+
+        for (int i = 1; i < colliders.Length; i++)
+        {
+            checkDist = Vector3.Distance(colliders[i].transform.position, transform.position);
+
+            // 체크 거리가 더 짧다면
+            if (checkDist < nearestDist)
+            {
+                // 배열의 첫번째와 자신을 바꿔줌
+                Swap(i);
+            }
+        }
+    }
+
+    void Swap(int swapIndex)
+    {
+        Collider2D temp = colliders[0];
+        colliders[0] = colliders[swapIndex];
+        colliders[swapIndex] = temp;
     }
 }

@@ -8,7 +8,7 @@ public enum DefUpgradeType
 {
     체력, 체력회복,
     방어력, 절대방어,
-    반사데미지, 흡혈,
+    가시대미지, 흡혈,
     넉백확률, 넉백강도,
     오브속도, 오브,
     Length
@@ -40,10 +40,19 @@ public class DefUpgradeButton : UpgradeButton, ISetUpType
             case DefUpgradeType.절대방어:
                 curValueText.text = GameManager.instance.player.AbsDef.ToString("F2");
                 break;
+            case DefUpgradeType.가시대미지:
+                curValueText.text = GameManager.instance.player.ThronsPer.ToString("F2") + "%";
+                break;
+            case DefUpgradeType.흡혈:
+                curValueText.text = GameManager.instance.player.LifeStealPer.ToString("F2") + "%";
+                break;
+            case DefUpgradeType.넉백확률:
+                break;
+            case DefUpgradeType.넉백강도:
+                break;
             default:
                 break;
         }
-
     }
 
     public void OnUpBtClk()

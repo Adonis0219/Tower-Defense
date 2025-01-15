@@ -58,6 +58,9 @@ public class Player : MonoBehaviour, IHit
 
     float range;
 
+    /// <summary>
+    /// 반지름 기준 범위
+    /// </summary>
     public float Range
     {
         get 
@@ -100,10 +103,42 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    public float bounceChance = 100;
-    public int bounceCount = 2;
-    public float bounceRange = 1;
-    
+    float bounceChance;
+
+    public float BounceChance
+    {
+        get
+        {
+            bounceChance = .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.바운스샷확률] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷확률]);
+            return bounceChance;
+        }
+    }
+
+    int bounceCount;
+
+    public int BounceCount
+    {
+        get
+        {
+            bounceCount = 2 + GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.바운스샷표적] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷표적];
+            return bounceCount;
+        }
+    }
+
+    float bounceRange;
+
+    /// <summary>
+    /// 반지름 기준
+    /// </summary>
+    public float BounceRange
+    {
+        get
+        {
+            bounceRange = 10 + .1f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.바운스샷범위] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷범위]);
+            return bounceRange;
+        }
+    }
+
     [Header("  # Def")]
     [SerializeField]
     float maxHp;
@@ -175,7 +210,34 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    [Header("  # Def")]
+    float thronsPer;
+    /// <summary>
+    /// 가시 대미지 퍼센트
+    /// </summary>
+    public float ThronsPer
+    {
+        get
+        {
+            thronsPer = GameManager.instance.defDollarLevels[(int)DefUpgradeType.가시대미지] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.가시대미지];
+            return thronsPer;
+        }
+    }
+
+    float lifeStealPer;
+
+    /// <summary>
+    /// 흡혈 퍼센트
+    /// </summary>
+    public float LifeStealPer
+    {
+        get
+        {
+            lifeStealPer = .05f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.흡혈] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.흡혈]);
+            return lifeStealPer;
+        }
+    }
+
+    [Header("  # Util")]
    // [SerializeField]
    
 
@@ -194,7 +256,6 @@ public class Player : MonoBehaviour, IHit
         CurrentHp = MaxHp;
 
         StartCoroutine(OnShoot());
-
         StartCoroutine(OnRegenHp());
     }
 
@@ -237,18 +298,16 @@ public class Player : MonoBehaviour, IHit
 
             if (sortedTraget.Count > 0)
             {
-                int shootCount = IsMultishot(MultiChance) ? MultiCount : 1;
+                //int shootCount = IsMultishot(MultiChance) ? MultiCount : 1;
+                int shootCount = IsMultishot(100) ? MultiCount : 1;
 
                 if (shootCount > sortedTraget.Count) shootCount = sortedTraget.Count;
                
                 // 가까운 순으로 발사수(멀티샷 수)만큼 발사
                 for (int i = 0; i < shootCount; i++)
                 {
-                    Shoot(sortedTraget[i].collider.transform.position);
+                    Shoot(sortedTraget[i].collider.transform);
                 }
-
-                targets.Clear();
-                sortedTraget.Clear();
 
                 yield return new WaitForSeconds(1 / AtkSpd);
             }
@@ -257,15 +316,14 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    void Shoot(Vector3 targetPos)
+    void Shoot(Transform target)
     {
         Transform tempBullet = PoolManager.instance.GetPool(PoolObejectType.bullet).transform;
         tempBullet.SetParent(GameManager.instance.poolManager.GetChild(0));
         tempBullet.position = transform.position;
-        tempBullet.up = targetPos - transform.position;
+        
+        tempBullet.GetComponent<Bullet>().target = target;
     }
-
-
 
     IEnumerator OnRegenHp()
     {
@@ -284,22 +342,16 @@ public class Player : MonoBehaviour, IHit
         CurrentHp -= (damage * (1 - Def)) - AbsDef;
     }
 
-    // 피격데미지
-    IEnumerator IHit.OnCollisionHit(float damage)
-    {
-        while (CurrentHp > 0)
-        {
-            CurrentHp -= (damage * (1 - Def / 100)) - AbsDef;
-
-            yield return new WaitForSeconds(2f);
-        }
-    }
-
     void Dead()
     {
         GameManager.instance.resultPanel.SetActive(true);
         Destroy(gameObject);
         Time.timeScale = 0;
+    }
+
+    public void LifeSteal(float dmg)
+    {
+        CurrentHp += dmg * (LifeStealPer * .01f);
     }
 }
 

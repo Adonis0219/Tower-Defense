@@ -101,10 +101,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolType: 4
   killedDollar: 3
-  moveSpd: 1.5
-  maxHp: 2
+  moveSpd: 0.5
+  baseMaxHp: 10
+  maxHp: 0
   currentHp: 0
-  collDamage: 1.5
+  baseCollDamage: 0
   killedCoin: 4
 --- !u!61 &3082797800593604026
 BoxCollider2D:
@@ -151,5 +152,5 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4

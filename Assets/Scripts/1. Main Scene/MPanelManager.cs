@@ -287,12 +287,13 @@ public class MPanelManager : MonoBehaviour
             temp.SetData(datas[totalCreateCount - createCount][UPGRADE_NAME].ToString(), (int)datas[totalCreateCount - createCount][UPGRADE_COST], (float)datas[totalCreateCount - createCount][UPGRADE_FACTOR]);
             // curValue를 위한 초기화
             // 자식이 가진 ISetUpType을 사용할 수 있도록
-            temp.GetComponent<ISetUpType>().SetUpType(createCount);
+            temp.GetComponent<ISetUpType>().SetUpType(totalCreateCount - createCount);
 
             // 만들 버튼의 개수
             createCount--;
         }
 
+        // 이전 라인에 버튼이 이미 2개 있을 때 -> 라인을 새로 만들어야 할 때
         for (int i = totalCreateCount - createCount; i < totalCreateCount; i++)
         {
             if (i % 2 == 0)

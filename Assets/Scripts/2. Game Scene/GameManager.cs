@@ -306,6 +306,7 @@ public class GameManager : MonoBehaviour
             // 적이 플레이어 방향 바라보게
             tempEnemy.up = player.transform.position - spawnPos;
 
+            //yield return new WaitForSeconds(1);
             yield return new WaitForSeconds(3);
         }
     }
@@ -376,7 +377,12 @@ public class GameManager : MonoBehaviour
         CurDollar += basicGoods * (isDollar ? DollarBonusFactor : coinBonusFactor);
     }
 
-    // 적
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="basicGoods"></param>
+    /// <param name="enenyPos"></param>
+    /// <param name="isDollar"></param>
     public void GoodsFactor(float basicGoods, Transform enenyPos, bool isDollar)
     {
 
@@ -396,7 +402,7 @@ public class GameManager : MonoBehaviour
         else
         {
             CurCoin += (int)(basicGoods * coinBonusFactor);
-            tempUpText.transform.position = enenyPos.position + new Vector3(0, .5f, 0);
+            tempUpText.transform.position = enenyPos.position + new Vector3(0, .4f, 0);
             tempUpTextMesh.text = "<sprite=12>" + basicGoods * DollarBonusFactor;
         }
     }

@@ -43,6 +43,15 @@ public class MAtkUpgradeButton : MUpgradeButton, ISetUpType
             case AtkUpgradeType.¸ÖÆ¼¼¦Ç¥Àû:
                 curValueText.text = 2 + PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType] + "";
                 break;
+            case AtkUpgradeType.¹Ù¿î½º¼¦È®·ü:
+                curValueText.text = (.5f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType]).ToString("F2") + "%";
+                break;
+            case AtkUpgradeType.¹Ù¿î½º¼¦Ç¥Àû:
+                curValueText.text = 2 + PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType] + "";
+                break;
+            case AtkUpgradeType.¹Ù¿î½º¼¦¹üÀ§:
+                curValueText.text = (10 + .1f * (PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType])).ToString("F1") + "m";
+                break;
             default:
                 break;
         }

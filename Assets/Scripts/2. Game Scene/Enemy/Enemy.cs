@@ -14,7 +14,7 @@ public class Enemy : PoolObject, IHit
     [SerializeField]
     float baseMaxHp;
     
-    float BaseMaxHp
+    public float BaseMaxHp
     {
         get { return baseMaxHp; }
         set
@@ -23,10 +23,12 @@ public class Enemy : PoolObject, IHit
         }
     }
 
+    public float maxHp;
+
     [SerializeField]
     float currentHp;
 
-    float CurrentHp
+    public float CurrentHp
     {
         get { return currentHp; }
         set
@@ -55,8 +57,9 @@ public class Enemy : PoolObject, IHit
 
     private void OnEnable()
     {
+        maxHp = BaseMaxHp * GameManager.instance.waveHpFactor;
         // 소환될 때 배수만큼 곱해주기
-        CurrentHp = BaseMaxHp * GameManager.instance.waveHpFactor;
+        CurrentHp = maxHp;
         collDamage = baseCollDamage * GameManager.instance.waveDmgFactor;
     }
 
@@ -66,14 +69,26 @@ public class Enemy : PoolObject, IHit
         transform.Translate(Vector3.up * moveSpd * Time.deltaTime);
     }
 
+    IHit hitObj;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        IHit hitObj = collision.gameObject.GetComponent<IHit>();
+        hitObj = collision.gameObject.GetComponent<IHit>();
 
-        if (hitObj != null)
+        if (hitObj != null) StartCoroutine(Attack());
+    }
+
+    IEnumerator Attack()
+    {
+        while (gameObject.activeSelf)
         {
-            StartCoroutine(hitObj.OnCollisionHit(collDamage));
+            hitObj.Hit(collDamage);
+            // 가시 반사 대미지
+            CurrentHp -= maxHp * (GameManager.instance.player.ThronsPer * .01f);
+
+            yield return new WaitForSeconds(2f);
         }
+
     }
 
     public IEnumerator OnCollisionHit(float damage)
@@ -86,5 +101,10 @@ public class Enemy : PoolObject, IHit
         // Dollar 획득
         GameManager.instance.GoodsFactor(killedDollar, this.transform, true);
         ReturnPool();
+    }
+
+    public IEnumerator OnCollisionHit(float damage, Collision2D enemy)
+    {
+        throw new System.NotImplementedException();
     }
 }

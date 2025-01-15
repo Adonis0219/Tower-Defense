@@ -55,10 +55,13 @@ public class AtkUpgradeButton : UpgradeButton, ISetUpType
                 curValueText.text = GameManager.instance.player.MultiCount.ToString();
                 break;
             case AtkUpgradeType.¹Ù¿î½º¼¦È®·ü:
+                curValueText.text = GameManager.instance.player.BounceChance.ToString("F2") + "%";
                 break;
             case AtkUpgradeType.¹Ù¿î½º¼¦Ç¥Àû:
+                curValueText.text = GameManager.instance.player.BounceCount.ToString();
                 break;
             case AtkUpgradeType.¹Ù¿î½º¼¦¹üÀ§:
+                curValueText.text = GameManager.instance.player.BounceRange.ToString("F1") + "m";
                 break;
             default:
                 break;

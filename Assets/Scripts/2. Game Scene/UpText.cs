@@ -31,7 +31,6 @@ public class UpText : PoolObject
 
     IEnumerator DisAppearUpText()
     {
-
         float a = 1;
 
         // 바꿔줄 색상
@@ -39,7 +38,7 @@ public class UpText : PoolObject
 
         while (a > 0)
         {
-            if (poolType == PoolObejectType.dollarText)
+            if (poolType != PoolObejectType.damageText)
             {
                 // 점점 올라감
                 transform.position += Vector3.up * upSpeed * Time.deltaTime;
