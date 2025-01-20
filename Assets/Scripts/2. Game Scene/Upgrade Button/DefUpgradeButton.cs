@@ -47,8 +47,10 @@ public class DefUpgradeButton : UpgradeButton, ISetUpType
                 curValueText.text = GameManager.instance.player.LifeStealPer.ToString("F2") + "%";
                 break;
             case DefUpgradeType.³Ë¹éÈ®·ü:
+                curValueText.text = GameManager.instance.player.KnockbackChance.ToString("F2") + "%";
                 break;
             case DefUpgradeType.³Ë¹é°­µµ:
+                curValueText.text = GameManager.instance.player.KnockbackForce.ToString("F2");
                 break;
             default:
                 break;

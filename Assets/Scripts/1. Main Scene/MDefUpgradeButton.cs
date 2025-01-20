@@ -34,11 +34,14 @@ public class MDefUpgradeButton : MUpgradeButton, ISetUpType
                 curValueText.text = (PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType]).ToString("F2") + "%";
                 break;
             case DefUpgradeType.ÈíÇ÷:
-                curValueText.text = (.05f *(PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType])).ToString("F2") + "%";
+                curValueText.text = (.05f * (PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType])).ToString("F2") + "%";
                 break;
             case DefUpgradeType.³Ë¹éÈ®·ü:
+                curValueText.text = (PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType]).ToString("F2") + "%";
                 break;
             case DefUpgradeType.³Ë¹é°­µµ:
+                curValueText.text = (.5f + .15f * (PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType])).ToString("F2");
+                break;
             default:
                 break;
         }

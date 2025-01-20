@@ -194,7 +194,8 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        CurDollar = initDollar;
+        //CurDollar = initDollar;
+        CurDollar = 9999999;
 
         InitLevelSet();
     }
@@ -236,6 +237,12 @@ public class GameManager : MonoBehaviour
             {
                 OnPuaseClk(3);
             }
+        }
+
+        // 디버그 판넬 호출 키 입력
+        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.F1))
+        {
+            Debug.Log("디버그 판넬");
         }
 
         // 누르는 숫자에 따라 게임 속도 변경
@@ -306,8 +313,8 @@ public class GameManager : MonoBehaviour
             // 적이 플레이어 방향 바라보게
             tempEnemy.up = player.transform.position - spawnPos;
 
-            //yield return new WaitForSeconds(1);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(1);
+            //yield return new WaitForSeconds(3);
         }
     }
 
@@ -360,6 +367,24 @@ public class GameManager : MonoBehaviour
         }
 
         resultPanel.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// 각 확률에 따라 발동 됐는지
+    /// </summary>
+    /// <param name="chance">발동 확률</param>
+    /// <returns></returns>
+    public bool IsChanceTrue(float chance)
+    {
+        float randNum = Random.Range(0f, 100f);
+
+        // 랜덤으로 돌린값이 chance보다 작다면
+        // 참 반환 -> 확률 터짐
+        if (chance >= randNum)
+        {
+            return true;
+        }
+        else return false;
     }
 
     // 웨이브
@@ -418,5 +443,10 @@ public class GameManager : MonoBehaviour
         // isUp(Plus) 버튼이면 .5를 더해주고, 아니면 .5를 빼준다
         CurTimeScale += isUp ? .5f : -.5f;
         Time.timeScale = CurTimeScale;
+    }
+
+    private void OnApplicationQuit()
+    {
+        PlayDataManager.Instance.SaveData(curCoin);
     }
 }

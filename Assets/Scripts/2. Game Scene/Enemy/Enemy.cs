@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : PoolObject, IHit
@@ -14,6 +15,8 @@ public class Enemy : PoolObject, IHit
     [SerializeField]
     float baseMaxHp;
     
+    Player player;
+
     public float BaseMaxHp
     {
         get { return baseMaxHp; }
@@ -50,9 +53,21 @@ public class Enemy : PoolObject, IHit
 
     float collDamage;
 
+    ////////// 넉백
+    bool isKnockBack = false;
+    Rigidbody2D rb;
+    WaitForSeconds wait;
+    
     public void Hit(float damage)
     {
         CurrentHp -= damage;
+    }
+
+    private void Awake()
+    {
+        player = GameManager.instance.player;
+        rb = GetComponent<Rigidbody2D>();
+        wait = new WaitForSeconds(.1f);
     }
 
     private void OnEnable()
@@ -66,6 +81,8 @@ public class Enemy : PoolObject, IHit
     // Update is called once per frame
     void Update()
     {
+        if (isKnockBack) return;
+
         transform.Translate(Vector3.up * moveSpd * Time.deltaTime);
     }
 
@@ -78,33 +95,45 @@ public class Enemy : PoolObject, IHit
         if (hitObj != null) StartCoroutine(Attack());
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // 넉백 발동하지 않았다면 얼리리턴
+        if (!GameManager.instance.IsChanceTrue(player.KnockbackChance))
+            return;
+
+        StartCoroutine(KnockBack());
+    }
+
     IEnumerator Attack()
     {
         while (gameObject.activeSelf)
         {
             hitObj.Hit(collDamage);
             // 가시 반사 대미지
-            CurrentHp -= maxHp * (GameManager.instance.player.ThronsPer * .01f);
+            CurrentHp -= maxHp * (player.ThronsPer * .01f);
 
             yield return new WaitForSeconds(2f);
         }
-
-    }
-
-    public IEnumerator OnCollisionHit(float damage)
-    {
-        yield return null;
     }
 
     protected virtual void OnDead()
     {
+        // 코루틴이 끝나기 전에 죽으면 isKnockback이 true 상태
+        isKnockBack = false;
+
         // Dollar 획득
         GameManager.instance.GoodsFactor(killedDollar, this.transform, true);
         ReturnPool();
     }
 
-    public IEnumerator OnCollisionHit(float damage, Collision2D enemy)
+    IEnumerator KnockBack()
     {
-        throw new System.NotImplementedException();
+        isKnockBack = true;
+        rb.AddForce(-transform.up * player.KnockbackForce, ForceMode2D.Impulse);
+
+        yield return wait;
+
+        rb.velocity = Vector2.zero;
+        isKnockBack = false;
     }
 }

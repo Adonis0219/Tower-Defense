@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IHit
 {
-    [Header("# Debug")]
-
-    //bool isShoot = false;
-
     [Header("# Player Status")]
     [Header("  # ATTACK")]
     float damage;
@@ -17,10 +13,11 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            damage = 3 * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.데미지] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.데미지] + 1);
+            damage = 3 * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.데미지] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.데미지] + 1);
             return damage;
         }
-        // 외부에선 설정할 수 없으므로 Set은 없다
+        // 외부에선 설정할 필요가 없으므로 Set은 없다
     }
 
     float critChance;
@@ -29,7 +26,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            critChance = GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.치명타확률] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.치명타확률] + 1;
+            critChance = GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.치명타확률] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.치명타확률] + 1;
             return critChance;
         }
     }
@@ -40,7 +38,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            critFactor = 1.2f + .1f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.치명타데미지] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.치명타데미지]);
+            critFactor = 1.2f + .1f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.치명타데미지] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.치명타데미지]);
             return critFactor;
         }
     }
@@ -51,7 +50,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            atkSpd = 1 + .05f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.공격속도] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.공격속도]);
+            atkSpd = 1 + .05f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.공격속도] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.공격속도]);
             return atkSpd;
         }
     }
@@ -65,7 +65,8 @@ public class Player : MonoBehaviour, IHit
     {
         get 
         {
-            range = 20 + .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.범위] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.범위]);
+            range = 20 + .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.범위] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.범위]);
             return range; 
         }
     }
@@ -76,7 +77,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            dmgPerMeter = 1 + .008f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.거리당데미지] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.거리당데미지]);
+            dmgPerMeter = 1 + .008f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.거리당데미지] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.거리당데미지]);
             return dmgPerMeter;
         }
     }
@@ -87,7 +89,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            multiChance = .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.멀티샷확률] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.멀티샷확률]);
+            multiChance = .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.멀티샷확률] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.멀티샷확률]);
             return multiChance;
         }
     }
@@ -98,7 +101,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            multiCount = 2 + GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.멀티샷표적] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.멀티샷표적];
+            multiCount = 2 + GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.멀티샷표적] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.멀티샷표적];
             return multiCount;
         }
     }
@@ -109,7 +113,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            bounceChance = .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.바운스샷확률] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷확률]);
+            bounceChance = .5f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.바운스샷확률] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷확률]);
             return bounceChance;
         }
     }
@@ -120,7 +125,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            bounceCount = 2 + GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.바운스샷표적] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷표적];
+            bounceCount = 2 + GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.바운스샷표적] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷표적];
             return bounceCount;
         }
     }
@@ -134,7 +140,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            bounceRange = 10 + .1f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.바운스샷범위] + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷범위]);
+            bounceRange = 10 + .1f * (GameManager.instance.atkCoinLevels[(int)AtkUpgradeType.바운스샷범위] 
+                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷범위]);
             return bounceRange;
         }
     }
@@ -146,8 +153,9 @@ public class Player : MonoBehaviour, IHit
     public float MaxHp
     {
         get 
-        { 
-            maxHp = 5 * (1 + GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.체력]);
+        {
+            maxHp = 5 * (1 + GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력] 
+                + GameManager.instance.defCoinLevels[(int)DefUpgradeType.체력]);
             return maxHp; 
         }
         set
@@ -183,7 +191,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            regenHp = .04f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력회복] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.체력회복]);
+            regenHp = .04f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력회복] 
+                + GameManager.instance.defCoinLevels[(int)DefUpgradeType.체력회복]);
             return regenHp; 
         }
     }
@@ -195,7 +204,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            def = .5f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.방어력] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.방어력]);
+            def = .5f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.방어력] 
+                + GameManager.instance.defCoinLevels[(int)DefUpgradeType.방어력]);
             return def;
         }
     }
@@ -205,7 +215,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            absDef = .5f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.절대방어] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.절대방어]);
+            absDef = .5f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.절대방어] 
+                + GameManager.instance.defCoinLevels[(int)DefUpgradeType.절대방어]);
             return absDef; 
         }
     }
@@ -218,7 +229,8 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            thronsPer = GameManager.instance.defDollarLevels[(int)DefUpgradeType.가시대미지] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.가시대미지];
+            thronsPer = GameManager.instance.defDollarLevels[(int)DefUpgradeType.가시대미지] 
+                + GameManager.instance.defCoinLevels[(int)DefUpgradeType.가시대미지];
             return thronsPer;
         }
     }
@@ -232,8 +244,36 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            lifeStealPer = .05f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.흡혈] + GameManager.instance.defCoinLevels[(int)DefUpgradeType.흡혈]);
+            lifeStealPer = .05f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.흡혈] 
+                + GameManager.instance.defCoinLevels[(int)DefUpgradeType.흡혈]);
             return lifeStealPer;
+        }
+    }
+
+
+    [SerializeField]
+    float knockbackChance;
+
+    public float KnockbackChance
+    {
+        get
+        {
+            knockbackChance = GameManager.instance.defDollarLevels[(int)DefUpgradeType.넉백확률] 
+                + GameManager.instance.defCoinLevels[(int)DefUpgradeType.넉백확률];
+            return knockbackChance;
+        }
+    }
+
+    [SerializeField]
+    float knockbackForce;
+
+    public float KnockbackForce
+    {
+        get
+        {
+            knockbackForce = .5f + .15f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.넉백강도]
+                + GameManager.instance.defCoinLevels[(int)DefUpgradeType.넉백강도]);
+            return knockbackForce;
         }
     }
 
@@ -266,19 +306,6 @@ public class Player : MonoBehaviour, IHit
         rangeObject.localScale = Vector3.one * Range / 5;        
     }
 
-    bool IsMultishot(float chance)
-    {
-        float randNum = Random.Range(0f, 100f);
-
-        // 랜덤으로 돌린값이 chance보다 작다면
-        // 참 반환 -> 크리티컬이다
-        if (chance >= randNum)
-        {
-            return true;
-        }
-        else return false;
-    }
-
     IEnumerator OnShoot()
     {
         while (true)
@@ -298,8 +325,7 @@ public class Player : MonoBehaviour, IHit
 
             if (sortedTraget.Count > 0)
             {
-                //int shootCount = IsMultishot(MultiChance) ? MultiCount : 1;
-                int shootCount = IsMultishot(100) ? MultiCount : 1;
+                int shootCount = GameManager.instance.IsChanceTrue(MultiChance) ? MultiCount : 1;
 
                 if (shootCount > sortedTraget.Count) shootCount = sortedTraget.Count;
                
@@ -345,8 +371,8 @@ public class Player : MonoBehaviour, IHit
     void Dead()
     {
         GameManager.instance.resultPanel.SetActive(true);
-        Destroy(gameObject);
         Time.timeScale = 0;
+        Destroy(gameObject);
     }
 
     public void LifeSteal(float dmg)

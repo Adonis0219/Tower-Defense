@@ -51,4 +51,9 @@ public class MainSceneManager : MonoBehaviour
         yield return new WaitForSeconds(.1f);
         lockText.gameObject.SetActive(false);
     }
+
+    private void OnApplicationQuit()
+    {
+        PlayDataManager.Instance.SaveData(PlayDataManager.Instance.playData.haveCoin);
+    }
 }
