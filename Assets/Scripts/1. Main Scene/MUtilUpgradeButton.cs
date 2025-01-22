@@ -23,15 +23,20 @@ public class MUtilUpgradeButton : MUpgradeButton, ISetUpType
             case UtilUpgradeType.캐시웨이브:
                 curValueText.text = (4 * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString();
                 break;
-            case UtilUpgradeType.코인보너스:
+            case UtilUpgradeType.코인킬보너스:
+                curValueText.text = "x" + (1 + .01f * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString("F2");
                 break;
             case UtilUpgradeType.코인웨이브:
+                curValueText.text = PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType].ToString();
                 break;
             case UtilUpgradeType.무료공격업:
+                curValueText.text = (.5f * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString("F2") + "%";
                 break;
             case UtilUpgradeType.무료방어업:
+                curValueText.text = (.5f * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString("F2") + "%";
                 break;
             case UtilUpgradeType.무료유틸업:
+                curValueText.text = (.5f * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString("F2") + "%";
                 break;
             case UtilUpgradeType.이자웨이브:
                 break;

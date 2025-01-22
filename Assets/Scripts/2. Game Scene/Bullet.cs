@@ -42,7 +42,7 @@ public class Bullet : PoolObject
     }
 
     [SerializeField]
-    float lineSize = 1000f;
+    //float lineSize = 1000f;
 
     // Update is called once per frame
     void Update()

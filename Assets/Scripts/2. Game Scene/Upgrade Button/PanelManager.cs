@@ -8,13 +8,6 @@ using UnityEngine.UI;
 
 public class PanelManager : MonoBehaviour
 {
-    public enum PanelType
-    {
-        Attack,
-        Defense,
-        Utility
-    }    
-
     PanelType type;
 
     [SerializeField]

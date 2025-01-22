@@ -113,7 +113,7 @@ public class PlayDataManager : MonoBehaviour
             playData.totalEarnCoin = value;
 
             if (playData.totalEarnCoin >= UnlockConditions.TOTAL_EARN_COIN)
-                playData.achive |= 1 << (int)Achive.UnlockCards;
+                playData.achive |= 1 << (int)Achive.UnlockLabs;
         }
     }
 
@@ -154,7 +154,7 @@ public class PlayDataManager : MonoBehaviour
         }
     }
 
-    public void SaveData(int coin)
+    public void SaveData(float coin)
     {
        //MainCoin = coin;
         MainCoin = 99999;

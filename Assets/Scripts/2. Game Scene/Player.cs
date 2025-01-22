@@ -275,11 +275,7 @@ public class Player : MonoBehaviour, IHit
                 + GameManager.instance.defCoinLevels[(int)DefUpgradeType.³Ë¹é°­µµ]);
             return knockbackForce;
         }
-    }
-
-    [Header("  # Util")]
-   // [SerializeField]
-   
+    }  
 
     [Header("# Bullet")]
     [SerializeField]

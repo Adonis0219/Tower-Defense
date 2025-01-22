@@ -9,6 +9,9 @@ public class MainSceneManager : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI coinText;
+    
+    [SerializeField]
+    TextMeshProUGUI diaText;
 
     [SerializeField]
     TextMeshProUGUI lockText;

@@ -7,7 +7,7 @@ public enum UtilUpgradeType
 {
     캐시보너스,
     캐시웨이브,
-    코인보너스,
+    코인킬보너스,
     코인웨이브,
     무료공격업,
     무료방어업,
@@ -35,15 +35,20 @@ public class UtilUpgradeButton : UpgradeButton, ISetUpType
             case UtilUpgradeType.캐시웨이브:
                 curValueText.text = GameManager.instance.DollarWaveBonus.ToString();
                 break;
-            case UtilUpgradeType.코인보너스:
+            case UtilUpgradeType.코인킬보너스:
+                curValueText.text = "x" + GameManager.instance.CoinKillBonus.ToString("F2");
                 break;
             case UtilUpgradeType.코인웨이브:
+                curValueText.text = GameManager.instance.CoinWaveBonus.ToString();
                 break;
             case UtilUpgradeType.무료공격업:
+                curValueText.text = GameManager.instance.AtkFreeUpChance.ToString("F2") + "%";
                 break;
             case UtilUpgradeType.무료방어업:
+                curValueText.text = GameManager.instance.DefFreeUpChance.ToString("F2") + "%";
                 break;
             case UtilUpgradeType.무료유틸업:
+                curValueText.text = GameManager.instance.UtilFreeUpChance.ToString("F2") + "%";
                 break;
             case UtilUpgradeType.이자웨이브:
                 break;

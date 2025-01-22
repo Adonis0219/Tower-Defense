@@ -46,13 +46,14 @@ public class GameManager : MonoBehaviour
     
     float curDollar;
 
-    int dollarWaveBonus;
+    float dollarWaveBonus;
 
-    public int DollarWaveBonus
+    public float DollarWaveBonus
     {
         get
         {
-            dollarWaveBonus = 4 * (utilCoinLevels[(int)UtilUpgradeType.캐시웨이브] + utilDollarLevels[(int)UtilUpgradeType.캐시웨이브]);
+            dollarWaveBonus = 4 * (utilCoinLevels[(int)UtilUpgradeType.캐시웨이브] 
+                + utilDollarLevels[(int)UtilUpgradeType.캐시웨이브]);
             return dollarWaveBonus;
         }
     }
@@ -63,7 +64,8 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            dollarBonusFactor = 1 + .01f * (utilCoinLevels[(int)UtilUpgradeType.캐시보너스] + utilDollarLevels[(int)UtilUpgradeType.캐시보너스]);
+            dollarBonusFactor = 1 + .01f * (utilCoinLevels[(int)UtilUpgradeType.캐시보너스] 
+                + utilDollarLevels[(int)UtilUpgradeType.캐시보너스]);
             return dollarBonusFactor;
         }
     }
@@ -73,12 +75,72 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI curCoinText;
 
     [SerializeField]
-    int curCoin;
+    float curCoin;
 
     public float initCoin;     // 초기 코인
     public float earnCoin;     // 이번 게임 획득 코인
 
-    public float coinBonusFactor = 1f;
+    float coinKillBonus;
+
+    public float CoinKillBonus
+    {
+        get
+        {
+            coinKillBonus = 1 + (.01f * (utilCoinLevels[(int)UtilUpgradeType.코인킬보너스] 
+                + utilDollarLevels[(int)UtilUpgradeType.코인킬보너스]));
+            return coinKillBonus;
+        }
+    }
+
+    float coinWaveBonus;
+
+    public float CoinWaveBonus
+    {
+        get
+        {
+            coinWaveBonus = (utilCoinLevels[(int)UtilUpgradeType.코인웨이브] 
+                + utilDollarLevels[(int)UtilUpgradeType.코인웨이브]);
+            return coinWaveBonus;
+        }
+    }
+
+    [Header("# Util")]
+    float atkFreeUpChance;
+
+    public float AtkFreeUpChance
+    {
+        get
+        {
+            atkFreeUpChance = 100;
+            atkFreeUpChance = (.5f * (utilCoinLevels[(int)UtilUpgradeType.무료공격업] 
+                + utilDollarLevels[(int)UtilUpgradeType.무료공격업]));
+            return atkFreeUpChance;
+        }
+    }
+
+    float defFreeUpChance;
+
+    public float DefFreeUpChance
+    {
+        get
+        {
+            defFreeUpChance = (.5f * (utilCoinLevels[(int)UtilUpgradeType.무료방어업] 
+                + utilDollarLevels[(int)UtilUpgradeType.무료방어업]));
+            return defFreeUpChance;
+        }
+    }
+
+    float utilFreeUpChance;
+
+    public float UtilFreeUpChance
+    {
+        get
+        {
+            utilFreeUpChance = (.5f * (utilCoinLevels[(int)UtilUpgradeType.무료유틸업] 
+                + utilDollarLevels[(int)UtilUpgradeType.무료유틸업]));
+            return utilFreeUpChance;
+        }
+    }
 
     [HideInInspector]
     public int[] atkCoinLevels;
@@ -108,9 +170,6 @@ public class GameManager : MonoBehaviour
     [Header("# Wave Control")]
     public WaveData[] waveDatas;
 
-    [SerializeField]
-    Transform wavePoint;
-
     int wave = 1;
 
     [SerializeField]
@@ -127,7 +186,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public float gameTime;
-    float maxGameTime = 5 * 10f;
+    //float maxGameTime = 5 * 10f;
 
     ////// 프로퍼티
     public float CurDollar
@@ -142,7 +201,7 @@ public class GameManager : MonoBehaviour
             curDollarText.text = "$" + curDollar.ToString("F0");
         }
     }
-    public int CurCoin
+    public float CurCoin
     {
         get
         {
@@ -151,7 +210,7 @@ public class GameManager : MonoBehaviour
         set
         {
             curCoin = value;
-            curCoinText.text = curCoin.ToString();
+            curCoinText.text = curCoin.ToString("F0");
         }
     }
 
@@ -169,10 +228,12 @@ public class GameManager : MonoBehaviour
             waveDmgFactorText.text = waveDmgFactor.ToString("F2");
             waveHpFactorText.text = waveHpFactor.ToString("F2");
 
-            curDollar += DollarWaveBonus;
+            GoodsKillFactor(DollarWaveBonus, true);
+            GoodsKillFactor(CoinWaveBonus, false);
 
-            // 달러 위치에 Uptext
-            //if (waveBonusDollar != 0) GoodsFactor(waveBonusDollar, wavePoint, true);
+            if (IsChanceTrue(AtkFreeUpChance)) FreeUpgrade(PanelType.Attack);
+            if (IsChanceTrue(DefFreeUpChance)) FreeUpgrade(PanelType.Defense);
+            if (IsChanceTrue(UtilFreeUpChance)) FreeUpgrade(PanelType.Utility);
         }
     }
 
@@ -255,6 +316,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 게임씬으로 넘어올 때 PlayDataManager에게 받은 각 재화레벨 배열들을 게임매니저에서 쓸 수 있도록 변환해주는 함수
+    /// </summary>
     void InitLevelSet()
     {
         PlayData playData = PlayDataManager.Instance.playData;
@@ -286,6 +350,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 적을 소환해주는 코루틴
+    /// </summary>
+    /// <returns></returns>
     IEnumerator SpawnEnemy()
     {
         int spawnIndex;     // 소환해줄 적의 index(타입)
@@ -318,6 +386,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 무료 업그레이드 실행 함수
+    /// </summary>
+    /// <param name="type">업그레이드 타입</param>
+    void FreeUpgrade(PanelType type)
+    {
+        switch (type)
+        {
+            case PanelType.Attack:
+                atkDollarLevels[Random.Range(0, PlayDataManager.Instance.playData.totalCreatCounts[(int)type])]++;
+                break;
+            case PanelType.Defense:
+                defDollarLevels[Random.Range(0, PlayDataManager.Instance.playData.totalCreatCounts[(int)type])]++;
+                break;
+            case PanelType.Utility:
+                utilDollarLevels[Random.Range(0, PlayDataManager.Instance.playData.totalCreatCounts[(int)type])]++;
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    /// <summary>
+    /// 일시정지를 눌렀을 때 나오는 버튼들을 눌렀을 때 실행할 함수
+    /// </summary>
+    /// <param name="pType">버튼의 타입</param>
     [VisibleEnum(typeof(ButtonType))]
     public void OnPuaseClk(int pType)
     {
@@ -352,6 +447,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 결과창을 보여주는 함수
+    /// </summary>
+    /// <param name="isActive">결과창의 활성화 여부</param>
     void ResultPanelSetActive(bool isActive)
     {
         if (isActive)
@@ -388,29 +487,26 @@ public class GameManager : MonoBehaviour
     }
 
     // 웨이브
-    public void GoodsFactor(float basicGoods, bool isDollar)
+    public void GoodsKillFactor(float basicGoods, bool isDollar)
     {
         if (isDollar)
         {
-            curDollar += basicGoods * DollarBonusFactor;
+            CurDollar += basicGoods * DollarBonusFactor;
         }
         else
         {
-            curCoin += (int)(basicGoods * coinBonusFactor);
+            CurCoin += basicGoods;
         }
-
-        CurDollar += basicGoods * (isDollar ? DollarBonusFactor : coinBonusFactor);
     }
 
     /// <summary>
-    /// 
+    /// 일반 달러 보너스와 킬 보너스
     /// </summary>
     /// <param name="basicGoods"></param>
-    /// <param name="enenyPos"></param>
+    /// <param name="enemyPos"></param>
     /// <param name="isDollar"></param>
-    public void GoodsFactor(float basicGoods, Transform enenyPos, bool isDollar)
+    public void GoodsFactor(float basicGoods, Transform enemyPos, bool isDollar)
     {
-
         // UpText 복사하여 죽은 위치에 올려주기
         // 달러라면 dollar의 풀오브젝트 가져오기
         GameObject tempUpText = PoolManager.instance.GetPool(isDollar ? PoolObejectType.dollarText : PoolObejectType.coinText);
@@ -421,14 +517,14 @@ public class GameManager : MonoBehaviour
         if (isDollar)
         {
             CurDollar += basicGoods * DollarBonusFactor;
-            tempUpText.transform.position = enenyPos.position + new Vector3(0, .1f, 0);
+            tempUpText.transform.position = enemyPos.position + new Vector3(0, .1f, 0);
             tempUpTextMesh.text = "$" + basicGoods * DollarBonusFactor;
         }
         else
         {
-            CurCoin += (int)(basicGoods * coinBonusFactor);
-            tempUpText.transform.position = enenyPos.position + new Vector3(0, .4f, 0);
-            tempUpTextMesh.text = "<sprite=12>" + basicGoods * DollarBonusFactor;
+            CurCoin += (int)(basicGoods * CoinKillBonus);
+            tempUpText.transform.position = enemyPos.position + new Vector3(0, .4f, 0);
+            tempUpTextMesh.text = "<sprite=12>" + basicGoods * CoinKillBonus;
         }
     }
 

@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 메인화면 작업장 부분의 판넬 타입
-public enum UpPanelType
-{
-    Attack,
-    Defense,
-    Utility
-}
-
 public class MPanelManager : MonoBehaviour
 {
     public static MPanelManager instance;
@@ -23,7 +15,7 @@ public class MPanelManager : MonoBehaviour
 
     MainPanelType mainPanelType;
 
-    UpPanelType upPanelType;
+    PanelType upPanelType;
 
     [Header("## MainPanel")]
     // 메인 판넬 GO를 담아둘 리스트
@@ -102,9 +94,9 @@ public class MPanelManager : MonoBehaviour
         activeUpPanel = upPanels[0];
         activeUpBt = upBts[0];
 
-        UpgradeBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)UpPanelType.Attack, atkUpBt, atkContent);
-        UpgradeBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)UpPanelType.Defense, defUpBt, defContent);
-        UpgradeBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)UpPanelType.Utility, utilUpBt, utilContent);
+        UpgradeBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)PanelType.Attack, atkUpBt, atkContent);
+        UpgradeBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)PanelType.Defense, defUpBt, defContent);
+        UpgradeBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)PanelType.Utility, utilUpBt, utilContent);
     }
 
 
@@ -149,10 +141,10 @@ public class MPanelManager : MonoBehaviour
     /// 작업장 판넬을 클릭 했을 때 실행할 함수
     /// </summary>
     /// <param name="pType">작업장 판넬 타입</param>
-    [VisibleEnum(typeof(UpPanelType))]
+    [VisibleEnum(typeof(PanelType))]
     public void UpPanelBtClick(int pType)
     {
-        upPanelType = (UpPanelType)pType;
+        upPanelType = (PanelType)pType;
 
         if (upPanels[(int)upPanelType].activeSelf)
             return;
@@ -242,14 +234,14 @@ public class MPanelManager : MonoBehaviour
     {
         switch (myType)
         {   
-            case (int)UpPanelType.Attack:
-                AddUpBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)UpPanelType.Attack, createCount, atkUpBt, atkContent);
+            case (int)PanelType.Attack:
+                AddUpBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)PanelType.Attack, createCount, atkUpBt, atkContent);
                 break;
-            case (int)UpPanelType.Defense:
-                AddUpBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)UpPanelType.Defense, createCount, defUpBt, defContent);
+            case (int)PanelType.Defense:
+                AddUpBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)PanelType.Defense, createCount, defUpBt, defContent);
                 break;
-            case (int)UpPanelType.Utility:
-                AddUpBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)UpPanelType.Utility, createCount, utilUpBt, utilContent);
+            case (int)PanelType.Utility:
+                AddUpBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)PanelType.Utility, createCount, utilUpBt, utilContent);
                 break;
             default:
                 break;
@@ -273,6 +265,7 @@ public class MPanelManager : MonoBehaviour
 
         int totalCreateCount = PlayDataManager.Instance.playData.totalCreatCounts[myType];
 
+        ////////// 이전 라인에 버튼이 1개
         // TotalCreateCount == 2 -> Utility 첫 업그레이드 -> 검사할 필요 X
         // 넣어줄 content의 자식들 중 마지막 라인(자식의 갯수번째 - 1)의 자식(버튼)의 개수가 1개일 때
         if (totalCreateCount > 2 && content.GetChild(content.childCount - 1).childCount == 1)
@@ -293,6 +286,7 @@ public class MPanelManager : MonoBehaviour
             createCount--;
         }
 
+        //////// 이전 라인에 버튼이 2개
         // 이전 라인에 버튼이 이미 2개 있을 때 -> 라인을 새로 만들어야 할 때
         for (int i = totalCreateCount - createCount; i < totalCreateCount; i++)
         {
