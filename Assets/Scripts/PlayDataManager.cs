@@ -33,6 +33,8 @@ public class PlayData
     public int[] lineOpenCounts = new int[3];
 }
 
+
+// 잠금해제 조건들
 public class UnlockConditions
 {
    public const int BEST_WAVE = 2;
