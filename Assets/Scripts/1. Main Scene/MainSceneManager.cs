@@ -16,10 +16,14 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI lockText;
 
+    int curDia;
+
     private void Start()
     {
         instance = this;
+
         coinText.text = PlayDataManager.Instance.MainCoin.ToString();
+        diaText.text = PlayDataManager.Instance.MainDia.ToString();
     }
 
     public void OnStartBtClk()
@@ -57,6 +61,6 @@ public class MainSceneManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        PlayDataManager.Instance.SaveData(PlayDataManager.Instance.playData.haveCoin);
+        PlayDataManager.Instance.SaveData(PlayDataManager.Instance.playData.haveCoin, PlayDataManager.Instance.playData.haveDia);
     }
 }

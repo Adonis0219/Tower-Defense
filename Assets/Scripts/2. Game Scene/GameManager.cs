@@ -381,8 +381,8 @@ public class GameManager : MonoBehaviour
             // 적이 플레이어 방향 바라보게
             tempEnemy.up = player.transform.position - spawnPos;
 
-            yield return new WaitForSeconds(1);
-            //yield return new WaitForSeconds(3);
+            //yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(3);
         }
     }
 
@@ -530,7 +530,7 @@ public class GameManager : MonoBehaviour
 
     void ChangeScene(int sceneIndex)
     {
-        PlayDataManager.Instance.SaveData(CurCoin);
+        PlayDataManager.Instance.SaveData(CurCoin, PlayDataManager.Instance.playData.haveDia);
         SceneManager.LoadScene(sceneIndex);
     }
 
@@ -543,6 +543,6 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        PlayDataManager.Instance.SaveData(curCoin);
+        PlayDataManager.Instance.SaveData(curCoin, PlayDataManager.Instance.playData.haveDia);
     }
 }

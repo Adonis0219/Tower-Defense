@@ -8,8 +8,8 @@ using UnityEngine;
 public enum Achive
 {
     UnlockWorkShop, 
-    UnlockCards,
     UnlockLabs,
+    UnlockCards,
     Length
 }
 

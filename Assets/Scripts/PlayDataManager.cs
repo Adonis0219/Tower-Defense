@@ -6,10 +6,31 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public class Print
+{
+    public static void Array2D(int[,] arr)
+    {
+        string printStr = "";
+
+        for (int i = 0; i < arr.GetLength(0); i++)
+        {
+            for (int j = 0; j < arr.GetLength(1); j++)
+            {
+                printStr += arr[i, j] + " ";
+            }
+            printStr += "\n";
+        }
+
+        Debug.Log(printStr);
+    }
+}
+
 public class PlayData
 {
     // 플레이어가 가진 코인수
     public int haveCoin = 0;
+
+    public int haveDia = 0;
 
     public int dia = 0;
     public int bestWave = 0;
@@ -31,6 +52,15 @@ public class PlayData
     /// 열어야 할 Unlock버튼의 인덱스
     /// </summary>
     public int[] lineOpenCounts = new int[3];
+
+
+    [Header("# Lab")]
+    public int openLabCount = 1;
+    /// <summary>
+    /// 열어줄 연구 버튼의 개수
+    /// </summary>
+    public int[] openResearchBtCounts = new int[(int)ResearchType.Length];
+    public int[,] labResearchLevels = new int[(int)ResearchType.Length, 9];
 }
 
 
@@ -71,7 +101,6 @@ public class PlayDataManager : MonoBehaviour
 
             return instance; 
         }
-        //set { Instance = value; }
     }
 
     public PlayData playData;
@@ -96,6 +125,7 @@ public class PlayDataManager : MonoBehaviour
     }
 
     public Action<int> onChangedCoin;
+    public Action<int> onChangedDia;
 
     public int MainCoin
     {
@@ -106,6 +136,7 @@ public class PlayDataManager : MonoBehaviour
             onChangedCoin?.Invoke(MainCoin);
         }
     }
+   
 
     public float TotalEarnCoin
     {
@@ -116,6 +147,16 @@ public class PlayDataManager : MonoBehaviour
 
             if (playData.totalEarnCoin >= UnlockConditions.TOTAL_EARN_COIN)
                 playData.achive |= 1 << (int)Achive.UnlockLabs;
+        }
+    }
+
+    public int MainDia
+    {
+        get { return playData.haveDia; }
+        set
+        {
+            playData.haveDia = value;
+            onChangedDia?.Invoke(MainDia);
         }
     }
 
@@ -156,10 +197,12 @@ public class PlayDataManager : MonoBehaviour
         }
     }
 
-    public void SaveData(float coin)
+    public void SaveData(float coin, float dia)
     {
        //MainCoin = coin;
         MainCoin = 99999;
+        MainDia = 10000;
+
 
         string saveJD = JsonUtility.ToJson(playData);
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);

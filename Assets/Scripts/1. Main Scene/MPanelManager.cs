@@ -10,7 +10,7 @@ public class MPanelManager : MonoBehaviour
     // 메인 화면의 업그레이드 판넬
     public enum MainPanelType 
     {
-        Battle, Workshop, Cards, Lab
+        Battle, Workshop, Lab, Cards
     }
 
     MainPanelType mainPanelType;
