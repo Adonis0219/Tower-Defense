@@ -133,22 +133,29 @@ public class LabButton : MonoBehaviour
         LabManager.instance.clickedIndex = labIndex;
     }
 
-    public IEnumerator WaitReqTime(ResearchType type, int researchId)
+    public IEnumerator WaitReqTime(ResearchType type, int researchID)
     {
         IsEmpty = false;
 
+        // 해당 버튼 연구중
+        PlayDataManager.Instance.playData.isResearching[(int)type, researchID] = true;
+
+        Print.Array2D(PlayDataManager.Instance.playData.isResearching);
+
         yield return new WaitForSeconds(requireTime);
 
-        ResearchComplete(type, researchId);
+        ResearchComplete(type, researchID);
     }
 
     /// <summary>
     /// 연구가 완료 됐을 때 실행할 함수
     /// </summary>
-    void ResearchComplete(ResearchType type, int researchId)
+    void ResearchComplete(ResearchType type, int researchID)
     {
+        // 해당 버튼 연구중 해제
+        PlayDataManager.Instance.playData.isResearching[(int)type, researchID] = false;
         // PDM에 해당 업그레이드 레벨 올려주기
-        PlayDataManager.Instance.playData.labResearchLevels[(int)type, researchId]++;
+        PlayDataManager.Instance.playData.labResearchLevels[(int)type, researchID]++;
 
         // 빈 연구실로 만들어주기
         IsEmpty = true;

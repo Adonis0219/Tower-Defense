@@ -812,6 +812,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3ec5af12377acab4693cc8cd878a033f, type: 2}
   - {fileID: 11400000, guid: 3c1865fd01782c840817bbe61d040fa6, type: 2}
   - {fileID: 11400000, guid: bd35ff3fc836aa74d9ada38ec5fddd3f, type: 2}
+  myData: {fileID: 0}
+  researchBtLv: 0
 --- !u!1 &87034957
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,7 +2582,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 304360488911477201, guid: 89aa22824f9599845896cfd3091be6a0, type: 3}
+      - m_Target: {fileID: 71398621}
         m_TargetAssemblyTypeName: 
         m_MethodName: OnChkResearchClk
         m_Mode: 1
@@ -6518,9 +6520,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 304360488911477201, guid: 89aa22824f9599845896cfd3091be6a0, type: 3}
+      - m_Target: {fileID: 71398621}
         m_TargetAssemblyTypeName: 
-        m_MethodName: OnBtClk
+        m_MethodName: OnChkExitClk
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -23,6 +23,22 @@ public class Print
 
         Debug.Log(printStr);
     }
+
+    public static void Array2D(bool[,] arr)
+    {
+        string printStr = "";
+
+        for (int i = 0; i < arr.GetLength(0); i++)
+        {
+            for (int j = 0; j < arr.GetLength(1); j++)
+            {
+                printStr += arr[i, j] + " ";
+            }
+            printStr += "\n";
+        }
+
+        Debug.Log(printStr);
+    }
 }
 
 public class PlayData
@@ -57,10 +73,11 @@ public class PlayData
     [Header("# Lab")]
     public int openLabCount = 1;
     /// <summary>
-    /// 열어줄 연구 버튼의 개수
+    /// 열어줄 연구 버튼의 개수 (Length는 반복문 전용이기 때문에 -1)
     /// </summary>
-    public int[] openResearchBtCounts = new int[(int)ResearchType.Length];
-    public int[,] labResearchLevels = new int[(int)ResearchType.Length, 9];
+    public int[] openResearchBtCounts = new int[(int)ResearchType.Length - 1];
+    public int[,] labResearchLevels = new int[(int)ResearchType.Length - 1, 9];
+    public bool[,] isResearching = new bool[(int)ResearchType.Length - 1, 9];
 }
 
 

@@ -150,9 +150,87 @@ public class LabManager : MonoBehaviour
         listPanelArrows[type].SetActive(listPanels[type].activeSelf ? false : true);
     }
 
+    /// <summary>
+    /// x 버튼 눌렀을 떄
+    /// </summary>
+    /// <param name="go">꺼줄 게임오브젝트</param>
     public void OnCloseBtClk(GameObject go)
     {
         go.SetActive(false);
+    }
+
+    /// <summary>
+    /// 체크 판넬에서 나가기 버튼 눌렀을 때
+    /// </summary>
+    public void OnChkExitClk()
+    {
+        // 체크 판넬 꺼주기
+        checkPN.SetActive(false);
+        // 연구 리스트 판넬 켜주기
+        researchListPN.SetActive(true);
+    }
+
+    public ResearchData myData;
+    public int researchLevel;
+
+    public void OnChkResearchClk()
+    {
+        researchLevel = PlayDataManager.Instance.playData.labResearchLevels[(int)myData.researchType, myData.researchID];
+
+        // 체크 판넬이 열렸다는 것은 코인이 충분하다는 전제가 있으므로 if 사용x
+        PlayDataManager.Instance.playData.haveCoin -= myData.costs[researchLevel];
+
+        // 체크판넬 닫기
+        checkPN.SetActive(false);
+
+        LabButton clickedBt = labs[clickedIndex];
+
+        // 클릭한 연구실 연구중으로 바꿔주기
+        clickedBt.transform.GetChild(1).gameObject.SetActive(false);
+        clickedBt.transform.GetChild(2).gameObject.SetActive(true);
+
+        clickedBt.nameNLevelText.text = myData.researchName + " Lv." + (researchLevel + 1);
+        clickedBt.upInfoText.text = UpInfoStrSet(myData);
+        clickedBt.remainTime = myData.reqTimes[researchLevel];
+        clickedBt.requireTime = myData.reqTimes[researchLevel];
+
+        clickedBt.StartCoroutine(clickedBt.WaitReqTime(myData.researchType, myData.researchID));
+    }
+
+    public string UpInfoStrSet(ResearchData data)
+    {
+        string upInfoStr = "";
+        researchLevel = PlayDataManager.Instance.playData.labResearchLevels[(int)data.researchType, data.researchID];
+
+        switch (data.researchType)
+        {
+            case ResearchType.Main:
+                switch (data.researchID)
+                {
+                    case 0:
+                        upInfoStr = "x" + (data.oriValue + researchLevel * data.increaseValue).ToString("F1") + " >> " + "x" + (data.oriValue + (researchLevel + 1) * data.increaseValue).ToString("F1");
+                        break;
+                    case 1:
+                        upInfoStr = (data.oriValue + researchLevel * data.increaseValue) + " >> " + (data.oriValue + (researchLevel + 1) * data.increaseValue);
+                        break;
+                    case 3:
+                        upInfoStr = (data.oriValue + researchLevel * data.increaseValue).ToString("F2") + "% >> " + (data.oriValue + (researchLevel + 1) * data.increaseValue).ToString("F2") + "%";
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case ResearchType.Attak:
+                break;
+            case ResearchType.Defense:
+                break;
+            case ResearchType.Utility:
+                break;
+            default:
+                break;
+        }
+
+        return upInfoStr;
     }
 
     public string DisplayTime(float reqTime)
