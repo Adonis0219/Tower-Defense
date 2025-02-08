@@ -68,7 +68,7 @@ public class ResearchButton : MonoBehaviour
     {
         // 맥스레벨이거나 연구중이거나, 비용이 부족하다면
         if (Level == data.maxLevel || PlayDataManager.Instance.playData.isResearching[(int)data.researchType, data.researchID] 
-            || PlayDataManager.Instance.playData.haveCoin < data.costs[Level])        
+            || PlayDataManager.Instance.playData.haveCoin < data.costs[Level])            
             bt.interactable = false;       
         else 
             bt.interactable = true;

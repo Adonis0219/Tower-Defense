@@ -41,9 +41,17 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI curDollarText;
 
-    [SerializeField]
-    float initDollar = 80;
-    
+    int initDollar = 0;
+
+    public int InitDollar
+    {
+        get
+        {
+            initDollar = 5 * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.시작달러];
+            return initDollar;
+        }
+    }
+
     float curDollar;
 
     float dollarWaveBonus;
@@ -255,8 +263,8 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        //CurDollar = initDollar;
-        CurDollar = 9999999;
+        CurDollar = initDollar;
+        //CurDollar = 9999999;
 
         InitLevelSet();
     }

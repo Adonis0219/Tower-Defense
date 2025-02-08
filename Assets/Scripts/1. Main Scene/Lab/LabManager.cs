@@ -78,11 +78,16 @@ public class LabManager : MonoBehaviour
             labs.Add(temp);
             temp.labIndex = i;
             temp.IsOpen = true;
-            // PDM에게 연구중인지를 알아내서 isEmpty 설정
-            temp.IsEmpty = PlayDataManager.Instance.playData.labRemainTimes[i] == -1 ? true : false;
-            // PDM에 저장된 자신의 인덱스에 맞는 남은 시간 전달
-            temp.remainTime = PlayDataManager.Instance.playData.labRemainTimes[i] 
-                - (float)PlayDataManager.Instance.timeDif.TotalSeconds;
+
+            if (PlayDataManager.Instance.playData.isResearchingData[i] == null)
+            {
+                temp.IsEmpty = true;
+            }
+            else
+            {
+                temp.MyData = PlayDataManager.Instance.playData.isResearchingData[i];
+                temp.IsEmpty = false;
+            }
         }
 
         // 실험실 5개가 모두 열려 있으면 추가 생성 X
@@ -92,8 +97,8 @@ public class LabManager : MonoBehaviour
         LabButton unlockTemp = Instantiate(oriLabBt, labListContent);
         labs.Add(unlockTemp);
         unlockTemp.labIndex = PlayDataManager.Instance.playData.openLabCount;
-        unlockTemp.IsOpen = false;
         unlockTemp.IsEmpty = true;
+        unlockTemp.IsOpen = false;
     }
 
     /// <summary>
@@ -212,7 +217,13 @@ public class LabManager : MonoBehaviour
         clickedBt.remainTime = myData.reqTimes[researchLevel];
         clickedBt.requireTime = myData.reqTimes[researchLevel];
 
-        clickedBt.StartCoroutine(clickedBt.WaitReqTime(myData.researchType, myData.researchID));
+        PlayDataManager.Instance.playData.isResearchingData[clickedIndex] = myData;
+        PlayDataManager.Instance.playData.startTimes[clickedIndex] = DateTime.Now;
+
+        // 코루틴 실행이 아닌 정보전달
+        // 클릭했을 때 시간을 연구 시작 시간으로 넘겨줌
+        clickedBt.IsEmpty = false;
+        clickedBt.MyData = myData;
     }
 
     public string UpInfoStrSet(ResearchData data)

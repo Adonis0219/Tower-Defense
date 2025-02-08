@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,6 +20,17 @@ public class LabButton : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI labNameText;
 
+    public int labIndex;
+
+    [Header("# Unlock")]
+    [SerializeField]
+    TextMeshProUGUI unlockText;
+
+    [SerializeField]
+    bool isEmpty = true;
+    [SerializeField]
+    bool isOpen = false;
+
     [Header("# Upgrade")]
     [SerializeField]
     public TextMeshProUGUI nameNLevelText;
@@ -29,14 +42,17 @@ public class LabButton : MonoBehaviour
     [SerializeField]
     Slider mySlider;
 
-    [Header("# Unlock")]
-    [SerializeField]
-    TextMeshProUGUI unlockText;
+    /// <summary>
+    /// 경과된 시간
+    /// </summary>
+    public TimeSpan elapsedTime;
 
-    [SerializeField]
-    bool isEmpty = true;
-    [SerializeField]
-    bool isOpen = false;
+    [HideInInspector]       // 소요시간 변화 X
+    public float requireTime;
+    [HideInInspector]       // 남은시간 -> 시간이 지날 수록 줄어듦
+    public float remainTime;
+
+    ResearchData myData;
 
     /// <summary>
     /// 비어있는가? -> false = 연구중
@@ -61,43 +77,72 @@ public class LabButton : MonoBehaviour
         }
     }
 
-    public int labIndex;
+    public ResearchData MyData
+    {
+        get { return myData; }
 
-    [HideInInspector]       // 소요시간 변화 X
-    public float requireTime;
-    [HideInInspector]       // 남은시간 -> 시간이 지날 수록 줄어듦
-    public float remainTime;
+        set
+        {
+            myData = value;
+
+            if (myData != null)
+            {
+                requireTime = MyData.reqTimes[PlayDataManager.Instance.playData.labResearchLevels[(int)MyData.researchType, MyData.researchID]];
+                StartCoroutine(WaitReqTime(requireTime - (float)(DateTime.Now - PlayDataManager.Instance.playData.startTimes[labIndex]).TotalSeconds));
+            }
+        }
+    }
+
+
+    private void Awake()
+    {
+        MyData = PlayDataManager.Instance.playData.isResearchingData[labIndex];
+    }
 
     private void Start()
     {
         labNameText.text = "Lab " + (labIndex + 1);
 
-        // 마지막 연구실이 아니고 && 잠긴 연구실이라면
-        if (!isOpen)
+        if (IsEmpty)
         {
-            unlockText.text = (labIndex + 1) + "번째 실험실잠금해제\n" + LabManager.instance.labOpenCost[labIndex] + "<sprite=0>";
+            this.enabled = false;
+
+            // 잠긴 연구실이면
+            if (!IsOpen)
+            {
+                unlockText.text = (labIndex + 1) + "번째 실험실잠금해제\n" + LabManager.instance.labOpenCost[labIndex] + "<sprite=0>";
+            }
         }
+
     }
+
 
     private void Update()
     {
-        // 업그레이드 중이고, 남은 시간이 0보다 작다면
-        if (!transform.GetChild(2).gameObject.activeSelf && remainTime < 0)
-        {
-            remainTime = 0;
-            return;
-        }
+        Debug.Log(labIndex);
 
-        remainTime -= Time.deltaTime;
+        //// 업그레이드 중이고, 남은 시간이 0보다 작다면
+        //if (!transform.GetChild(2).gameObject.activeSelf && remainTime < 0)
+        //{
+        //    remainTime = 0;
+        //    return;
+        //}
+
+        elapsedTime = DateTime.Now - PlayDataManager.Instance.playData.startTimes[labIndex];
+
+        remainTime = requireTime - (float)elapsedTime.TotalSeconds;
 
         remainTimeText.text = LabManager.instance.DisplayTime(remainTime);
 
         mySlider.value = 1 - (remainTime / requireTime);
     }
 
+    /// <summary>
+    /// 랩버튼 UI 설정
+    /// </summary>
     void LabBtSet()
     {
-        if (isOpen)
+        if (IsOpen)
         {
             // 빈 연구실
             transform.GetChild(1).gameObject.SetActive(IsEmpty ? true : false);
@@ -143,37 +188,43 @@ public class LabButton : MonoBehaviour
         LabManager.instance.clickedIndex = labIndex;
     }
 
-
-    public IEnumerator WaitReqTime(ResearchType type, int researchID)
+    public IEnumerator WaitReqTime(float remainTime)
     {
-        IsEmpty = false;
-
         // 해당 버튼 연구중
-        PlayDataManager.Instance.playData.isResearching[(int)type, researchID] = true;
+        PlayDataManager.Instance.playData.isResearching[(int)MyData.researchType, MyData.researchID] = true;
 
-        //Print.Array2D(PlayDataManager.Instance.playData.isResearching);
+        this.enabled = true;
 
-        yield return new WaitForSeconds(requireTime);
 
-        ResearchComplete(type, researchID);
+        Print.Array2D(PlayDataManager.Instance.playData.isResearching);
+        Print.ResearchArray(PlayDataManager.Instance.playData.isResearchingData);
+
+        yield return new WaitForSeconds(remainTime);
+
+        ResearchComplete();
     }
 
     /// <summary>
     /// 연구가 완료 됐을 때 실행할 함수
     /// </summary>
-    void ResearchComplete(ResearchType type, int researchID)
+    void ResearchComplete()
     {
-        // 해당 버튼 연구중 해제
-        PlayDataManager.Instance.playData.isResearching[(int)type, researchID] = false;
         // PDM에 해당 업그레이드 레벨 올려주기
-        PlayDataManager.Instance.playData.labResearchLevels[(int)type, researchID]++;
+        PlayDataManager.Instance.playData.labResearchLevels[(int)MyData.researchType, MyData.researchID]++;
+        PlayDataManager.Instance.playData.isResearching[(int)MyData.researchType, MyData.researchID] = false;
+        PlayDataManager.Instance.playData.isResearchingData[labIndex] = null;
 
         // 빈 연구실로 만들어주기
         IsEmpty = true;
 
+        this.enabled = false;
+
         transform.GetChild(1).gameObject.SetActive(true);
         transform.GetChild(2).gameObject.SetActive(false);
 
-        Print.Array2D(PlayDataManager.Instance.playData.labResearchLevels);
+        //Print.Array2D(PlayDataManager.Instance.playData.labResearchLevels);
+        Print.Array2D(PlayDataManager.Instance.playData.isResearching);
+
+        Debug.Log("연구 끝남");
     }
 }

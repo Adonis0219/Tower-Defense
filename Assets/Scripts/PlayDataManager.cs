@@ -1,15 +1,14 @@
+using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Print
 {
     public static void Array2D(int[,] arr)
     {
+#if !UNITY_EDITOR
+    return;
+#endif
         string printStr = "";
 
         for (int i = 0; i < arr.GetLength(0); i++)
@@ -26,6 +25,9 @@ public class Print
 
     public static void Array2D(bool[,] arr)
     {
+#if !UNITY_EDITOR
+    return;
+#endif
         string printStr = "";
 
         for (int i = 0; i < arr.GetLength(0); i++)
@@ -35,6 +37,21 @@ public class Print
                 printStr += arr[i, j] + " ";
             }
             printStr += "\n";
+        }
+
+        Debug.Log(printStr);
+    }
+
+    public static void ResearchArray(ResearchData[] arr)
+    {
+#if !UNITY_EDITOR
+    return;
+#endif
+        string printStr = "";
+        
+        for (int i = 0; i < arr.Length; i++)
+        {
+            printStr += $"{i}번째 실험실 : " + arr[i] + "\n";
         }
 
         Debug.Log(printStr);
@@ -75,22 +92,21 @@ public class PlayData
     /// <summary>
     /// 열어줄 연구 버튼의 개수 (Length는 반복문 전용이기 때문에 -1)
     /// </summary>
-    public int[] openResearchBtCounts = new int[(int)ResearchType.Length - 1];
-    public int[,] labResearchLevels = new int[(int)ResearchType.Length - 1, 9];
-    public bool[,] isResearching = new bool[(int)ResearchType.Length - 1, 9];
+    public int[] openResearchBtCounts = new int[(int)ResearchType.Length];
+    public int[,] labResearchLevels = new int[(int)ResearchType.Length, 9];
+    public bool[,] isResearching = new bool[(int)ResearchType.Length, 9];
 
-    // 종료 시간 저장
-    public DateTime exitTime;
-    // -1 > 연구중 아님
-    public float[] labRemainTimes = new float[5] { -1, -1, -1, -1, -1 };
+    // 지금 연구중인 데이터
+    public ResearchData[] isResearchingData = new ResearchData[5];
+    public DateTime[] startTimes = new DateTime[5];
 }
 
 
 // 잠금해제 조건들
 public class UnlockConditions
 {
-   public const int BEST_WAVE = 2;
-   public const float TOTAL_EARN_COIN = 10;
+    public const int BEST_WAVE = 0;
+   public const float TOTAL_EARN_COIN = 0;
 }
 
 // 어떤 씬에서든 PlayData 참조 가능하도록
@@ -206,10 +222,6 @@ public class PlayDataManager : MonoBehaviour
 
         // 새로운 플레이데이터가 생성될 때 데이터 로드 해주기
         LoadData();
-
-        // 접속시간 설정
-        DateTime accessTime = DateTime.Now;
-        timeDif = accessTime - playData.exitTime;
     }
 
 
@@ -220,12 +232,15 @@ public class PlayDataManager : MonoBehaviour
     public void LoadData()
     {
         string loadJD = PlayerPrefs.GetString(SAVE_DATA_KEY, "");
-        playData = JsonUtility.FromJson<PlayData>(loadJD);
+        playData = JsonConvert.DeserializeObject<PlayData>(loadJD);
+       // playData = JsonUtility.FromJson<PlayData>(loadJD);
 
         if (playData == null)
         {
             playData = new PlayData();
         }
+
+        Print.ResearchArray(playData.isResearchingData);
     }
 
     public void SaveData(float coin, float dia)
@@ -234,17 +249,8 @@ public class PlayDataManager : MonoBehaviour
         MainCoin = 99999;
         MainDia = 10000;
 
-        // 나갈 때 현재 시간 저장
-        playData.exitTime = DateTime.Now;
-
-        string saveJD = JsonUtility.ToJson(playData);
-        PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);
-    }
-
-    // 저장 2개 나눠서도 가능한지
-    public void LabSaveData(int labIndex, float remainTime)
-    {
-        string saveJD = JsonUtility.ToJson(playData);
+        string saveJD = JsonConvert.SerializeObject(playData); 
+        //string saveJD = JsonUtility.ToJson(playData);
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);
     }
 }

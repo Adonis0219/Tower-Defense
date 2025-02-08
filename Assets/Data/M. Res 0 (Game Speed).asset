@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2a71c61af367a4cb8f0a07ffcd0aab, type: 3}
   m_Name: M. Res 0 (Game Speed)
   m_EditorClassIdentifier: 
-  researchType: 0
+  researchType: 3
   researchID: 0
   researchName: "\uAC8C\uC784 \uC18D\uB3C4"
   researchDesc: "\uCD5C\uB300 \uAC8C\uC784 \uC18D\uB3C4 \uC99D\uAC00"
-  costs: 2c010000c4090000e02e000050c30000f049020020a1070040420f00
-  reqTimes:
-  - 60
-  - 2
-  - 2
-  - 2
-  - 1200
-  - 2400
-  - 3600
   oriValue: 1.5
   increaseValue: 0.5
   maxLevel: 7
+  costs: 2c010000c4090000e02e000050c30000f049020020a1070040420f00
+  reqTimes:
+  - 30
+  - 30
+  - 30
+  - 30
+  - 1200
+  - 2400
+  - 3600
