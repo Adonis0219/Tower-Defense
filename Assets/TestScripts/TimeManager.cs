@@ -13,8 +13,6 @@ public class TimeManager : Singleton<TestManager>
 
     const string SAVE_DATA_KEY = "SaveData";
 
-    string exitTimeStr;
-
     DateTime accessTime;
     DateTime exitTime;
     TimeSpan timeDif;
@@ -28,7 +26,6 @@ public class TimeManager : Singleton<TestManager>
 
         timeDif = accessTime - exitTime;
 
-        Debug.Log((int)timeDif.TotalSeconds);
         Debug.Log(DisplayTime((int)timeDif.TotalSeconds));
     }
 

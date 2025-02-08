@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -61,10 +62,13 @@ public class LabManager : MonoBehaviour
 
         for (int i = 0; i < (int)ResearchType.Length; i++)
         {
-            ChkInitSet((ResearchType)i);
+            ResearchInitSet((ResearchType)i);
         }
     }
 
+    /// <summary>
+    /// 연구실 화면 초기 세팅
+    /// </summary>
     void LabInitSet()
     {
         // 열어줄만큼 열어주고 데이터 넣어주기
@@ -75,7 +79,10 @@ public class LabManager : MonoBehaviour
             temp.labIndex = i;
             temp.IsOpen = true;
             // PDM에게 연구중인지를 알아내서 isEmpty 설정
-            temp.IsEmpty = true;
+            temp.IsEmpty = PlayDataManager.Instance.playData.labRemainTimes[i] == -1 ? true : false;
+            // PDM에 저장된 자신의 인덱스에 맞는 남은 시간 전달
+            temp.remainTime = PlayDataManager.Instance.playData.labRemainTimes[i] 
+                - (float)PlayDataManager.Instance.timeDif.TotalSeconds;
         }
 
         // 실험실 5개가 모두 열려 있으면 추가 생성 X
@@ -89,7 +96,11 @@ public class LabManager : MonoBehaviour
         unlockTemp.IsEmpty = true;
     }
 
-    void ChkInitSet(ResearchType type)
+    /// <summary>
+    /// 연구판넬 초기 세팅
+    /// </summary>
+    /// <param name="type"></param>
+    void ResearchInitSet(ResearchType type)
     {
         List<ResearchData> datas = new List<ResearchData>();
         Transform createContent = null;
@@ -116,7 +127,7 @@ public class LabManager : MonoBehaviour
                 break;
         }
 
-
+        // datas의 타입에 따라 각 content에 datas의 개수만큼 리서치 버튼 생성
         for (int i = 0; i < datas.Count; i++)
         {
             ResearchButton temp = Instantiate(oriResBt, createContent);
@@ -141,6 +152,10 @@ public class LabManager : MonoBehaviour
         unlockTemp.IsEmpty = true;
     }
 
+    /// <summary>
+    /// 연구 리스트 이름을 누를 때 -> 각 리스트 판넬들을 껐다 켜줌
+    /// </summary>
+    /// <param name="type"></param>
     [VisibleEnum(typeof(ResearchType))]
     public void ListNameBtClk(int type)
     {
@@ -173,6 +188,9 @@ public class LabManager : MonoBehaviour
     public ResearchData myData;
     public int researchLevel;
 
+    /// <summary>
+    /// 체크 판넬에서 연구시작 버튼을 눌렀을 때 실행할 함수
+    /// </summary>
     public void OnChkResearchClk()
     {
         researchLevel = PlayDataManager.Instance.playData.labResearchLevels[(int)myData.researchType, myData.researchID];

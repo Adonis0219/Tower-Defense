@@ -78,6 +78,11 @@ public class PlayData
     public int[] openResearchBtCounts = new int[(int)ResearchType.Length - 1];
     public int[,] labResearchLevels = new int[(int)ResearchType.Length - 1, 9];
     public bool[,] isResearching = new bool[(int)ResearchType.Length - 1, 9];
+
+    // 종료 시간 저장
+    public DateTime exitTime;
+    // -1 > 연구중 아님
+    public float[] labRemainTimes = new float[5] { -1, -1, -1, -1, -1 };
 }
 
 
@@ -123,7 +128,7 @@ public class PlayDataManager : MonoBehaviour
     public PlayData playData;
 
     const string SAVE_DATA_KEY = "SaveData";
-
+    const string LAB_DATA_KEY = "LabData";
     public int BestWave
     {
         get { return playData.bestWave; }
@@ -176,7 +181,12 @@ public class PlayDataManager : MonoBehaviour
             onChangedDia?.Invoke(MainDia);
         }
     }
-
+    
+    /// <summary>
+    /// 종료 시간, 접속 시간 차이
+    /// </summary>
+    public TimeSpan timeDif;
+    
     private void Awake()
     {
         if( instance == null)
@@ -196,6 +206,10 @@ public class PlayDataManager : MonoBehaviour
 
         // 새로운 플레이데이터가 생성될 때 데이터 로드 해주기
         LoadData();
+
+        // 접속시간 설정
+        DateTime accessTime = DateTime.Now;
+        timeDif = accessTime - playData.exitTime;
     }
 
 
@@ -220,7 +234,16 @@ public class PlayDataManager : MonoBehaviour
         MainCoin = 99999;
         MainDia = 10000;
 
+        // 나갈 때 현재 시간 저장
+        playData.exitTime = DateTime.Now;
 
+        string saveJD = JsonUtility.ToJson(playData);
+        PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);
+    }
+
+    // 저장 2개 나눠서도 가능한지
+    public void LabSaveData(int labIndex, float remainTime)
+    {
         string saveJD = JsonUtility.ToJson(playData);
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);
     }

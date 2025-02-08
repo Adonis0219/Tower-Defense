@@ -5,14 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-class DisplayTime
-{
-    public int d;
-    public int h;
-    public int m;
-    public int s;
-}
-
 public struct CurResearchData
 {
     public string NameNLevelStr;

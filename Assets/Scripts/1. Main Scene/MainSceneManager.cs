@@ -61,6 +61,6 @@ public class MainSceneManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        PlayDataManager.Instance.SaveData(PlayDataManager.Instance.playData.haveCoin, PlayDataManager.Instance.playData.haveDia);
+        PlayDataManager.Instance.SaveData(PlayDataManager.Instance.MainCoin, PlayDataManager.Instance.MainDia);
     }
 }

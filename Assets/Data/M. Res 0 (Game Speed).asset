@@ -18,7 +18,7 @@ MonoBehaviour:
   researchDesc: "\uCD5C\uB300 \uAC8C\uC784 \uC18D\uB3C4 \uC99D\uAC00"
   costs: 2c010000c4090000e02e000050c30000f049020020a1070040420f00
   reqTimes:
-  - 2
+  - 60
   - 2
   - 2
   - 2
@@ -27,4 +27,4 @@ MonoBehaviour:
   - 3600
   oriValue: 1.5
   increaseValue: 0.5
-  maxLevel: 2
+  maxLevel: 7

@@ -1,8 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+
+public class DisplayTime
+{
+    public int d;
+    public int h;
+    public int m;
+    public int s;
+}
 
 public class LabButton : MonoBehaviour
 {
@@ -30,7 +39,7 @@ public class LabButton : MonoBehaviour
     bool isOpen = false;
 
     /// <summary>
-    /// 연구가 실행중인가? Empty -> 비어있다
+    /// 비어있는가? -> false = 연구중
     /// </summary>
     public bool IsEmpty
     {
@@ -54,9 +63,9 @@ public class LabButton : MonoBehaviour
 
     public int labIndex;
 
-    [HideInInspector]
+    [HideInInspector]       // 소요시간 변화 X
     public float requireTime;
-    [HideInInspector]
+    [HideInInspector]       // 남은시간 -> 시간이 지날 수록 줄어듦
     public float remainTime;
 
     private void Start()
@@ -72,6 +81,7 @@ public class LabButton : MonoBehaviour
 
     private void Update()
     {
+        // 업그레이드 중이고, 남은 시간이 0보다 작다면
         if (!transform.GetChild(2).gameObject.activeSelf && remainTime < 0)
         {
             remainTime = 0;
@@ -133,6 +143,7 @@ public class LabButton : MonoBehaviour
         LabManager.instance.clickedIndex = labIndex;
     }
 
+
     public IEnumerator WaitReqTime(ResearchType type, int researchID)
     {
         IsEmpty = false;
@@ -140,7 +151,7 @@ public class LabButton : MonoBehaviour
         // 해당 버튼 연구중
         PlayDataManager.Instance.playData.isResearching[(int)type, researchID] = true;
 
-        Print.Array2D(PlayDataManager.Instance.playData.isResearching);
+        //Print.Array2D(PlayDataManager.Instance.playData.isResearching);
 
         yield return new WaitForSeconds(requireTime);
 
