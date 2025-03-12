@@ -23,6 +23,7 @@ public class AchiveManager : MonoBehaviour
     {
         for (int i = 0; i < (int)Achive.Length; i++)
         {
+            // 만약 업적이 달성됐다면 판넬 해제
             if ((PlayDataManager.Instance.playData.achive >> i) % 2 == 1)
             //if ((PlayDataManager.Instance.playData.achive & (1 << i)) == 1)
                 OpenPanel(i);

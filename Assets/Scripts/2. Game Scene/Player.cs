@@ -366,7 +366,7 @@ public class Player : MonoBehaviour, IHit
 
     void Dead()
     {
-        GameManager.instance.resultPanel.SetActive(true);
+        GameManager.instance.ResultPanelSetActive(true);
         Time.timeScale = 0;
         Destroy(gameObject);
     }

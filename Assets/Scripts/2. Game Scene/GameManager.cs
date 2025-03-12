@@ -175,6 +175,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI timeScaleText;
 
+    float maxTimeScale = 1.5f;
+
+    float curTimeScale = 1.0f;
+
     [Header("# Wave Control")]
     public WaveData[] waveDatas;
 
@@ -245,8 +249,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    float curTimeScale = 1.0f;
-
     public float CurTimeScale
     {
         get { return curTimeScale; }
@@ -256,14 +258,22 @@ public class GameManager : MonoBehaviour
             timeScaleText.text = "x" + curTimeScale;
             Time.timeScale = curTimeScale;
         }
+    }
 
+    public float MaxTimeScale
+    {
+        get
+        {
+            maxTimeScale = 1.5f + .5f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.게임속도];
+            return maxTimeScale;
+        }
     }
 
     private void Awake()
     {
         instance = this;
 
-        CurDollar = initDollar;
+        CurDollar = InitDollar;
         //CurDollar = 9999999;
 
         InitLevelSet();
@@ -271,7 +281,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        curTimeScale = 1.5f;
+        CurTimeScale = 1f;
 
         CurCoin = PlayDataManager.Instance.MainCoin;
 
@@ -459,7 +469,7 @@ public class GameManager : MonoBehaviour
     /// 결과창을 보여주는 함수
     /// </summary>
     /// <param name="isActive">결과창의 활성화 여부</param>
-    void ResultPanelSetActive(bool isActive)
+    public void ResultPanelSetActive(bool isActive)
     {
         if (isActive)
         {
@@ -544,6 +554,9 @@ public class GameManager : MonoBehaviour
 
     public void OnScaleUpClick(bool isUp)
     {
+        if (CurTimeScale == MaxTimeScale)
+            return;
+
         // isUp(Plus) 버튼이면 .5를 더해주고, 아니면 .5를 빼준다
         CurTimeScale += isUp ? .5f : -.5f;
         Time.timeScale = CurTimeScale;

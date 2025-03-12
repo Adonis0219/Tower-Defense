@@ -14,20 +14,19 @@ public class LabManager : MonoBehaviour
     public Transform labListContent;
     
     [SerializeField]
-    public List<LabButton> labs;
-
+    public List<LabButton> labs;        // 연구실 버튼 목록
     [SerializeField]
     LabButton oriLabBt;
 
     [HideInInspector]
-    public int clickedIndex;
-    public int[] labOpenCost = new int[4] { 100, 400, 1400, 3000 };
+    public int clickedIndex;    // 클릭한 인덱스 -> 연구확인 패널과 연동 시 사용
+    public int[] labOpenCost = new int[4] { 100,  400, 1400, 3000 };
 
     [Header("## Research List")]
     [SerializeField]
-    public GameObject researchListPN;
+    public GameObject researchListPN;   // 연구사항 목록 판넬
     [SerializeField]
-    public GameObject checkPN;
+    public GameObject checkPN;          // 연구 확인 판넬
 
     [SerializeField]
     GameObject[] listPanels;
@@ -198,6 +197,7 @@ public class LabManager : MonoBehaviour
     /// </summary>
     public void OnChkResearchClk()
     {
+        // 연구 전 연구 레벨 가져오기
         researchLevel = PlayDataManager.Instance.playData.labResearchLevels[(int)myData.researchType, myData.researchID];
 
         // 체크 판넬이 열렸다는 것은 코인이 충분하다는 전제가 있으므로 if 사용x
@@ -206,24 +206,28 @@ public class LabManager : MonoBehaviour
         // 체크판넬 닫기
         checkPN.SetActive(false);
 
+        // 클릭한 버튼을 할당
         LabButton clickedBt = labs[clickedIndex];
 
-        // 클릭한 연구실 연구중으로 바꿔주기
-        clickedBt.transform.GetChild(1).gameObject.SetActive(false);
-        clickedBt.transform.GetChild(2).gameObject.SetActive(true);
+        //// 클릭한 연구실 연구중으로 바꿔주기
+        //// 빈 연구실 글자 false
+        //clickedBt.transform.GetChild(1).gameObject.SetActive(false);
+        //// 연구중 글자 
+        //clickedBt.transform.GetChild(2).gameObject.SetActive(true);
 
-        clickedBt.nameNLevelText.text = myData.researchName + " Lv." + (researchLevel + 1);
-        clickedBt.upInfoText.text = UpInfoStrSet(myData);
-        clickedBt.remainTime = myData.reqTimes[researchLevel];
-        clickedBt.requireTime = myData.reqTimes[researchLevel];
-
+        // 지금 연구중인 데이터를 자기 자신으로 넣어줌
         PlayDataManager.Instance.playData.isResearchingData[clickedIndex] = myData;
+
+        clickedBt.MyData = myData;
+        // 연구 단계 넘겨주기
+        clickedBt.curResearchLevel = researchLevel;
+
+        // 클릭했을 때 시간을 연구 시작 시간으로 넘겨줌
         PlayDataManager.Instance.playData.startTimes[clickedIndex] = DateTime.Now;
 
         // 코루틴 실행이 아닌 정보전달
-        // 클릭했을 때 시간을 연구 시작 시간으로 넘겨줌
         clickedBt.IsEmpty = false;
-        clickedBt.MyData = myData;
+
     }
 
     public string UpInfoStrSet(ResearchData data)

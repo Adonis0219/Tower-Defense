@@ -641,7 +641,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7237622140995859297}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7237622142497611216}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: SkipBtClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7237622141284996462
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,7 +1569,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7237622142140371385}
   m_Layer: 5
-  m_Name: Upgrade
+  m_Name: Researching
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2099,12 +2111,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   labNameText: {fileID: 7237622141284996456}
+  labIndex: 0
+  unlockText: {fileID: 7237622142422513680}
+  isEmpty: 1
+  isOpen: 0
   nameNLevelText: {fileID: 7237622140768980985}
   upInfoText: {fileID: 7237622141954220030}
   remainTimeText: {fileID: 7237622141901723719}
   mySlider: {fileID: 7237622142251824569}
-  unlockText: {fileID: 7237622142422513680}
-  labIndex: 0
   requireTime: 0
   remainTime: 0
 --- !u!1 &7237622142547616518

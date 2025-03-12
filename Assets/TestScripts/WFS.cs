@@ -13,7 +13,7 @@ public class WFS : MonoBehaviour
 {
 
     [SerializeField]
-    int num = 50;
+    //int num = 50;
 
     private void Start()
     {

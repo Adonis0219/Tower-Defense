@@ -21,7 +21,7 @@ MonoBehaviour:
   maxLevel: 7
   costs: 2c010000c4090000e02e000050c30000f049020020a1070040420f00
   reqTimes:
-  - 30
+  - 3
   - 30
   - 30
   - 30
