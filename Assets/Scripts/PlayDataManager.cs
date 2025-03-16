@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class Print
 {
+    public static void Array(int[] arr)
+    {
+#if !UNITY_EDITOR
+    return;
+#endif
+        string printStr = "";
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            printStr += arr[i] + " ";
+        }
+
+        Debug.Log(printStr);
+    }
+
     public static void Array2D(int[,] arr)
     {
 #if !UNITY_EDITOR

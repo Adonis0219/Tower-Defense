@@ -13,7 +13,7 @@ public class MDefUpgradeButton : MUpgradeButton, ISetUpType
     {
         bt.interactable = PlayDataManager.Instance.MainCoin > upCost ? true : false;
 
-        costText.text = "<sprite=12>" + upCost;
+        costText.text = "<sprite=12>" + Mathf.FloorToInt(upCost * Sale(MainRschType.방어할인));
 
         switch (myUpType)
         {
@@ -49,7 +49,7 @@ public class MDefUpgradeButton : MUpgradeButton, ISetUpType
 
     public void OnUpBtClk()
     {
-        PlayDataManager.Instance.MainCoin -= upCost;
+        PlayDataManager.Instance.MainCoin -= Mathf.FloorToInt(upCost * Sale(MainRschType.방어할인));
 
         PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType]++;
 

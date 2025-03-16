@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: M. Res 7 (Multiplier)
   m_EditorClassIdentifier: 
   researchType: 3
-  researchID: 4
+  researchID: 7
   researchName: "\uB300\uB7C9 \uC5C5\uADF8\uB808\uC774\uB4DC"
   researchDesc: "\uB300\uB7C9 \uC5C5\uADF8\uB808\uC774\uB4DC \uAD6C\uB9E4 \uD65C\uC131\uD654"
   oriValue: 0
@@ -21,7 +21,7 @@ MonoBehaviour:
   maxLevel: 4
   costs: c40900001027000050c3000020a10700
   reqTimes:
-  - 3600
-  - 19800
-  - 86400
-  - 259200
+  - 3
+  - 3
+  - 3
+  - 3

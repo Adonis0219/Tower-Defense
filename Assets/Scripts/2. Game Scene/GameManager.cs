@@ -200,6 +200,8 @@ public class GameManager : MonoBehaviour
     public float gameTime;
     //float maxGameTime = 5 * 10f;
 
+    public int[] curMultis = new int[3] { 1, 1, 1 };
+
     ////// 프로퍼티
     public float CurDollar
     {
@@ -273,8 +275,8 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        CurDollar = InitDollar;
-        //CurDollar = 9999999;
+        //CurDollar = InitDollar;
+        CurDollar = 9999999;
 
         InitLevelSet();
     }

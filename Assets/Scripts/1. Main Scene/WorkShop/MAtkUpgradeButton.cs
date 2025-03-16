@@ -13,13 +13,13 @@ public class MAtkUpgradeButton : MUpgradeButton, ISetUpType
     {
         bt.interactable = PlayDataManager.Instance.MainCoin > upCost ? true : false;
 
-        costText.text = "<sprite=12>" + upCost;
+        costText.text = "<sprite=12>" + Mathf.FloorToInt(upCost * Sale(MainRschType.공격할인));
 
         switch (myUpType)
         {
             case AtkUpgradeType.데미지:
                 // Main화면으로 시작했을 때 게임매니저에 접근할 수 없으므로 계산식으로 넣어주기
-                curValueText.text = (3 * (PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType]+1)).ToString();
+                curValueText.text = (3 * (PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType] + 1)).ToString();
                 break;
             case AtkUpgradeType.공격속도:
                 curValueText.text = (1 + .05f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType]).ToString("F2");
@@ -31,7 +31,7 @@ public class MAtkUpgradeButton : MUpgradeButton, ISetUpType
                 curValueText.text = "x" + (1.2f + .1f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType]).ToString("F2");
                 break;
             case AtkUpgradeType.범위:
-                curValueText.text = (20 + (.5f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType])).ToString("F2")+ "m";
+                curValueText.text = (20 + (.5f * PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType])).ToString("F2") + "m";
                 break;
             case AtkUpgradeType.거리당데미지:
                 curValueText.fontSize = 40;
@@ -57,9 +57,10 @@ public class MAtkUpgradeButton : MUpgradeButton, ISetUpType
         }
     }
 
+    // 업그레이드 버튼을 눌렀을 때 실행할 함수
     public void OnUpBtClk()
     {
-        PlayDataManager.Instance.MainCoin -= upCost;
+        PlayDataManager.Instance.MainCoin -= Mathf.FloorToInt(upCost * Sale(MainRschType.공격할인));
 
         PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType]++;
 

@@ -248,23 +248,4 @@ public class LabButton : MonoBehaviour
 
         Debug.Log("연구 끝남");
     }
-
-    public IEnumerator WaitReqTime(float remainTime)
-    {
-        // 남은 시간이 있다면
-        if (remainTime > 0)
-        {
-            // 해당 버튼 연구중
-            PlayDataManager.Instance.playData.isResearching[(int)MyData.researchType, MyData.researchID] = true;
-
-            this.enabled = true;
-
-            Print.Array2D(PlayDataManager.Instance.playData.isResearching);
-            Print.ResearchArray(PlayDataManager.Instance.playData.isResearchingData);
-
-            yield return new WaitForSeconds(remainTime);
-        }
-
-        ResearchComplete();
-    }
 }

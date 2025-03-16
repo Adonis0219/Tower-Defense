@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PanelManager : MonoBehaviour
@@ -30,6 +31,17 @@ public class PanelManager : MonoBehaviour
     [SerializeField]
     GameObject utilLock;
 
+    [SerializeField]
+    GameObject[] panels;
+
+    [SerializeField]
+    GameObject[] curMutliBts;
+    [SerializeField]
+    GameObject[] multiBts;
+    [SerializeField]
+    GameObject[] upNameTexts;
+
+
     const string ATK_UPGRADE = "AtkUpgrade";
     const string DEF_UPGRADE = "DefUpgrade";
     const string UTIL_UPGRADE = "UtilUpgrade";
@@ -43,13 +55,14 @@ public class PanelManager : MonoBehaviour
         activePanel = panels[0];
         activeIcon = btIcons[0];
 
+        MultiBtSet();
+
         UpgradeBtSet(ATK_UPGRADE, PlayDataManager.Instance.playData.totalCreatCounts[(int)PanelType.Attack], atkUpBt, atkContent);
         UpgradeBtSet(DEF_UPGRADE, PlayDataManager.Instance.playData.totalCreatCounts[(int)PanelType.Defense], defUpBt, defContent);
         UpgradeBtSet(UTIL_UPGRADE, PlayDataManager.Instance.playData.totalCreatCounts[(int)PanelType.Utility], utilUpBt, utilContent);
     }
 
-    [SerializeField]
-    GameObject[] panels;    
+
 
     [VisibleEnum(typeof(PanelType))]
     public void PanelBtClick(int pType)
@@ -119,5 +132,82 @@ public class PanelManager : MonoBehaviour
 
             tempBt.GetComponent<ISetUpType>().SetUpType(i);
         }
-    }   
+    }
+
+    /// <summary>
+    /// 게임 시작 시 연구레벨에 따라 멀티 버튼들을 켜주는 함수
+    /// </summary>
+    public void MultiBtSet()
+    {
+        // 1. PDD의 연구 레벨 확인
+        int level = PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.승수];
+
+        if (level != 0)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                // 현재 배수 버튼 켜주기
+                curMutliBts[i].SetActive(true);
+            }
+
+            for (int i = 0; i < level; i++)
+            {
+                multiBts[0].transform.GetChild(i + 1).gameObject.SetActive(true);
+                multiBts[1].transform.GetChild(i + 1).gameObject.SetActive(true);
+                multiBts[2].transform.GetChild(i + 1).gameObject.SetActive(true);
+            }
+        }
+
+        // 2. 연구 레벨이 0일 때 현재 멀티 버튼도 꺼주기
+        // 3. 연구 레벨이 1일 때 현재 멀티 버튼 켜주고 x5 버튼까지 켜주기 
+    }
+
+    /// <summary>
+    /// 현재 배수 버튼 눌렀을 때 실행할 함수
+    /// </summary>
+    /// <param name="type">몇 배수인지</param>
+    public void OnCurMultiBtClk(int type)
+    {
+        // 이름 텍스트 꺼주고
+        upNameTexts[type].SetActive(multiBts[type].activeSelf == false ? false : true);
+
+        // 승수 버튼들 켜주기
+        multiBts[type].SetActive(multiBts[type].activeSelf == false ? true : false);
+    }
+
+    const string ATK = "Atk Multi Bts";
+    const string DEF = "Def Multi Bts";
+    const string UTIL = "Util Multi Bts";
+
+    /// <summary>
+    /// 배수 버튼을 눌렀을 때 실행할 함수
+    /// </summary>
+    /// <param name="value">몇 배수인지</param>
+    public void OnMultiBtClk(int value)
+    {
+        // 방금 클릭한 버튼의 정보를 가져와 저장
+        GameObject clickedBt = EventSystem.current.currentSelectedGameObject;
+
+        int type = 0;
+
+        switch (clickedBt.transform.parent.name)
+        {
+            case ATK:
+                type = 0;
+                break;
+            case DEF:
+                type = 1;
+                break;
+            case UTIL:
+                type = 2;
+                break;
+            default:
+                break;
+        }
+
+        GameManager.instance.curMultis[type] = value;
+
+        upNameTexts[type].SetActive(true);
+        multiBts[type].SetActive(false);
+    }
 }

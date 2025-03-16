@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -37,5 +38,15 @@ public class MUpgradeButton : MonoBehaviour
         upFactor = factor;
 
         costText.text = "$" + cost;
+    }
+
+    /// <summary>
+    /// 작업장 할인 함수
+    /// </summary>
+    /// <param name="type">할인할 작업장</param>
+    /// <returns></returns>
+    public float Sale(MainRschType type)
+    {
+        return 1 - (.005f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)type]);
     }
 }

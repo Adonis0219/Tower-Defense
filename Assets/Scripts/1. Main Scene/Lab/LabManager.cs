@@ -201,19 +201,13 @@ public class LabManager : MonoBehaviour
         researchLevel = PlayDataManager.Instance.playData.labResearchLevels[(int)myData.researchType, myData.researchID];
 
         // 체크 판넬이 열렸다는 것은 코인이 충분하다는 전제가 있으므로 if 사용x
-        PlayDataManager.Instance.playData.haveCoin -= myData.costs[researchLevel];
+        PlayDataManager.Instance.MainCoin -= SaledCost(myData.costs[researchLevel]);
 
         // 체크판넬 닫기
         checkPN.SetActive(false);
 
         // 클릭한 버튼을 할당
         LabButton clickedBt = labs[clickedIndex];
-
-        //// 클릭한 연구실 연구중으로 바꿔주기
-        //// 빈 연구실 글자 false
-        //clickedBt.transform.GetChild(1).gameObject.SetActive(false);
-        //// 연구중 글자 
-        //clickedBt.transform.GetChild(2).gameObject.SetActive(true);
 
         // 지금 연구중인 데이터를 자기 자신으로 넣어줌
         PlayDataManager.Instance.playData.isResearchingData[clickedIndex] = myData;
@@ -227,7 +221,11 @@ public class LabManager : MonoBehaviour
 
         // 코루틴 실행이 아닌 정보전달
         clickedBt.IsEmpty = false;
+    }
 
+    public int SaledCost(int cost)
+    {
+        return Mathf.FloorToInt(cost * (1 - .003f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.연구실할인])); ;
     }
 
     public string UpInfoStrSet(ResearchData data)

@@ -20,6 +20,8 @@ public class UpgradeButton : MonoBehaviour
     protected TextMeshProUGUI curValueText;
     [SerializeField]
     protected TextMeshProUGUI costText;
+    [SerializeField]
+    protected TextMeshProUGUI multiText;
 
     public int upType;
 
@@ -36,5 +38,31 @@ public class UpgradeButton : MonoBehaviour
         upFactor = factor;
 
         costText.text = "$" + cost;
+    }
+
+    /// <summary>
+    /// 각 업그레이드 버튼 오른쪽 위의 배수 표시 글자를 바꿔주는 함수
+    /// </summary>
+    /// <param name="type"></param>
+    protected void SetMultiText(int type)
+    {
+        int multi = GameManager.instance.curMultis[type];
+
+        multiText.text = multi != 1 ? "x" + GameManager.instance.curMultis[type] : "";
+    }
+
+    protected int SetCost(int type)
+    {
+        int cost = upCost;
+
+        if (GameManager.instance.curMultis[type] == 1)
+            return cost;
+
+        for (int i = 0; i < GameManager.instance.curMultis[type]; i++)
+        {
+            cost += Mathf.RoundToInt(cost * upFactor);
+        }
+
+        return cost;
     }
 }

@@ -25,7 +25,9 @@ public class UtilUpgradeButton : UpgradeButton, ISetUpType
     {
         bt.interactable = GameManager.instance.CurDollar < upCost ? false : true;
 
-        costText.text = "$" + upCost;
+        SetMultiText(2);
+
+        costText.text = "$" + SetCost(2);
 
         switch (myUpType)
         {
@@ -61,11 +63,14 @@ public class UtilUpgradeButton : UpgradeButton, ISetUpType
 
     public void OnUpBtClk()
     {
-        GameManager.instance.CurDollar -= upCost;
+        GameManager.instance.CurDollar -= SetCost(2);
 
-        GameManager.instance.utilDollarLevels[(int)myUpType]++;
+        GameManager.instance.utilDollarLevels[(int)myUpType] += GameManager.instance.curMultis[2];
 
-        upCost = Mathf.RoundToInt(upCost * upFactor);
+        for (int i = 0; i < GameManager.instance.curMultis[2]; i++)
+        {
+            upCost = Mathf.RoundToInt(upCost * upFactor);
+        }
     }
 
     public void SetUpType(int upType)

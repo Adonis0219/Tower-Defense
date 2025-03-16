@@ -24,7 +24,9 @@ public class DefUpgradeButton : UpgradeButton, ISetUpType
     {
         bt.interactable = GameManager.instance.CurDollar < upCost ? false : true;
 
-        costText.text = "$" + upCost;
+        SetMultiText(1);
+
+        costText.text = "$" + SetCost(1);
 
         switch (myUpType)
         {
@@ -59,15 +61,18 @@ public class DefUpgradeButton : UpgradeButton, ISetUpType
 
     public void OnUpBtClk()
     {
-        GameManager.instance.CurDollar -= upCost;
+        GameManager.instance.CurDollar -= SetCost(1);
 
-        GameManager.instance.defDollarLevels[(int)myUpType] ++;
+        GameManager.instance.defDollarLevels[(int)myUpType] += GameManager.instance.curMultis[1];
 
-        // 업그레이드 버튼이 체력타입일 경우 현재 체력 올려주기
-        if (myUpType == DefUpgradeType.체력)
-            GameManager.instance.player.CurrentHp += 5;
+        for (int i = 0; i < GameManager.instance.curMultis[1]; i++)
+        {
+            // 업그레이드 버튼이 체력타입일 경우 현재 체력 올려주기
+            if (myUpType == DefUpgradeType.체력)
+                GameManager.instance.player.CurrentHp += 5;
 
-        upCost = Mathf.RoundToInt(upCost * upFactor);
+            upCost = Mathf.RoundToInt(upCost * upFactor);
+        }
     }
 
     public void SetUpType(int upType)
