@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            dollarWaveBonus = 4 * (utilCoinLevels[(int)UtilUpgradeType.캐시웨이브] 
+            dollarWaveBonus = 4 * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.캐시웨이브] 
                 + utilDollarLevels[(int)UtilUpgradeType.캐시웨이브]);
             return dollarWaveBonus;
         }
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            dollarBonusFactor = 1 + .01f * (utilCoinLevels[(int)UtilUpgradeType.캐시보너스] 
+            dollarBonusFactor = 1 + .01f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.캐시보너스] 
                 + utilDollarLevels[(int)UtilUpgradeType.캐시보너스]);
             return dollarBonusFactor;
         }
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            coinKillBonus = 1 + (.01f * (utilCoinLevels[(int)UtilUpgradeType.코인킬보너스] 
+            coinKillBonus = 1 + (.01f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.코인킬보너스] 
                 + utilDollarLevels[(int)UtilUpgradeType.코인킬보너스]));
             return coinKillBonus;
         }
@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            coinWaveBonus = (utilCoinLevels[(int)UtilUpgradeType.코인웨이브] 
+            coinWaveBonus = (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.코인웨이브] 
                 + utilDollarLevels[(int)UtilUpgradeType.코인웨이브]);
             return coinWaveBonus;
         }
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
         get
         {
             atkFreeUpChance = 100;
-            atkFreeUpChance = (.5f * (utilCoinLevels[(int)UtilUpgradeType.무료공격업] 
+            atkFreeUpChance = (.5f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.무료공격업] 
                 + utilDollarLevels[(int)UtilUpgradeType.무료공격업]));
             return atkFreeUpChance;
         }
@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            defFreeUpChance = (.5f * (utilCoinLevels[(int)UtilUpgradeType.무료방어업] 
+            defFreeUpChance = (.5f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.무료방어업] 
                 + utilDollarLevels[(int)UtilUpgradeType.무료방어업]));
             return defFreeUpChance;
         }
@@ -144,18 +144,11 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            utilFreeUpChance = (.5f * (utilCoinLevels[(int)UtilUpgradeType.무료유틸업] 
+            utilFreeUpChance = (.5f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.무료유틸업] 
                 + utilDollarLevels[(int)UtilUpgradeType.무료유틸업]));
             return utilFreeUpChance;
         }
     }
-
-    [HideInInspector]
-    public int[] atkCoinLevels;
-    [HideInInspector]
-    public int[] defCoinLevels;
-    [HideInInspector]
-    public int[] utilCoinLevels;
 
     [HideInInspector]
     public int[] atkDollarLevels;
@@ -341,33 +334,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void InitLevelSet()
     {
-        PlayData playData = PlayDataManager.Instance.playData;
-
-        // 각 업그레이드 레벨들 길이 초기화해주기
-        atkCoinLevels = new int[(int)AtkUpgradeType.Length];
         atkDollarLevels = new int[(int)AtkUpgradeType.Length];
-
-        defCoinLevels = new int[(int)DefUpgradeType.Length];
         defDollarLevels = new int[(int)DefUpgradeType.Length];
-
-        utilCoinLevels = new int[(int)UtilUpgradeType.Length];
         utilDollarLevels = new int[(int)UtilUpgradeType.Length];
-
-        // PlayData에서 받아온 Coin레벨을 GameManager에서 사용할 수 있도록 초기화
-        for (int i = 0; i < playData.atkCoinLevels.Length; i++)
-        {
-            atkCoinLevels[i] = playData.atkCoinLevels[i];
-        }
-
-        for (int i = 0; i < playData.defCoinLevels.Length; i++)
-        {
-            defCoinLevels[i] = playData.defCoinLevels[i];
-        }
-
-        for (int i = 0; i < playData.utilCoinLevels.Length; i++)
-        {
-            utilCoinLevels[i] = playData.utilCoinLevels[i];
-        }
     }
 
     /// <summary>

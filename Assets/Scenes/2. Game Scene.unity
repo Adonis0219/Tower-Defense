@@ -12876,9 +12876,6 @@ MonoBehaviour:
   curCoin: 10
   initCoin: 0
   earnCoin: 0
-  atkCoinLevels: 
-  defCoinLevels: 
-  utilCoinLevels: 
   atkDollarLevels: 
   defDollarLevels: 
   utilDollarLevels: 

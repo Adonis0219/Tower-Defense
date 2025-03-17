@@ -5,25 +5,20 @@ using UnityEngine;
 
 public class TestManager : Singleton<TestManager>
 {
-    Coroutine coru;
+    int[] test;
 
     private void Start()
     {
-        coru = StartCoroutine(TT());
-    }
+        int[] print = test = new int[3] { 1, 2, 3 };
 
-    public IEnumerator TT()
-    {
-        while (true)
+        for (int i = 0; i < print.Length; i++)
         {
-            Debug.Log("코루틴 실행중");
-
-            yield return new WaitForSeconds(-1f);
+            Debug.Log(print[i]);
         }
-    }
 
-    public void OnStopClk()
-    {
-        StopCoroutine(coru);
+        for (int j = 0; j < test.Length; j++)
+        {
+            Debug.Log(test[j]);
+        }
     }
 }

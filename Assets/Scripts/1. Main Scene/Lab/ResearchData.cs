@@ -12,6 +12,11 @@ public enum MainRschType
     게임속도, 시작달러, 공격할인, 방어할인, 유틸할인, 연구실할인, 연구실속도, 승수
 }
 
+public enum AtkRschType
+{
+    데미지, 공격속도, 치명타배율, 범위
+}
+
 [CreateAssetMenu(fileName = "Research Data", menuName = "Scriptable Object/Lab Data")]
 public class ResearchData : ScriptableObject
 {

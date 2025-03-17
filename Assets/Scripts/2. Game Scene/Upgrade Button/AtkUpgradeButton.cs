@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public enum AtkUpgradeType
 {
     데미지, 공격속도,
-    치명타확률, 치명타데미지,
+    치명타확률, 치명타배율,
     범위, 거리당데미지,
     멀티샷확률, 멀티샷표적,
     바운스샷확률, 바운스샷표적, 바운스샷범위,
@@ -40,7 +40,7 @@ public class AtkUpgradeButton : UpgradeButton, ISetUpType
             case AtkUpgradeType.치명타확률:
                 curValueText.text = GameManager.instance.player.CritChance.ToString("F2") + "%";
                 break;
-            case AtkUpgradeType.치명타데미지:
+            case AtkUpgradeType.치명타배율:
                 curValueText.text = "x" + GameManager.instance.player.CritFactor.ToString("F2");
                 break;
             case AtkUpgradeType.범위:

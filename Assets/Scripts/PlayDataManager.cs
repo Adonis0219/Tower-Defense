@@ -125,7 +125,7 @@ public class UnlockConditions
 }
 
 // 어떤 씬에서든 PlayData 참조 가능하도록
-public class PlayDataManager : MonoBehaviour
+public partial class PlayDataManager : MonoBehaviour
 {
     static PlayDataManager instance = null;
 

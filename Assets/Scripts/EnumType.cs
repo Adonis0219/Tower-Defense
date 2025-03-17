@@ -6,8 +6,10 @@ using UnityEngine;
 
 public enum PanelType
 {
-    Attack,
-    Defense,
-    Utility
+    Attack, Defense, Utility
 }
 
+public enum SceneType
+{
+    Main, Game
+}
