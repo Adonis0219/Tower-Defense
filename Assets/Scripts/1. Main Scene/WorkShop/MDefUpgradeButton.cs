@@ -19,16 +19,16 @@ public class MDefUpgradeButton : MUpgradeButton, ISetUpType
         {
             case DefUpgradeType.체력:
                 // Main화면으로 시작했을 때 게임매니저에 접근할 수 없으므로 계산식으로 넣어주기
-                curValueText.text = (5 * (PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType]+1)).ToString();
+                curValueText.text = PlayDataManager.Instance.HpFormula(SceneType.Main).ToString();
                 break;
             case DefUpgradeType.체력회복:
-                curValueText.text = (.04f * PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType]).ToString("F2") + "/sec";
+                curValueText.text = PlayDataManager.Instance.HpRegenFormula(SceneType.Main).ToString("F2") + "/sec";
                 break;
             case DefUpgradeType.방어력:
                 curValueText.text = (.5f * PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType]).ToString("F2") + "%";
                 break;
             case DefUpgradeType.절대방어:
-                curValueText.text = (1 * PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType]).ToString("F2");
+                curValueText.text = PlayDataManager.Instance.AbsDefFormula(SceneType.Main).ToString("F2");
                 break;
             case DefUpgradeType.가시대미지:
                 curValueText.text = (PlayDataManager.Instance.playData.defCoinLevels[(int)myUpType]).ToString("F2") + "%";

@@ -146,13 +146,7 @@ public class Player : MonoBehaviour, IHit
     {
         get 
         {
-            maxHp = 5 * (1 + GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력] 
-                + PlayDataManager.Instance.playData.defCoinLevels[(int)DefUpgradeType.체력]);
-            return maxHp; 
-        }
-        set
-        {
-            maxHp = value;
+            return PlayDataManager.Instance.HpFormula(SceneType.Game); 
         }
     }
 
@@ -182,10 +176,8 @@ public class Player : MonoBehaviour, IHit
     public float RegenHp
     {
         get
-        {
-            regenHp = .04f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력회복] 
-                + PlayDataManager.Instance.playData.defCoinLevels[(int)DefUpgradeType.체력회복]);
-            return regenHp; 
+        { 
+            return PlayDataManager.Instance.HpRegenFormula(SceneType.Game); 
         }
     }
 
@@ -207,9 +199,7 @@ public class Player : MonoBehaviour, IHit
     {
         get
         {
-            absDef = .5f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.절대방어] 
-                + PlayDataManager.Instance.playData.defCoinLevels[(int)DefUpgradeType.절대방어]);
-            return absDef; 
+            return PlayDataManager.Instance.AbsDefFormula(SceneType.Game);
         }
     }
 

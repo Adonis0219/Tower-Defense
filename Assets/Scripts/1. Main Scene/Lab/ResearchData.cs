@@ -17,6 +17,11 @@ public enum AtkRschType
     데미지, 공격속도, 치명타배율, 범위
 }
 
+public enum DefRschType
+{
+    체력, 체력회복, 절대방어
+}
+
 [CreateAssetMenu(fileName = "Research Data", menuName = "Scriptable Object/Lab Data")]
 public class ResearchData : ScriptableObject
 {

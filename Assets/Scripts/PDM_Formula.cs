@@ -87,4 +87,65 @@ public partial class PlayDataManager : MonoBehaviour
 public partial class PlayDataManager : MonoBehaviour
 {
     // DefFormula 함수만 가지고 있음
+    public float HpFormula(SceneType type)
+    {
+        float maxHp = 0;
+
+        if (type == SceneType.Main)
+        {
+            maxHp = 5 * (PlayDataManager.Instance.playData.defCoinLevels[(int)DefUpgradeType.체력] + 1);
+        }
+        else
+        {
+            maxHp = 5 * (1 + GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력]
+                    + PlayDataManager.Instance.playData.defCoinLevels[(int)DefUpgradeType.체력]);
+        }
+
+        maxHp *= (1 + .03f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Defense, (int)DefRschType.체력]);
+
+        return maxHp;
+    }
+
+    public float HpRegenFormula(SceneType type)
+    {
+        float regenHp = 0;
+
+        if (type == SceneType.Main)
+        {
+            regenHp = .04f * PlayDataManager.Instance.playData.defCoinLevels[(int)DefUpgradeType.체력회복];
+        }
+        else
+        {
+            regenHp = .04f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.체력회복]
+                + PlayDataManager.Instance.playData.defCoinLevels[(int)DefUpgradeType.체력회복]);
+        }
+
+        regenHp *= (1 + .03f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Defense, (int)DefRschType.체력회복]);
+
+        return regenHp;
+    }
+
+    public float AbsDefFormula(SceneType type)
+    {
+        float absDef = 0;
+
+        if (type == SceneType.Main)
+        {
+            absDef = .5f * PlayDataManager.Instance.playData.defCoinLevels[(int)DefUpgradeType.절대방어];
+        }
+        else
+        {
+            absDef = .5f * (GameManager.instance.defDollarLevels[(int)DefUpgradeType.절대방어]
+                + PlayDataManager.Instance.playData.defCoinLevels[(int)DefUpgradeType.절대방어]);
+        }
+
+        absDef *= (1 + .03f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Defense, (int)DefRschType.절대방어]);
+
+        return absDef;
+    }
+}
+
+public partial class PlayDataManager : MonoBehaviour
+{
+    // UtilFormula 함수만 가지고 있음
 }
