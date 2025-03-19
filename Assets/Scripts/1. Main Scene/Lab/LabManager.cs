@@ -22,6 +22,9 @@ public class LabManager : MonoBehaviour
     public int clickedIndex;    // 클릭한 인덱스 -> 연구확인 패널과 연동 시 사용
     public int[] labOpenCost = new int[4] { 100,  400, 1400, 3000 };
 
+    [SerializeField]
+    public GameObject completeCountUI;
+
     [Header("## Research List")]
     [SerializeField]
     public GameObject researchListPN;   // 연구사항 목록 판넬
@@ -211,13 +214,17 @@ public class LabManager : MonoBehaviour
 
         // 지금 연구중인 데이터를 자기 자신으로 넣어줌
         PlayDataManager.Instance.playData.isResearchingData[clickedIndex] = myData;
+        // 남은 시간 넘겨주기
+        PlayDataManager.Instance.playData.labRemainTime[clickedIndex] = myData.reqTimes[researchLevel];
+        PlayDataManager.Instance.playData.fixedLabRemainTime[clickedIndex] = myData.reqTimes[researchLevel];
+
+        PlayDataManager.Instance.playData.startTimes[clickedIndex] = DateTime.Now;
 
         clickedBt.MyData = myData;
         // 연구 단계 넘겨주기
         clickedBt.curResearchLevel = researchLevel;
 
         // 클릭했을 때 시간을 연구 시작 시간으로 넘겨줌
-        PlayDataManager.Instance.playData.startTimes[clickedIndex] = DateTime.Now;
 
         // 코루틴 실행이 아닌 정보전달
         clickedBt.IsEmpty = false;

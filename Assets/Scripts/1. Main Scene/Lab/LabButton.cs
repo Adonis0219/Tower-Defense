@@ -135,25 +135,34 @@ public class LabButton : MonoBehaviour
     private void Update()
     {
         // 연구중이 아니라면 얼리리턴
+        // 남은 시간이 0보다 작다면 리턴 || remainTime < 0
         if (IsEmpty)
         {
             return;
         }
 
         // 시간 갭 = 현재시간 - 시작 시간
-        elapsedTime = DateTime.Now - PlayDataManager.Instance.playData.startTimes[labIndex];
+        ////////////////elapsedTime = DateTime.Now - PlayDataManager.Instance.playData.startTimes[labIndex];
 
-        remainTime = myData.reqTimes[curResearchLevel] - (float)elapsedTime.TotalSeconds;
+        //////////////remainTime = myData.reqTimes[curResearchLevel] - (float)elapsedTime.TotalSeconds;
 
-        remainTimeText.text = LabManager.instance.DisplayTime(remainTime);
+        remainTimeText.text = LabManager.instance.DisplayTime(PlayDataManager.Instance.playData.labRemainTime[labIndex]);
+        ////////////remainTimeText.text = LabManager.instance.DisplayTime(remainTime);
 
         Debug.Log(labIndex + "번째 연구실 남은 시간 : " + LabManager.instance.DisplayTime(remainTime));
 
-        mySlider.value = 1 - (remainTime / myData.reqTimes[curResearchLevel]);
+        mySlider.value = 1 - (PlayDataManager.Instance.playData.labRemainTime[labIndex] / myData.reqTimes[curResearchLevel]);
+        /////////////mySlider.value = 1 - (remainTime / myData.reqTimes[curResearchLevel]);
 
-        if (remainTime < 0)
+        ///////////////if (remainTime < 0)
+        if (PlayDataManager.Instance.playData.labRemainTime[labIndex] < 0)
         {
-            ResearchComplete();
+            // 연구 완료 판넬 띄워주기
+            transform.GetChild(2).gameObject.SetActive(false);
+            transform.GetChild(4).gameObject.SetActive(true);
+
+            // 연구 완료 개수 올려주기
+            //////////////LabManager.instance.LabCompleteCount++;
         }
     }
 
@@ -209,7 +218,10 @@ public class LabButton : MonoBehaviour
         LabManager.instance.clickedIndex = labIndex;
     }
 
-    public void SkipBtClick()
+    /// <summary>
+    ///  스킵 버튼과 연구완료 버튼 누를 시 실행할 함수
+    /// </summary>
+    public void RschCompleteBtClk()
     {
         ResearchComplete();
     }
@@ -227,6 +239,13 @@ public class LabButton : MonoBehaviour
     /// </summary>
     void ResearchComplete()
     {
+        // 연구완료 버튼 꺼주기
+        transform.GetChild(4).gameObject.SetActive(false);
+        // 연구완료 개수 줄여주기
+        /////////////////LabManager.instance.LabCompleteCount--;
+        PlayDataManager.Instance.LabCompleteCount--;
+
+
         // PDM에 해당 업그레이드 레벨 올려주기
         PlayDataManager.Instance.playData.labResearchLevels[(int)MyData.researchType, MyData.researchID]++;
         // 현재 연구중 아님

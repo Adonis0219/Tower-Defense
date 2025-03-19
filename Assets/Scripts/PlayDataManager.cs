@@ -1,78 +1,7 @@
 using Newtonsoft.Json;
 using System;
+using TMPro;
 using UnityEngine;
-
-public class Print
-{
-    public static void Array(int[] arr)
-    {
-#if !UNITY_EDITOR
-    return;
-#endif
-        string printStr = "";
-
-        for (int i = 0; i < arr.Length; i++)
-        {
-            printStr += arr[i] + " ";
-        }
-
-        Debug.Log(printStr);
-    }
-
-    public static void Array2D(int[,] arr)
-    {
-#if !UNITY_EDITOR
-    return;
-#endif
-        string printStr = "";
-
-        for (int i = 0; i < arr.GetLength(0); i++)
-        {
-            for (int j = 0; j < arr.GetLength(1); j++)
-            {
-                printStr += arr[i, j] + " ";
-            }
-            printStr += "\n";
-        }
-
-        Debug.Log(printStr);
-    }
-
-    public static void Array2D(bool[,] arr)
-    {
-#if !UNITY_EDITOR
-    return;
-#endif
-        string printStr = "";
-
-        for (int i = 0; i < arr.GetLength(0); i++)
-        {
-            for (int j = 0; j < arr.GetLength(1); j++)
-            {
-                printStr += arr[i, j] + " ";
-            }
-            printStr += "\n";
-        }
-
-        Debug.Log(printStr);
-    }
-
-    public static void ResearchArray(ResearchData[] arr)
-    {
-#if !UNITY_EDITOR
-    return;
-#endif
-        string printStr = "";
-        
-        for (int i = 0; i < arr.Length; i++)
-        {
-            printStr += $"{i}번째 실험실 : " + arr[i] + "\n";
-        }
-
-        Debug.Log(printStr);
-    }
-}
-
 public class PlayData
 {
     // 플레이어가 가진 코인수
@@ -114,6 +43,12 @@ public class PlayData
     // 지금 연구중인 데이터
     public ResearchData[] isResearchingData = new ResearchData[5];
     public DateTime[] startTimes = new DateTime[5];
+
+    // 연구실 남은 시간
+    public float[] labRemainTime = new float[5];
+    public float[] fixedLabRemainTime = new float[5];
+
+    public int labCompleteCount = 0;
 }
 
 
@@ -212,7 +147,24 @@ public partial class PlayDataManager : MonoBehaviour
             onChangedDia?.Invoke(MainDia);
         }
     }
-    
+
+    public int LabCompleteCount
+    {
+        get
+        {
+            return playData.labCompleteCount;
+        }
+        
+        set
+        {
+            playData.labCompleteCount = value;
+
+            LabManager.instance.completeCountUI.SetActive(playData.labCompleteCount == 0 ? false : true);
+
+            LabManager.instance.completeCountUI.GetComponentInChildren<TextMeshProUGUI>().text = playData.labCompleteCount.ToString();
+        }
+    }
+
     /// <summary>
     /// 종료 시간, 접속 시간 차이
     /// </summary>
@@ -239,6 +191,23 @@ public partial class PlayDataManager : MonoBehaviour
         LoadData();
     }
 
+    public TimeSpan elapsedTime;
+
+    private void Update()
+    {
+        if (playData.labRemainTime[0] > 0)
+        {
+            // 시간 갭 = 현재시간 - 시작 시간
+            elapsedTime = DateTime.Now - playData.startTimes[0];
+
+            playData.labRemainTime[0] = playData.fixedLabRemainTime[0] - (float)elapsedTime.TotalSeconds;
+
+            if (playData.labRemainTime[0] < 0)
+            {
+                LabCompleteCount++;
+            }
+        }
+    }
 
     ////// MainScene의 PlayDataManager GOBJ가 활성화 됐을 때(메인 씬 시작하자마자), 
     ////// GameScene의 GameManager가 활성화 됐을 때(게임씬으로 넘어가자마자)
@@ -267,5 +236,76 @@ public partial class PlayDataManager : MonoBehaviour
         string saveJD = JsonConvert.SerializeObject(playData); 
         //string saveJD = JsonUtility.ToJson(playData);
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);
+    }
+}
+
+public class Print
+{
+    public static void Array(int[] arr)
+    {
+#if !UNITY_EDITOR
+    return;
+#endif
+        string printStr = "";
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            printStr += arr[i] + " ";
+        }
+
+        Debug.Log(printStr);
+    }
+
+    public static void Array2D(int[,] arr)
+    {
+#if !UNITY_EDITOR
+    return;
+#endif
+        string printStr = "";
+
+        for (int i = 0; i < arr.GetLength(0); i++)
+        {
+            for (int j = 0; j < arr.GetLength(1); j++)
+            {
+                printStr += arr[i, j] + " ";
+            }
+            printStr += "\n";
+        }
+
+        Debug.Log(printStr);
+    }
+
+    public static void Array2D(bool[,] arr)
+    {
+#if !UNITY_EDITOR
+    return;
+#endif
+        string printStr = "";
+
+        for (int i = 0; i < arr.GetLength(0); i++)
+        {
+            for (int j = 0; j < arr.GetLength(1); j++)
+            {
+                printStr += arr[i, j] + " ";
+            }
+            printStr += "\n";
+        }
+
+        Debug.Log(printStr);
+    }
+
+    public static void ResearchArray(ResearchData[] arr)
+    {
+#if !UNITY_EDITOR
+    return;
+#endif
+        string printStr = "";
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            printStr += $"{i}번째 실험실 : " + arr[i] + "\n";
+        }
+
+        Debug.Log(printStr);
     }
 }
