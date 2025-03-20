@@ -215,8 +215,8 @@ public class LabManager : MonoBehaviour
         // 지금 연구중인 데이터를 자기 자신으로 넣어줌
         PlayDataManager.Instance.playData.isResearchingData[clickedIndex] = myData;
         // 남은 시간 넘겨주기
-        PlayDataManager.Instance.playData.labRemainTime[clickedIndex] = myData.reqTimes[researchLevel];
-        PlayDataManager.Instance.playData.fixedLabRemainTime[clickedIndex] = myData.reqTimes[researchLevel];
+        PlayDataManager.Instance.playData.labRemainTime[clickedIndex] = ReqTime(myData.reqTimes[researchLevel]);
+        PlayDataManager.Instance.playData.fixedLabRemainTime[clickedIndex] = ReqTime(myData.reqTimes[researchLevel]);
 
         PlayDataManager.Instance.playData.startTimes[clickedIndex] = DateTime.Now;
 
@@ -233,6 +233,11 @@ public class LabManager : MonoBehaviour
     public int SaledCost(int cost)
     {
         return Mathf.FloorToInt(cost * (1 - .003f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.연구실할인])); ;
+    }
+
+    public float ReqTime(float reqTime)
+    {
+        return reqTime / (1 + .02f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.연구실속도]);       
     }
 
     public string UpInfoStrSet(ResearchData data)

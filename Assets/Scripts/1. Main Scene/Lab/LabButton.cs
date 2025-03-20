@@ -142,27 +142,15 @@ public class LabButton : MonoBehaviour
         }
 
         // 시간 갭 = 현재시간 - 시작 시간
-        ////////////////elapsedTime = DateTime.Now - PlayDataManager.Instance.playData.startTimes[labIndex];
-
-        //////////////remainTime = myData.reqTimes[curResearchLevel] - (float)elapsedTime.TotalSeconds;
-
         remainTimeText.text = LabManager.instance.DisplayTime(PlayDataManager.Instance.playData.labRemainTime[labIndex]);
-        ////////////remainTimeText.text = LabManager.instance.DisplayTime(remainTime);
 
-        Debug.Log(labIndex + "번째 연구실 남은 시간 : " + LabManager.instance.DisplayTime(remainTime));
+        mySlider.value = 1 - (PlayDataManager.Instance.playData.labRemainTime[labIndex] / PlayDataManager.Instance.playData.fixedLabRemainTime[labIndex]);
 
-        mySlider.value = 1 - (PlayDataManager.Instance.playData.labRemainTime[labIndex] / myData.reqTimes[curResearchLevel]);
-        /////////////mySlider.value = 1 - (remainTime / myData.reqTimes[curResearchLevel]);
-
-        ///////////////if (remainTime < 0)
         if (PlayDataManager.Instance.playData.labRemainTime[labIndex] < 0)
         {
             // 연구 완료 판넬 띄워주기
             transform.GetChild(2).gameObject.SetActive(false);
             transform.GetChild(4).gameObject.SetActive(true);
-
-            // 연구 완료 개수 올려주기
-            //////////////LabManager.instance.LabCompleteCount++;
         }
     }
 
@@ -226,6 +214,13 @@ public class LabButton : MonoBehaviour
         ResearchComplete();
     }
 
+    public void OnSkipBtClk()
+    {
+        PlayDataManager.Instance.playData.labRemainTime[labIndex] = -1;
+        PlayDataManager.Instance.LabCompleteCount++;
+        ResearchComplete();
+    }
+
     void Researching()
     {
         // 해당 버튼 연구중
@@ -242,7 +237,6 @@ public class LabButton : MonoBehaviour
         // 연구완료 버튼 꺼주기
         transform.GetChild(4).gameObject.SetActive(false);
         // 연구완료 개수 줄여주기
-        /////////////////LabManager.instance.LabCompleteCount--;
         PlayDataManager.Instance.LabCompleteCount--;
 
 
@@ -262,9 +256,7 @@ public class LabButton : MonoBehaviour
         transform.GetChild(1).gameObject.SetActive(true);
         transform.GetChild(2).gameObject.SetActive(false);
 
-        Print.Array2D(PlayDataManager.Instance.playData.labResearchLevels);
-        Print.Array2D(PlayDataManager.Instance.playData.isResearching);
-
-        Debug.Log("연구 끝남");
+        //Print.Array2D(PlayDataManager.Instance.playData.labResearchLevels);
+        //Print.Array2D(PlayDataManager.Instance.playData.isResearching);
     }
 }

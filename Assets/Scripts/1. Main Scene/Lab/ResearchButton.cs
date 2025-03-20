@@ -33,7 +33,8 @@ public class ResearchButton : MonoBehaviour
 
             curResearchData.NameNLevelStr = data.researchName + "  Lv." + (Level + 1);
             curResearchData.UpInfoStr = LabManager.instance.UpInfoStrSet(data);
-            curResearchData.ReqTimeStr = LabManager.instance.DisplayTime(data.reqTimes[Level]).ToString();
+            //curResearchData.ReqTimeStr = LabManager.instance.DisplayTime(data.reqTimes[Level]).ToString();
+            curResearchData.ReqTimeStr = LabManager.instance.DisplayTime(LabManager.instance.ReqTime(data.reqTimes[Level])).ToString();
             curResearchData.CostStr = LabManager.instance.SaledCost(data.costs[Level]) + "<sprite=12>";
         }
     }

@@ -187,6 +187,9 @@ public partial class PlayDataManager : MonoBehaviour
             return;
         }
 
+        // 프레임 고정
+        Application.targetFrameRate = 60;
+
         // 새로운 플레이데이터가 생성될 때 데이터 로드 해주기
         LoadData();
     }
@@ -195,14 +198,22 @@ public partial class PlayDataManager : MonoBehaviour
 
     private void Update()
     {
-        if (playData.labRemainTime[0] > 0)
+        for (int i = 0; i < 5; i++)
+        {
+            LabReduceTime(i);
+        }
+    }
+
+    void LabReduceTime(int labIndex)
+    {
+        if (playData.labRemainTime[labIndex] > 0)
         {
             // 시간 갭 = 현재시간 - 시작 시간
-            elapsedTime = DateTime.Now - playData.startTimes[0];
+            elapsedTime = DateTime.Now - playData.startTimes[labIndex];
 
-            playData.labRemainTime[0] = playData.fixedLabRemainTime[0] - (float)elapsedTime.TotalSeconds;
+            playData.labRemainTime[labIndex] = playData.fixedLabRemainTime[labIndex] - (float)elapsedTime.TotalSeconds;
 
-            if (playData.labRemainTime[0] < 0)
+            if (playData.labRemainTime[labIndex] < 0)
             {
                 LabCompleteCount++;
             }
