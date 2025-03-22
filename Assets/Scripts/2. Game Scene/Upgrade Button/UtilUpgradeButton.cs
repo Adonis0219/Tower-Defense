@@ -5,8 +5,8 @@ using TMPro;
 using UnityEditor;
 public enum UtilUpgradeType
 {
-    캐시보너스,
-    캐시웨이브,
+    달러보너스,
+    달러웨이브,
     코인킬보너스,
     코인웨이브,
     무료공격업,
@@ -31,17 +31,17 @@ public class UtilUpgradeButton : UpgradeButton, ISetUpType
 
         switch (myUpType)
         {
-            case UtilUpgradeType.캐시보너스:
+            case UtilUpgradeType.달러보너스:
                 curValueText.text = "x" + GameManager.instance.DollarBonusFactor.ToString("F2");
                 break;
-            case UtilUpgradeType.캐시웨이브:
-                curValueText.text = GameManager.instance.DollarWaveBonus.ToString();
+            case UtilUpgradeType.달러웨이브:
+                curValueText.text = GameManager.instance.DollarWaveBonus.ToString("F1");
                 break;
             case UtilUpgradeType.코인킬보너스:
                 curValueText.text = "x" + GameManager.instance.CoinKillBonus.ToString("F2");
                 break;
             case UtilUpgradeType.코인웨이브:
-                curValueText.text = GameManager.instance.CoinWaveBonus.ToString();
+                curValueText.text = GameManager.instance.CoinWaveBonus.ToString("F1");
                 break;
             case UtilUpgradeType.무료공격업:
                 curValueText.text = GameManager.instance.AtkFreeUpChance.ToString("F2") + "%";

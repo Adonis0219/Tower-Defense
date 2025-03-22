@@ -13,6 +13,14 @@ public enum Achive
     Length
 }
 
+// 잠금해제 조건들
+public class UnlockConditions
+{
+    public const int BEST_WAVE = 0;
+    public const float TOTAL_EARN_COIN = 0;
+    public const int BEST_WAVE_CARD = 0;
+}
+
 public class AchiveManager : MonoBehaviour
 {
     public GameObject[] lockPanels;
@@ -25,7 +33,6 @@ public class AchiveManager : MonoBehaviour
         {
             // 만약 업적이 달성됐다면 판넬 해제
             if ((PlayDataManager.Instance.playData.achive >> i) % 2 == 1)
-            //if ((PlayDataManager.Instance.playData.achive & (1 << i)) == 1)
                 OpenPanel(i);
         }
     }

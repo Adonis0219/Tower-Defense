@@ -17,6 +17,6 @@ public class CoinText : MonoBehaviour
 
     void ChangeText(int coin)
     {
-        changeText.text = coin.ToString();
+        changeText.text = coin.ToString("F0");
     }
 }

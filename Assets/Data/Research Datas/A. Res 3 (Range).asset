@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a71c61af367a4cb8f0a07ffcd0aab, type: 3}
+  m_Name: A. Res 3 (Range)
+  m_EditorClassIdentifier: 
+  researchType: 0
+  researchID: 3
+  researchName: "\uBC94\uC704"
+  researchDesc: "\uD0C0\uC6CC\uC758 \uCD5C\uB300 \uACF5\uACA9 \uBC94\uC704"
+  oriValue: 1
+  increaseValue: 0.02
+  maxLevel: 80
+  costs: 1e00000046000000b20000008e010000f049020020a1070040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f0040420f00
+  reqTimes:
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3
+  - 3

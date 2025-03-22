@@ -106,7 +106,7 @@ MonoBehaviour:
   maxHp: 0
   currentHp: 0
   baseCollDamage: 2
-  killedCoin: 2
+  killedCoin: 100
 --- !u!61 &3082797800593604026
 BoxCollider2D:
   m_ObjectHideFlags: 0

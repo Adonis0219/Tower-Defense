@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Notifications;
 using Unity.Notifications.Android;
+
 public class NotificationsManager : MonoBehaviour
 {
     public void Show()
@@ -14,7 +15,6 @@ public class NotificationsManager : MonoBehaviour
             Name = "Default Channel",
             Importance = Importance.Default,
             Description = "Generic notifications",
-
         };
 
         AndroidNotificationCenter.RegisterNotificationChannel(channel);

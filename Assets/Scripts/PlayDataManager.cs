@@ -7,9 +7,9 @@ public class PlayData
     // 플레이어가 가진 코인수
     public int haveCoin = 0;
 
-    public int haveDia = 0;
+    public int mainDia = 0;
 
-    public int dia = 0;
+    public int di = 0;
     public int bestWave = 0;
     public int achive = 0;
     
@@ -49,14 +49,15 @@ public class PlayData
     public float[] fixedLabRemainTime = new float[5];
 
     public int labCompleteCount = 0;
-}
 
+    [Header("# Card")]
+    public int curSlotCount = 1;
+    public int maxSlotCount = 20;
+    public int[] slotOpneCost = { 50, 100, 200, 300, 400, 500, 600, 750, 1000, 1200, 1400, 1600, 1800, 2000, 2300, 2600, 3000, 3500, 4000};
 
-// 잠금해제 조건들
-public class UnlockConditions
-{
-    public const int BEST_WAVE = 0;
-   public const float TOTAL_EARN_COIN = 0;
+    public int[] cardLvs;
+    // 현재 적용중인 카드 데이터들
+    public CardData[] activedCardDatas;
 }
 
 // 어떤 씬에서든 PlayData 참조 가능하도록
@@ -106,8 +107,13 @@ public partial class PlayDataManager : MonoBehaviour
                 // 최고 웨이브를 들어온 값으로 설정
                 playData.bestWave = value ;
 
+                // 작업장 열어주기
                 if (playData.bestWave >= UnlockConditions.BEST_WAVE)
                     playData.achive |= 1 << (int)Achive.UnlockWorkShop;
+
+                // 카드 열어주기
+                if (playData.bestWave >= UnlockConditions.BEST_WAVE_CARD)
+                    playData.achive |= 1 << (int)Achive.UnlockCards;
             }
         }
     }
@@ -140,10 +146,10 @@ public partial class PlayDataManager : MonoBehaviour
 
     public int MainDia
     {
-        get { return playData.haveDia; }
+        get { return playData.mainDia; }
         set
         {
-            playData.haveDia = value;
+            playData.mainDia = value;
             onChangedDia?.Invoke(MainDia);
         }
     }

@@ -23,6 +23,11 @@ public enum DefRschType
     체력, 체력회복, 절대방어
 }
 
+public enum UtilRschType
+{
+    달러보너스, 달러웨이브, 코인보너스, 코인웨이브
+}
+
 [CreateAssetMenu(fileName = "Research Data", menuName = "Scriptable Object/Lab Data")]
 public class ResearchData : ScriptableObject
 {

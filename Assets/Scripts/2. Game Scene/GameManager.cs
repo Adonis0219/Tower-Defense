@@ -60,8 +60,8 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            dollarWaveBonus = 4 * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.캐시웨이브] 
-                + utilDollarLevels[(int)UtilUpgradeType.캐시웨이브]);
+            dollarWaveBonus = 4 * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.달러웨이브] 
+                + utilDollarLevels[(int)UtilUpgradeType.달러웨이브]);
             return dollarWaveBonus;
         }
     }
@@ -72,9 +72,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            dollarBonusFactor = 1 + .01f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.캐시보너스] 
-                + utilDollarLevels[(int)UtilUpgradeType.캐시보너스]);
-            return dollarBonusFactor;
+            return PlayDataManager.Instance.DollarBonusFormula(SceneType.Game);
         }
     }
 
@@ -94,9 +92,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            coinKillBonus = 1 + (.01f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.코인킬보너스] 
-                + utilDollarLevels[(int)UtilUpgradeType.코인킬보너스]));
-            return coinKillBonus;
+            return PlayDataManager.Instance.CoinKillBonusFormula(SceneType.Game);
         }
     }
 
@@ -106,9 +102,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            coinWaveBonus = (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.코인웨이브] 
-                + utilDollarLevels[(int)UtilUpgradeType.코인웨이브]);
-            return coinWaveBonus;
+            return PlayDataManager.Instance.CoinWaveFormula(SceneType.Game);
         }
     }
 
@@ -191,7 +185,6 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public float gameTime;
-    //float maxGameTime = 5 * 10f;
 
     public int[] curMultis = new int[3] { 1, 1, 1 };
 
@@ -235,7 +228,9 @@ public class GameManager : MonoBehaviour
             waveDmgFactorText.text = waveDmgFactor.ToString("F2");
             waveHpFactorText.text = waveHpFactor.ToString("F2");
 
-            GoodsKillFactor(DollarWaveBonus, true);
+            CurDollar += PlayDataManager.Instance.DollarWaveFormula(SceneType.Game);
+            CurCoin += PlayDataManager.Instance.CoinWaveFormula(SceneType.Game);
+
             GoodsKillFactor(CoinWaveBonus, false);
 
             if (IsChanceTrue(AtkFreeUpChance)) FreeUpgrade(PanelType.Attack);
@@ -489,7 +484,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 일반 달러 보너스와 킬 보너스
+    /// 적을 죽였을 때 적용되는 달러 보너스와 킬 보너스
     /// </summary>
     /// <param name="basicGoods"></param>
     /// <param name="enemyPos"></param>
@@ -507,19 +502,19 @@ public class GameManager : MonoBehaviour
         {
             CurDollar += basicGoods * DollarBonusFactor;
             tempUpText.transform.position = enemyPos.position + new Vector3(0, .1f, 0);
-            tempUpTextMesh.text = "$" + basicGoods * DollarBonusFactor;
+            tempUpTextMesh.text = "$" + (basicGoods * DollarBonusFactor).ToString("F0");
         }
         else
         {
-            CurCoin += (int)(basicGoods * CoinKillBonus);
+            CurCoin += basicGoods * CoinKillBonus;
             tempUpText.transform.position = enemyPos.position + new Vector3(0, .4f, 0);
-            tempUpTextMesh.text = "<sprite=12>" + basicGoods * CoinKillBonus;
+            tempUpTextMesh.text = "<sprite=12>" + (basicGoods * CoinKillBonus).ToString("F0");
         }
     }
 
     void ChangeScene(int sceneIndex)
     {
-        PlayDataManager.Instance.SaveData(CurCoin, PlayDataManager.Instance.playData.haveDia);
+        PlayDataManager.Instance.SaveData(CurCoin, PlayDataManager.Instance.playData.mainDia);
         SceneManager.LoadScene(sceneIndex);
     }
 
@@ -535,6 +530,6 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        PlayDataManager.Instance.SaveData(curCoin, PlayDataManager.Instance.playData.haveDia);
+        PlayDataManager.Instance.SaveData(curCoin, PlayDataManager.Instance.playData.mainDia);
     }
 }

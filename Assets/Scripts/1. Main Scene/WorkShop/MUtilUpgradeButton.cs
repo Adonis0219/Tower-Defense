@@ -17,17 +17,17 @@ public class MUtilUpgradeButton : MUpgradeButton, ISetUpType
 
         switch (myUpType)
         {
-            case UtilUpgradeType.캐시보너스:
-                curValueText.text = "x" + (1 + .01f * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString("F2");
+            case UtilUpgradeType.달러보너스:
+                curValueText.text = "x" + PlayDataManager.Instance.DollarBonusFormula(SceneType.Main).ToString("F2");
                 break;
-            case UtilUpgradeType.캐시웨이브:
-                curValueText.text = (4 * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString();
+            case UtilUpgradeType.달러웨이브:
+                curValueText.text = PlayDataManager.Instance.DollarWaveFormula(SceneType.Main).ToString("F1");
                 break;
             case UtilUpgradeType.코인킬보너스:
-                curValueText.text = "x" + (1 + .01f * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString("F2");
+                curValueText.text = "x" + PlayDataManager.Instance.CoinKillBonusFormula(SceneType.Main).ToString("F2");
                 break;
             case UtilUpgradeType.코인웨이브:
-                curValueText.text = PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType].ToString();
+                curValueText.text = PlayDataManager.Instance.CoinWaveFormula(SceneType.Main).ToString("F1");
                 break;
             case UtilUpgradeType.무료공격업:
                 curValueText.text = (.5f * PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]).ToString("F2") + "%";
