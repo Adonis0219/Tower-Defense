@@ -56,8 +56,9 @@ public class PlayData
     public int[] slotOpneCost = { 50, 100, 200, 300, 400, 500, 600, 750, 1000, 1200, 1400, 1600, 1800, 2000, 2300, 2600, 3000, 3500, 4000};
 
     public int[] cardLvs;
-    // 현재 적용중인 카드 데이터들
-    public CardData[] activedCardDatas;
+    // 현재 적용중인 카드 데이터들 (최대 슬롯은 변하지 않으므로 그냥 20)
+    //////////////// Json 유틸리티 에러남
+    public CardData[] activedCardDatas = new CardData[20];
 }
 
 // 어떤 씬에서든 PlayData 참조 가능하도록
@@ -85,9 +86,7 @@ public partial class PlayDataManager : MonoBehaviour
                     // 생성자에서 호출 불가
                     DontDestroyOnLoad(temp);
                 }
-
             }
-
             return instance; 
         }
     }
@@ -259,6 +258,21 @@ public partial class PlayDataManager : MonoBehaviour
 public class Print
 {
     public static void Array(int[] arr)
+    {
+#if !UNITY_EDITOR
+    return;
+#endif
+        string printStr = "";
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            printStr += arr[i] + " ";
+        }
+
+        Debug.Log(printStr);
+    }
+
+    public static void Array(CardData[] arr)
     {
 #if !UNITY_EDITOR
     return;

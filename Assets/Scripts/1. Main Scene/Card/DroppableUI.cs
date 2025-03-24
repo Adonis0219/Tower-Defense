@@ -2,15 +2,21 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DroppableUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler
 {
-    private Image image;
-    private RectTransform rect;
+    Image img;
+    RectTransform rect;
+    Color oriColor;     // 카드 슬롯의 원래 색상
+
+    int slotIndex;
 
     private void Awake()
     {
-        image = GetComponent<Image>();
+        img = GetComponent<Image>();
         rect = GetComponent<RectTransform>();
+        oriColor = img.color;
+
+        slotIndex = GetComponent<CardSlot>().slotIndex;
     }
 
     /// <summary>
@@ -18,17 +24,16 @@ public class DroppableUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // 아이템 슬롯 색상 변경
-        image.color = Color.yellow;
+        // 아이템 슬롯 색상을 빨간색으로 변경
+        img.color = Color.red;
     }
 
     /// <summary>
-    /// 마우스 포인터가 현재 아이템 슬롯 영역을 빠져나갈 때 1회 호출
+    /// 마우스 포인터가 현재 아이템 슬롯 영역을 빠져나갈 때 1회 호출 
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
-        // 아이템 슬롯 색상 원래대로
-        image.color = Color.white;
+        img.color = oriColor;
     }
 
     /// <summary>
@@ -36,13 +41,27 @@ public class DroppableUI : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
     /// </summary>
     public void OnDrop(PointerEventData eventData)
     {
-        // pointerDrag는 현재 드래그하고 있는 대상(=아이템 GO)
-        if (eventData.pointerDrag != null)
+        // pointerDrag는 현재 드래그 하고 있는 대상(카드)을 반환
+        // 드래그 하고 있는 대상이 없거나 카드 슬롯이라면 얼리 리턴
+        if (eventData.pointerDrag == null)
+            return;
+
+        // 이미 자식이 있다면 -> 슬롯에 카드가 있다면
+        if (transform.childCount != 0)
         {
-            // 드래그하고 있는 대상의 부모를 현재 오브젝트로 설정,
-            // 위치를 현재 오브젝트 위치와 동일하게 설정
-            eventData.pointerDrag.transform.SetParent(transform);
-            eventData.pointerDrag.GetComponent<RectTransform>().position = rect.position;
+            // 그 카드를 삭제
+            DestroyImmediate(transform.GetChild(0).gameObject);
         }
+
+        eventData.pointerDrag.transform.SetParent(transform);
+        eventData.pointerDrag.GetComponent<RectTransform>().position = rect.position;
+
+        // 현재 장착중인 카드 정보에 현재 드래그한 카드 데이터 넣어주기
+        PlayDataManager.Instance.playData.activedCardDatas[slotIndex] = eventData.pointerDrag.GetComponent<Card>().MyData;
+
+        string name = eventData.pointerDrag.GetComponent<Card>().MyData.cardName;
+
+        Debug.Log(slotIndex + "번째 카드 슬롯에 " + name + " 카드 장착");
+        Print.Array(PlayDataManager.Instance.playData.activedCardDatas);
     }
 }
