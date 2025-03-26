@@ -9,6 +9,7 @@ public enum CardRarity
     Common, Rare, Epic, Legendary
 }
 
+[System.Serializable]
 [CreateAssetMenu(fileName = "Card Data", menuName = "Scriptable Object/Card Data")]
 public class CardData : ScriptableObject
 {

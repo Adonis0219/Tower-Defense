@@ -56,6 +56,10 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     /// </summary>
     public void OnEndDrag(PointerEventData eventData)
     {
+        // 알파값을 1로, 광선충돌처리 가능하도록 한다.
+        canvasGroup.alpha = 1;
+        canvasGroup.blocksRaycasts = true;
+
         // 드래그를 시작하면 부모가 canvas로 설정되기 때문에
         // 드래그를 종료할 때 부모가 canvas이면 카드 슬롯이 아닌 엉뚱한 곳에
         // 드롭을 했다는 뜻이므로 드래그 직전에 소속되어 있던 아이템 슬롯으로 아이템 이동
@@ -67,10 +71,6 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
             DestroyImmediate(gameObject);
         }
-
-        // 알파값을 1로, 광선충돌처리 가능하도록 한다.
-        //canvasGroup.alpha = 1;
-        //canvasGroup.blocksRaycasts = true;
     }
 
     /// <summary>

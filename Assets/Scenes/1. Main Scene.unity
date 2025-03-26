@@ -313,11 +313,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b22f53e5000d547bf63230674d3f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardDatas:
-  - {fileID: 11400000, guid: 0527e15df62227a4cb8062e3a67a211b, type: 2}
-  - {fileID: 11400000, guid: e2c7de04b1402814a8ba28e611db186a, type: 2}
-  - {fileID: 11400000, guid: 2a1e3e045781db84e9698e8574acb393, type: 2}
-  - {fileID: 11400000, guid: 9328ca0891b011948b4f91e1fd4d67fc, type: 2}
   inventoryContent: {fileID: 2066981400}
   activeSlotContent: {fileID: 1669229803}
   oriCard: {fileID: 3912855287433376628, guid: 001e48732b95ff242b1aee49c117e73e, type: 3}
@@ -966,7 +961,7 @@ GameObject:
   - component: {fileID: 80812071}
   - component: {fileID: 80812070}
   m_Layer: 5
-  m_Name: Active Card Slots
+  m_Name: Scroll View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1461,6 +1456,11 @@ MonoBehaviour:
   coinText: {fileID: 350058963}
   diaText: {fileID: 768977055}
   lockText: {fileID: 1571175902}
+  cardDatas:
+  - {fileID: 11400000, guid: 0527e15df62227a4cb8062e3a67a211b, type: 2}
+  - {fileID: 11400000, guid: e2c7de04b1402814a8ba28e611db186a, type: 2}
+  - {fileID: 11400000, guid: 2a1e3e045781db84e9698e8574acb393, type: 2}
+  - {fileID: 11400000, guid: 9328ca0891b011948b4f91e1fd4d67fc, type: 2}
 --- !u!1 &153943231
 GameObject:
   m_ObjectHideFlags: 0

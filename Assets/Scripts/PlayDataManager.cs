@@ -57,8 +57,7 @@ public class PlayData
 
     public int[] cardLvs;
     // 현재 적용중인 카드 데이터들 (최대 슬롯은 변하지 않으므로 그냥 20)
-    //////////////// Json 유틸리티 에러남
-    public CardData[] activedCardDatas = new CardData[20];
+    public int[] activedCardIDs = new int[20] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};    // -1은 장착 안 됨
 }
 
 // 어떤 씬에서든 PlayData 참조 가능하도록
@@ -207,6 +206,24 @@ public partial class PlayDataManager : MonoBehaviour
         {
             LabReduceTime(i);
         }
+    }
+
+    /// <summary>
+    /// 슬롯에 있는 카드들 중에 CheckID 카드가 있는지
+    /// </summary>
+    /// <param name="checkID">확인할 카드의 ID</param>
+    /// <returns>T 있다 F 없다</returns>
+    public bool CheckCard(int checkID)
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            if (PlayDataManager.Instance.playData.activedCardIDs[i] == checkID)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void LabReduceTime(int labIndex)

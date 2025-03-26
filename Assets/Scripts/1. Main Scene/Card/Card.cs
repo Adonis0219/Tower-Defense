@@ -4,6 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum CardID
+{
+    대미지, 공격속도, 체력, 체력재생
+}
+
+[System.Serializable]
 public class Card : MonoBehaviour
 {
     CardData myData;
@@ -28,12 +34,39 @@ public class Card : MonoBehaviour
     [SerializeField]
     public Image icon;
     [SerializeField]
+    public GameObject checkMark;
+
     public bool isOpen = false;
+
+    [SerializeField]
+    bool isUsed;
+    public bool IsUsed
+    {
+        get
+        {
+            return isUsed;
+        }
+
+        set
+        {
+            isUsed = value;
+            // 체크마크가 존재 할 때만
+            if (checkMark != null)
+                checkMark.SetActive(isUsed);
+        }
+    }
+
+
 
     private void OnEnable()
     {
         isOpen = true;
         //GetCard();
+    }
+
+    private void Update()
+    {
+        IsUsed = PlayDataManager.Instance.CheckCard(myData.cardID) ? true : false;
     }
 
     void InitSet()

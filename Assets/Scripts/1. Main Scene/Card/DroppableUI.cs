@@ -15,8 +15,6 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
         img = GetComponent<Image>();
         rect = GetComponent<RectTransform>();
         oriColor = img.color;
-
-        slotIndex = GetComponent<CardSlot>().slotIndex;
     }
 
     /// <summary>
@@ -41,27 +39,49 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
     /// </summary>
     public void OnDrop(PointerEventData eventData)
     {
-        // pointerDrag는 현재 드래그 하고 있는 대상(카드)을 반환
-        // 드래그 하고 있는 대상이 없거나 카드 슬롯이라면 얼리 리턴
-        if (eventData.pointerDrag == null)
+        // 스크롤 뷰 드롭 무시
+        if (eventData.pointerDrag.name == "Scroll View")
             return;
 
-        // 이미 자식이 있다면 -> 슬롯에 카드가 있다면
-        if (transform.childCount != 0)
+        int myID = eventData.pointerDrag.GetComponent<Card>().MyData.cardID;
+
+        // pointerDrag는 현재 드래그 하고 있는 대상(카드)을 반환
+        // 드래그 하고 있는 대상이 없거나 카드 슬롯이라면 얼리 리턴
+        // 슬롯에 장착된 카드들 중에 똑같은 카드가 있다면 리턴
+        if ((eventData.pointerDrag == null) || (PlayDataManager.Instance.CheckCard(myID)))
+            return;
+
+        // 이미 슬롯에 카드가 있다면
+        if (transform.childCount > 1)
         {
-            // 그 카드를 삭제
-            DestroyImmediate(transform.GetChild(0).gameObject);
-        }
+            // 원래 있던 카드 삭제
+            Destroy(transform.GetChild(0).gameObject);
+        }   // 후 자신을 넣기
 
+
+        // 현재 드래그중인 카드의 부모를 카드 슬롯으로 해주고
         eventData.pointerDrag.transform.SetParent(transform);
+        // 장비 해제 버튼이 더 위로 올라올 수 있도록 카드는 첫번째 자식으로
+        eventData.pointerDrag.transform.SetAsFirstSibling();
+        // 위치도 카드슬롯의 중앙으로 해준다
         eventData.pointerDrag.GetComponent<RectTransform>().position = rect.position;
+        // 체크 마크 제거
+        Destroy(eventData.pointerDrag.GetComponent<Card>().checkMark);
 
+        // 슬롯의 인덱스를 정해준다
+        slotIndex = gameObject.GetComponent<CardSlot>().slotIndex;
         // 현재 장착중인 카드 정보에 현재 드래그한 카드 데이터 넣어주기
-        PlayDataManager.Instance.playData.activedCardDatas[slotIndex] = eventData.pointerDrag.GetComponent<Card>().MyData;
+        PlayDataManager.Instance.playData.activedCardIDs[slotIndex] = myID;
 
+        // 슬롯 적용 확인용 프린트
+        PrintName(eventData);
+    }
+
+    void PrintName(PointerEventData eventData)
+    {
         string name = eventData.pointerDrag.GetComponent<Card>().MyData.cardName;
 
         Debug.Log(slotIndex + "번째 카드 슬롯에 " + name + " 카드 장착");
-        Print.Array(PlayDataManager.Instance.playData.activedCardDatas);
+        Print.Array(PlayDataManager.Instance.playData.activedCardIDs);
     }
 }

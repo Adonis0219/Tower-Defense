@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,6 +12,13 @@ public class CardSlot : MonoBehaviour
 
     [SerializeField]
     public int slotIndex;
+
+    private void Update()
+    {
+        // 현재 장착된 카드가 없다면 리턴
+        if (transform.childCount == 0)
+            return;
+    }
 
     public void OnSlotOpenClk()
     {
@@ -30,6 +38,10 @@ public class CardSlot : MonoBehaviour
 
         PlayDataManager.Instance.playData.curSlotCount++;
 
+        // 장비 해제 버튼 켜주기
+        // (한 프레임 내에 실행되어 아직 0번째 자식이 사라지기 전이므로 1)
+        transform.GetChild(1).gameObject.SetActive(true);
+
         // 현재 오픈된 슬롯 개수가 바뀌었으므로 비용 다시 설정
         cost = PlayDataManager.Instance.playData.slotOpneCost[slotIndex - 1];
 
@@ -37,5 +49,20 @@ public class CardSlot : MonoBehaviour
         if (PlayDataManager.Instance.playData.curSlotCount != PlayDataManager.Instance.playData.maxSlotCount)
             Instantiate(CardPanelManager.instance.oriSlot, CardPanelManager.instance.activeSlotContent).GetComponent<CardSlot>().costText.text =
                 cost + " <sprite=0>";
+    }
+
+    /// <summary>
+    /// 해제 클릭 시 실행할 함수
+    /// </summary>
+    public void OnUnequipClk()
+    {
+        // 장착된 카드가 없다면 리턴
+        if (transform.childCount == 1)
+            return;
+
+        // 카드 지워주고
+        Destroy(transform.GetChild(0).gameObject);
+        // 슬롯에 장착 안 됨 넘겨주기
+        PlayDataManager.Instance.playData.activedCardIDs[slotIndex] = -1;
     }
 }
