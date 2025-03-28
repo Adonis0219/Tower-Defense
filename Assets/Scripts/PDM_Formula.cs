@@ -25,7 +25,7 @@ public partial class PlayDataManager : MonoBehaviour
         damage *= (1 + .02f * playData.labResearchLevels[(int)ResearchType.Attak, (int)AtkRschType.데미지]);
 
         // 카드 적용
-        if (CheckCard((int)CardID.대미지))
+        if (CheckCard(CardID.대미지))
         {
             CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.대미지];
             damage *= myCard.value[myCard.curLv];
@@ -52,7 +52,7 @@ public partial class PlayDataManager : MonoBehaviour
         atkSpd *= (1 + .02f * playData.labResearchLevels[(int)ResearchType.Attak, (int)AtkRschType.공격속도]);
 
         // 카드 적용
-        if (CheckCard((int)CardID.공격속도))
+        if (CheckCard(CardID.공격속도))
         {
             CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.공격속도];
             atkSpd *= myCard.value[myCard.curLv];
@@ -98,6 +98,13 @@ public partial class PlayDataManager : MonoBehaviour
         // 연구 적용
         range *= (1 + .02f * playData.labResearchLevels[(int)ResearchType.Attak, (int)AtkRschType.범위]);
 
+        // 카드 적용
+        if (CheckCard(CardID.공격범위))
+        {
+            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.공격범위];
+            range *= myCard.value[myCard.curLv];
+        }
+
         return range;
     }
 }
@@ -123,7 +130,7 @@ public partial class PlayDataManager : MonoBehaviour
         maxHp *= (1 + .03f * playData.labResearchLevels[(int)ResearchType.Defense, (int)DefRschType.체력]);
 
         // 카드 적용
-        if (CheckCard((int)CardID.체력))
+        if (CheckCard(CardID.체력))
         {
             CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.체력];
             maxHp *= myCard.value[myCard.curLv];
@@ -150,7 +157,7 @@ public partial class PlayDataManager : MonoBehaviour
         regenHp *= (1 + .03f * playData.labResearchLevels[(int)ResearchType.Defense, (int)DefRschType.체력회복]);
 
         // 카드 적용
-        if (CheckCard((int)CardID.체력재생))
+        if (CheckCard(CardID.체력재생))
         {
             CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.체력재생];
             regenHp *= myCard.value[myCard.curLv];
@@ -200,6 +207,13 @@ public partial class PlayDataManager : MonoBehaviour
         // 연구 적용
         dollarBonusFactor *= (1 + .02f * playData.labResearchLevels[(int)ResearchType.Utility, (int)UtilRschType.달러보너스]);
 
+        // 카드 적용
+        if (CheckCard(CardID.달러))
+        {
+            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.달러];
+            dollarBonusFactor *= myCard.value[myCard.curLv];
+        }
+
         return dollarBonusFactor;
     }
 
@@ -226,6 +240,13 @@ public partial class PlayDataManager : MonoBehaviour
         // 연구실 배율 적용
         dollarWaveBonus *= (1 + .02f * playData.labResearchLevels[(int)ResearchType.Utility, (int)UtilRschType.달러웨이브]);
 
+        // 카드 적용
+        if (CheckCard(CardID.달러))
+        {
+            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.달러];
+            dollarWaveBonus *= myCard.value[myCard.curLv];
+        }
+
         return dollarWaveBonus;
     }
 
@@ -246,6 +267,13 @@ public partial class PlayDataManager : MonoBehaviour
         // 연구실 배율 적용
         coinKillBonus *= (1 + .02f * playData.labResearchLevels[(int)ResearchType.Utility, (int)UtilRschType.코인보너스]);
 
+        // 카드 적용
+        if (CheckCard(CardID.코인))
+        {
+            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.달러];
+            coinKillBonus *= myCard.value[myCard.curLv];
+        }
+
         return coinKillBonus;
     }
 
@@ -265,6 +293,13 @@ public partial class PlayDataManager : MonoBehaviour
 
         // 연구실 배율 적용
         coinWaveBonus *= (1 + .02f * playData.labResearchLevels[(int)ResearchType.Utility, (int)UtilRschType.코인웨이브]);
+
+        // 카드 적용
+        if (CheckCard(CardID.코인))
+        {
+            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.달러];
+            coinWaveBonus *= myCard.value[myCard.curLv];
+        }
 
         return coinWaveBonus;
     }

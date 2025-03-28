@@ -57,6 +57,10 @@ public class Enemy : PoolObject, IHit
     bool isKnockBack = false;
     Rigidbody2D rb;
     WaitForSeconds wait;
+
+    // 저속 오라 감지
+    bool isSlowed = false;
+
     
     public void Hit(float damage)
     {
@@ -83,6 +87,19 @@ public class Enemy : PoolObject, IHit
     {
         if (isKnockBack) return;
 
+        float range = Vector2.Distance(player.transform.position, this.transform.position);
+
+        // 슬로우가 안 걸렸고, 범위 내에 들어오면 슬로우 적용
+        if (!isSlowed && (player.Range / 10 > range))
+        {
+            CardData card = MainSceneManager.instance.cardDatas[(int)CardID.저속오라];
+
+            moveSpd *= (1 - (card.value[card.curLv] / 100));
+
+            isSlowed = true;
+        }
+
+        // 앞으로 이동
         transform.Translate(Vector3.up * moveSpd * Time.deltaTime);
     }
 

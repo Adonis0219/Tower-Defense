@@ -213,11 +213,13 @@ public partial class PlayDataManager : MonoBehaviour
     /// </summary>
     /// <param name="checkID">확인할 카드의 ID</param>
     /// <returns>T 있다 F 없다</returns>
-    public bool CheckCard(int checkID)
+    public bool CheckCard(CardID id)
     {
+        int checkId = (int)id;
+
         for (int i = 0; i < 20; i++)
         {
-            if (PlayDataManager.Instance.playData.activedCardIDs[i] == checkID)
+            if (PlayDataManager.Instance.playData.activedCardIDs[i] == checkId)
             {
                 return true;
             }

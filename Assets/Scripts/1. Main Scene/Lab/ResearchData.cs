@@ -43,4 +43,9 @@ public class ResearchData : ScriptableObject
     public int maxLevel;
     public int[] costs;
     public float[] reqTimes;
+
+    public ResearchData()
+    {
+        oriValue = 100;
+    }
 }

@@ -24,5 +24,5 @@ public class CardData : ScriptableObject
     public int curLv;
     public int MaxLv;
     public float[] value;
-    public int curCardCout;        // 현재 가지고 있는 카드 개수
+    public int curCardCount;        // 현재 가지고 있는 카드 개수
 }

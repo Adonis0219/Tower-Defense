@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public enum CardID
 {
-    대미지, 공격속도, 체력, 체력재생
+    대미지, 공격속도, 체력, 체력재생,
+    공격범위, 달러, 코인, 저속오라
 }
 
 [System.Serializable]
@@ -66,7 +67,7 @@ public class Card : MonoBehaviour
 
     private void Update()
     {
-        IsUsed = PlayDataManager.Instance.CheckCard(myData.cardID) ? true : false;
+        IsUsed = PlayDataManager.Instance.CheckCard((CardID)myData.cardID) ? true : false;
     }
 
     void InitSet()

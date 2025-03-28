@@ -48,7 +48,7 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
         // pointerDrag는 현재 드래그 하고 있는 대상(카드)을 반환
         // 드래그 하고 있는 대상이 없거나 카드 슬롯이라면 얼리 리턴
         // 슬롯에 장착된 카드들 중에 똑같은 카드가 있다면 리턴
-        if ((eventData.pointerDrag == null) || (PlayDataManager.Instance.CheckCard(myID)))
+        if ((eventData.pointerDrag == null) || (PlayDataManager.Instance.CheckCard((CardID)myID)))
             return;
 
         // 이미 슬롯에 카드가 있다면
