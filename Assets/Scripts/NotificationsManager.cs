@@ -6,6 +6,11 @@ using Unity.Notifications.Android;
 
 public class NotificationsManager : MonoBehaviour
 {
+    private void Start()
+    {
+        Show();
+    }
+
     public void Show()
     {
         // 채널 등록
@@ -24,7 +29,8 @@ public class NotificationsManager : MonoBehaviour
 
         notification.Title = "Test";
         notification.Text = "This is a test for android notification.";
-        notification.FireTime = System.DateTime.Now.AddSeconds(10);
+        // 10 초 뒤에 알림
+        notification.FireTime = System.DateTime.Now.AddSeconds(3);
 
         notification.SmallIcon = "icon_0";
         notification.LargeIcon = "icon_1";

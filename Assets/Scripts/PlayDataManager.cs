@@ -258,8 +258,6 @@ public partial class PlayDataManager : MonoBehaviour
         {
             playData = new PlayData();
         }
-
-        Print.ResearchArray(playData.isResearchingData);
     }
 
     public void SaveData(float coin, float dia)

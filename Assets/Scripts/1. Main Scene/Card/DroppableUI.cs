@@ -74,7 +74,7 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
         PlayDataManager.Instance.playData.activedCardIDs[slotIndex] = myID;
 
         // 슬롯 적용 확인용 프린트
-        PrintName(eventData);
+        // PrintName(eventData);
     }
 
     void PrintName(PointerEventData eventData)

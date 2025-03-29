@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public enum CardRarity
 {
-    Common, Rare, Epic, Legendary
+    일반, 레어, 에픽, 전설
 }
 
 [System.Serializable]

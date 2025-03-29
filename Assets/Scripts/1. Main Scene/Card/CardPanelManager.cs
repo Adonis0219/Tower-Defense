@@ -18,6 +18,9 @@ public class CardPanelManager : MonoBehaviour
     [SerializeField]
     public Transform oriSlot;
 
+    [SerializeField]
+    public GameObject cardInfoPanel;
+
     private void Awake()
     {
         instance = this;

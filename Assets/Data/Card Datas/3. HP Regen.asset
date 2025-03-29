@@ -18,7 +18,7 @@ MonoBehaviour:
   cardIcon: {fileID: 21300000, guid: 27049deb2060548418d61743aa073695, type: 3}
   rarity: 0
   curLv: 0
-  MaxLv: 7
+  MaxLv: 6
   value:
   - 1.4
   - 1.6
@@ -27,4 +27,4 @@ MonoBehaviour:
   - 2.2
   - 2.4
   - 2.6
-  curCardCout: 0
+  curCardCount: 0
