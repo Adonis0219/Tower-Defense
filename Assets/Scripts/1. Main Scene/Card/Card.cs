@@ -89,6 +89,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Update()
     {
         IsUsed = PlayDataManager.Instance.CheckCard((CardID)myData.cardID) ? true : false;
+
+        // 업데이트 말고 다른 곳도 가능?
+        StarSet();
     }
 
     void InitSet()
@@ -100,7 +103,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void StarSet()
     {
-        starImg.sprite = starSprites[MyData.curLv];
+        starImg.sprite = starSprites[CurLv];
     }
 
     /////////// Temp
@@ -152,6 +155,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         // 인포판넬에 기본 정보 전달하기
         //infoPN.GetComponent<CardInfoPanel>().InitSet(MyData.rarity.ToString(), MyData.cardDesc, MyData.curLv);
-        infoPN.GetComponent<CardInfoPanel>().InitSet(MyData);
+        infoPN.GetComponent<CardInfoPanel>().InitSet(MyData, starSprites[CurLv]);
     }
 }

@@ -18,7 +18,10 @@ public class CardInfoPanel : MonoBehaviour
     [SerializeField]
     public Image cardIcon;
 
-    public void InitSet(CardData myData)
+    [SerializeField]
+    public Image starImg;
+
+    public void InitSet(CardData myData, Sprite star )
     {
         cardName.text = myData.cardName;
         cardIcon.sprite = myData.cardIcon;
@@ -26,17 +29,21 @@ public class CardInfoPanel : MonoBehaviour
         rarityText.text = myData.rarity.ToString();
         descText.text = myData.cardDesc + myData.value[myData.curLv];
 
+        starImg.sprite = star;
+
         // 텍스트 초기화
         lv_ValueText.text = "";
 
-        for (int i = 0; i < myData.MaxLv; i++)
+        for (int i = 0; i < myData.MaxLv + 1; i++)
         {
             if (i == myData.curLv)
             {
                 lv_ValueText.text += "<color=white>Lv." + (i + 1) +"</color>" + "     <color=#56FFF9>x" + myData.value[i].ToString("F2") + "</color>\n";
             }
-
-            lv_ValueText.text += "Lv." + (i + 1) + "     x" + myData.value[i].ToString("F2") + "\n";
+            else
+            {
+                lv_ValueText.text += "Lv." + (i + 1) + "     x" + myData.value[i].ToString("F2") + "\n";
+            }
         }
     }
 
