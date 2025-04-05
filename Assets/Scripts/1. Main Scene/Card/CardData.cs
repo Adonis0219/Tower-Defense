@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public enum CardRarity
 {
-    일반, 레어, 에픽, 전설
+    일반, 레어, 에픽, Length
 }
 
 [System.Serializable]
@@ -19,6 +19,7 @@ public class CardData : ScriptableObject
     public string cardDesc;
     public Sprite cardIcon;
     public CardRarity rarity;
+    public float weight;
 
     [Header("# Level Data")]
     public int curLv;
