@@ -17,7 +17,8 @@ MonoBehaviour:
   cardDesc: "\uC5D0\uD53D"
   cardIcon: {fileID: 21300000, guid: c63c53120f87e84479c888eb2336f623, type: 3}
   rarity: 2
-  weight: 0
+  isGet: 0
+  weight: 5
   curLv: 0
   MaxLv: 6
   value:

@@ -19,6 +19,7 @@ public class CardData : ScriptableObject
     public string cardDesc;
     public Sprite cardIcon;
     public CardRarity rarity;
+    public bool isGet = false;              // 얻은 적이 있는지
     public float weight;
 
     [Header("# Level Data")]

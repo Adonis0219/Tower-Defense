@@ -27,7 +27,7 @@ public partial class PlayDataManager : MonoBehaviour
         // 카드 적용
         if (CheckCard(CardID.대미지))
         {
-            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.대미지];
+            CardData myCard = CardManager.instance.cardDatas[(int)CardID.대미지];
             damage *= myCard.value[myCard.curLv];
         }
 
@@ -54,7 +54,7 @@ public partial class PlayDataManager : MonoBehaviour
         // 카드 적용
         if (CheckCard(CardID.공격속도))
         {
-            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.공격속도];
+            CardData myCard = CardManager.instance.cardDatas[(int)CardID.공격속도];
             atkSpd *= myCard.value[myCard.curLv];
         }
 
@@ -101,7 +101,7 @@ public partial class PlayDataManager : MonoBehaviour
         // 카드 적용
         if (CheckCard(CardID.공격범위))
         {
-            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.공격범위];
+            CardData myCard = CardManager.instance.cardDatas[(int)CardID.공격범위];
             range *= myCard.value[myCard.curLv];
         }
 
@@ -132,7 +132,7 @@ public partial class PlayDataManager : MonoBehaviour
         // 카드 적용
         if (CheckCard(CardID.체력))
         {
-            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.체력];
+            CardData myCard = CardManager.instance.cardDatas[(int)CardID.체력];
             maxHp *= myCard.value[myCard.curLv];
         }
 
@@ -159,7 +159,7 @@ public partial class PlayDataManager : MonoBehaviour
         // 카드 적용
         if (CheckCard(CardID.체력재생))
         {
-            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.체력재생];
+            CardData myCard = CardManager.instance.cardDatas[(int)CardID.체력재생];
             regenHp *= myCard.value[myCard.curLv];
         }
 
@@ -210,7 +210,7 @@ public partial class PlayDataManager : MonoBehaviour
         // 카드 적용
         if (CheckCard(CardID.달러))
         {
-            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.달러];
+            CardData myCard = CardManager.instance.cardDatas[(int)CardID.달러];
             dollarBonusFactor *= myCard.value[myCard.curLv];
         }
 
@@ -243,7 +243,7 @@ public partial class PlayDataManager : MonoBehaviour
         // 카드 적용
         if (CheckCard(CardID.달러))
         {
-            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.달러];
+            CardData myCard = CardManager.instance.cardDatas[(int)CardID.달러];
             dollarWaveBonus *= myCard.value[myCard.curLv];
         }
 
@@ -270,7 +270,7 @@ public partial class PlayDataManager : MonoBehaviour
         // 카드 적용
         if (CheckCard(CardID.코인))
         {
-            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.달러];
+            CardData myCard = CardManager.instance.cardDatas[(int)CardID.달러];
             coinKillBonus *= myCard.value[myCard.curLv];
         }
 
@@ -297,7 +297,7 @@ public partial class PlayDataManager : MonoBehaviour
         // 카드 적용
         if (CheckCard(CardID.코인))
         {
-            CardData myCard = MainSceneManager.instance.cardDatas[(int)CardID.달러];
+            CardData myCard = CardManager.instance.cardDatas[(int)CardID.달러];
             coinWaveBonus *= myCard.value[myCard.curLv];
         }
 

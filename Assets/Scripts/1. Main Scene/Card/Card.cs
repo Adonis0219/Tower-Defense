@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Android.Types;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -21,30 +22,71 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         get { return myData; }
 
-        set 
-        { 
+        set
+        {
             myData = value;
             InitSet();
         }
     }
+
     public int[] reqCardCount;      // 카드 레벨업을 위해 필요한 카드 개수
     public int[] reqDia;            // 카드 레벨업에 필요한 다이아 개수
 
     [SerializeField]
-    public TextMeshProUGUI nameText;
+    TextMeshProUGUI nameText;
     [SerializeField]
-    public Image icon;
+    Image icon;
     [SerializeField]
     public GameObject checkMark;
     [SerializeField]
-    public Image starImg;
+    public GameObject upgradeMark;
+    [SerializeField]
+    Image starImg;
+    [SerializeField]
+    public TextMeshProUGUI cur_nextText;
 
     [SerializeField]
     public Sprite[] starSprites;
 
-    public bool isOpen = false;
+    public int CurCardCount
+    {
+        get
+        {
+            return MyData.curCardCount;
+        }
+
+        set
+        {
+            MyData.curCardCount = value;
+
+            //cur_nextText.color = CurCardCount >= reqCardCount[MyData.curLv] ? Color.red : Color.white;
+            CanUpgrade = CurCardCount >= reqCardCount[MyData.curLv] ? true : false;
+        }
+    }
 
     [SerializeField]
+    bool canUpgrade = false;
+
+    public bool CanUpgrade
+    {
+        get
+        {
+            return canUpgrade;
+        }
+
+        set
+        {
+            canUpgrade = value;
+
+            if (canUpgrade)
+                CardUpgrdae();
+            // 업그레이드 마크가 존재 할 때만
+            //if (upgradeMark != null)
+            //    upgradeMark.SetActive(canUpgrade);
+        }
+    }
+
+
     bool isUsed;
     public bool IsUsed
     {
@@ -59,6 +101,22 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             // 체크마크가 존재 할 때만
             if (checkMark != null)
                 checkMark.SetActive(isUsed);
+        }
+    }
+
+    public bool IsGet
+    {
+        get
+        {
+            return MyData.isGet;
+        }
+
+        set
+        {
+            MyData.isGet = value;
+
+            if (!MyData.isGet) return;
+            CardSet();
         }
     }
 
@@ -77,18 +135,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
     }
 
-
-    private void OnEnable()
-    {
-        isOpen = true;
-        //GetCard();
-    }
-
-    float t;
-
     private void Update()
     {
         IsUsed = PlayDataManager.Instance.CheckCard((CardID)myData.cardID) ? true : false;
+
+        cur_nextText.text = CurCardCount + "/" + reqCardCount[MyData.curLv];
 
         // 업데이트 말고 다른 곳도 가능?
         StarSet();
@@ -106,26 +157,18 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         starImg.sprite = starSprites[CurLv];
     }
 
-    /////////// Temp
-    public void OnUpClk()
+    public void CardSet()
     {
-        if (CurLv == myData.MaxLv)
-            return;
+        GetComponent<DraggableUI>().enabled = true;
 
-        CurLv++;
+        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(true);
     }
 
-    /// <summary>
-    /// 카드를 획득할 때 실행할 함수
-    /// </summary>
-    void GetCard()
+    void CardUpgrdae()
     {
-        isOpen = true;
-        // 카드를 얻고 나면 다시 잠글 일이 없으므로 그냥 지워주기
-        DestroyImmediate(transform.GetChild(0).gameObject);
-        // 상위에 있던 자식(0)이 사라졌으므로 자신이 다시 0이 된다
-        // 카드 인포 켜주기
-        transform.GetChild(0).gameObject.SetActive(true);
+        CurCardCount -= reqCardCount[MyData.curLv];
+        MyData.curLv++;
     }
 
     Coroutine coru;

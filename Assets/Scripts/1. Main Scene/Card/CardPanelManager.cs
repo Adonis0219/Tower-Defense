@@ -50,7 +50,7 @@ public class CardPanelManager : MonoBehaviour
             Instantiate(oriSlot, activeSlotContent).GetComponent<CardSlot>().costText.text = PlayDataManager.Instance.playData.slotOpneCost[PlayDataManager.Instance.playData.curSlotCount - 1] + " <sprite=0>";
 
         // 인벤토리에 카드 복제
-        for (int i = 0; i < MainSceneManager.instance.cardDatas.Length; i++)
+        for (int i = 0; i < CardManager.instance.cardDatas.Count; i++)
         {
             CreCard(i, inventoryContent);
         }
@@ -95,11 +95,26 @@ public class CardPanelManager : MonoBehaviour
     void CreCard(int index, Transform parent)
     {
         Transform temp = Instantiate(oriCard, parent);
-        temp.GetComponent<Card>().MyData = MainSceneManager.instance.cardDatas[index];
+        Card card = temp.GetComponent<Card>();
+        
+        // 카드 덱에 추가
+        CardManager.instance.deck.Add(card);
+
+        card.MyData = CardManager.instance.cardDatas[index];
+
+        card.CurCardCount = card.CurCardCount;
+
+        // 카드를 얻은 상태라면
+        if (card.MyData.isGet)
+            // 카드 열어주기
+            card.CardSet();
 
         // 슬롯에 생성되는 카드라면
         if (parent != inventoryContent)
-            // 체크 마크 제거
+        {
+            // 체크, 업그레이드 마크 제거
             Destroy(temp.GetComponent<Card>().checkMark);
+            Destroy(temp.GetComponent<Card>().upgradeMark);
+        }
     }
 }

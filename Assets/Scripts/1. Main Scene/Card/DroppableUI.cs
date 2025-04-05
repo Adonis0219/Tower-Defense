@@ -67,6 +67,8 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
         eventData.pointerDrag.GetComponent<RectTransform>().position = rect.position;
         // 체크 마크 제거
         Destroy(eventData.pointerDrag.GetComponent<Card>().checkMark);
+        Destroy(eventData.pointerDrag.GetComponent<Card>().upgradeMark);
+        Destroy(eventData.pointerDrag.GetComponent<Card>().cur_nextText.gameObject);
 
         // 슬롯의 인덱스를 정해준다
         slotIndex = gameObject.GetComponent<CardSlot>().slotIndex;

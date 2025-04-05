@@ -17,13 +17,18 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
+    private void Start()
+    {
+        
+    }
+
     /// <summary>
     /// 현재 오브젝트를 드래그 하기 시작할 때 1회 호출
     /// </summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
         // 잠겨 있는 카드라면 드래그 불가능
-        if (!gameObject.GetComponent<Card>().isOpen)
+        if (!gameObject.GetComponent<Card>().IsGet)
             return;
 
         InstantiateCard();

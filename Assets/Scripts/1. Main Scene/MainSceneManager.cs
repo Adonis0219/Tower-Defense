@@ -14,22 +14,13 @@ public class MainSceneManager : MonoBehaviour
     TextMeshProUGUI diaText;
 
     [SerializeField]
-    TextMeshProUGUI lockText;
-
-    [SerializeField]        // 모든 카드 데이터
-    public CardData[] cardDatas;
+    TextMeshProUGUI lockText;    
 
     int curDia;
 
     private void Awake()
     {
         instance = this;
-
-        // 데이터가 없을 때만 새로 만들어서 넣기
-        if (PlayDataManager.Instance.playData.cardLvs != null)
-        {
-            PlayDataManager.Instance.playData.cardLvs = new int[cardDatas.Length];
-        }
     }
 
     private void Start()
