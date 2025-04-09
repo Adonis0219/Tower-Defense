@@ -41,15 +41,6 @@ public class LabManager : MonoBehaviour
     [SerializeField]
     ResearchButton oriResBt;
 
-    [SerializeField]
-    Transform mainContent;
-    [SerializeField]
-    Transform atkContent;
-    [SerializeField]
-    Transform defContent;
-    [SerializeField]
-    Transform utilContent;
-
     [Header("# Datas")]
     public List<ResearchData> mainDatas = new List<ResearchData>();
     public List<ResearchData> atkDatas = new List<ResearchData>();
@@ -110,25 +101,22 @@ public class LabManager : MonoBehaviour
     void ResearchInitSet(ResearchType type)
     {
         List<ResearchData> datas = new List<ResearchData>();
-        Transform createContent = null;
+        //Transform createContent = null;
+        Transform createContent = listPanels[(int)type].transform;
 
         switch (type)
         {
             case ResearchType.Main:
                 datas = mainDatas;
-                createContent = mainContent;
                 break;
             case ResearchType.Attak:
                 datas = atkDatas;
-                createContent = atkContent;
                 break;
             case ResearchType.Defense:
                 datas = defDatas;
-                createContent = defContent;
                 break;
             case ResearchType.Utility:
                 datas = utilDatas;
-                createContent = utilContent;
                 break;
             default:
                 break;
@@ -163,11 +151,8 @@ public class LabManager : MonoBehaviour
     /// 연구 리스트 이름을 누를 때 -> 각 리스트 판넬들을 껐다 켜줌
     /// </summary>
     /// <param name="type"></param>
-    [VisibleEnum(typeof(ResearchType))]
     public void ListNameBtClk(int type)
     {
-        ResearchType myResearchType = (ResearchType)type;
-
         listPanels[type].SetActive(listPanels[type].activeSelf ? false : true);
         listPanelArrows[type].SetActive(listPanels[type].activeSelf ? false : true);
     }

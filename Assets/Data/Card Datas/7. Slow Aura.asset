@@ -18,7 +18,7 @@ MonoBehaviour:
     \uAC10\uC18C : x"
   cardIcon: {fileID: 21300000, guid: c63c53120f87e84479c888eb2336f623, type: 3}
   rarity: 0
-  isGet: 1
+  isGet: 0
   weight: 10
   curLv: 0
   MaxLv: 6
@@ -30,4 +30,4 @@ MonoBehaviour:
   - 25
   - 28
   - 31
-  curCardCount: 2
+  curCardCount: 1

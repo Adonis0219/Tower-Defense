@@ -76,13 +76,13 @@ public class PanelManager : MonoBehaviour
             panels[(int)type].SetActive(false);
 
             GameManager.instance.gameView.position = new Vector3(0, -4, 0);
-            infoPanel.anchoredPosition = new Vector3(0, -760, 0);
+            infoPanel.anchoredPosition = new Vector3(0, -610, 0);
         }
         else
         {
             SetPanels((int)type);
             GameManager.instance.gameView.position = Vector3.zero;
-            infoPanel.anchoredPosition = Vector3.zero;
+            infoPanel.anchoredPosition = new Vector3(0, 150,0);
         }
     }
 
