@@ -14,10 +14,14 @@ public class CardManager : MonoBehaviour
     [SerializeField]        // 모든 카드 데이터
     public List<CardData> cardDatas;
 
+    // 뽑기를 위한 카드 덱
     [SerializeField]
-    public List<Card> deck;
+    public List<Card> gachaDeck;
 
-
+    // 카드 등급 색상
+    [SerializeField]
+    public Color[] rarityColors = new Color[3];
+    
     // 가챠 횟수
     int gachaCount;
     
@@ -50,7 +54,7 @@ public class CardManager : MonoBehaviour
             weight += cardDatas[i].weight;
             if (selectNum <= weight)
             {
-                return deck[i];
+                return gachaDeck[i];
             }
         }
 

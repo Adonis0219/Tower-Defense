@@ -10,14 +10,15 @@ public class CardUI
 {
     public Transform card;
     public TextMeshProUGUI nameText;
+
     public Image icon;
     public Image starImg;
+    public Image backgroundImg;
 }
 
 [System.Serializable]
 public class GachaUI
 {
-
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI rarityText;
     public TextMeshProUGUI cur_nextText;
@@ -28,6 +29,7 @@ public class GachaUI
 
     public Image icon;
     public Image starImg;
+    public Image backgroundImg;
 }
 
 public class GachaManager : MonoBehaviour
@@ -35,8 +37,11 @@ public class GachaManager : MonoBehaviour
     [SerializeField]
     CardData[] cardDatas = new CardData[10];
 
+    /// <summary>
+    /// 10뽑의 최종 결과창에 나오는 10개의 카드들
+    /// </summary>
     [SerializeField]
-    CardUI[] cards;
+    CardUI[] resultCardUIs;
 
     [SerializeField]
     GachaUI[] gachaUIs = new GachaUI[2];
@@ -136,6 +141,7 @@ public class GachaManager : MonoBehaviour
 
         UI.icon.sprite = data.cardIcon;
         UI.starImg.sprite = starSprites[data.curLv];
+        UI.backgroundImg.color = CardManager.instance.rarityColors[(int)data.rarity];
     }
 
     /// <summary>
@@ -159,14 +165,19 @@ public class GachaManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 10개의 카드들 각각 초기 설정
+    /// </summary>
+    /// <param name="index"></param>
     void CardInitSet(int index)
     {
-        CardUI card = cards[index];
+        CardUI card = resultCardUIs[index];
         CardData data = cardDatas[index];
 
         card.nameText.text = data.cardName;
         card.icon.sprite = data.cardIcon;
         card.starImg.sprite = starSprites[data.curLv];
+        card.backgroundImg.color = CardManager.instance.rarityColors[(int)data.rarity];
     }
 
     /// <summary>

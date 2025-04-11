@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,6 +23,9 @@ public class CardPanelManager : MonoBehaviour
     [SerializeField]
     public GameObject cardInfoPanel;
 
+    [SerializeField]
+    public TextMeshProUGUI active_slotText;
+
     private void Awake()
     {
         instance = this;
@@ -32,6 +37,16 @@ public class CardPanelManager : MonoBehaviour
         //}
 
         InitCardPanelSet();
+    }
+
+    int activeCardCount = 0;
+
+    private void Update()
+    {
+        // 장착되지 않은 카드 슬롯을 제외 하고 개수 세기
+        activeCardCount = PlayDataManager.Instance.playData.activedCardIDs.Where(n => n != -1).Count();
+
+        active_slotText.text = activeCardCount + " / " + PlayDataManager.Instance.playData.curSlotCount;
     }
 
     /// <summary>
@@ -96,9 +111,6 @@ public class CardPanelManager : MonoBehaviour
     {
         Transform temp = Instantiate(oriCard, parent);
         Card card = temp.GetComponent<Card>();
-        
-        // 카드 덱에 추가
-        CardManager.instance.deck.Add(card);
 
         card.MyData = CardManager.instance.cardDatas[index];
 
@@ -116,5 +128,10 @@ public class CardPanelManager : MonoBehaviour
             Destroy(temp.GetComponent<Card>().checkMark);
             Destroy(temp.GetComponent<Card>().upgradeMark);
         }
+        // 인벤토리에 생성되는 카드라면
+        else
+            // 카드 덱에 추가
+            CardManager.instance.gachaDeck.Add(card);
+
     }
 }

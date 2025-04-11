@@ -47,6 +47,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     [SerializeField]
     public Sprite[] starSprites;
+    [SerializeField]
+    public Image backgroundImg;
 
     public int CurCardCount
     {
@@ -149,6 +151,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         nameText.text = MyData.cardName;
         icon.sprite = MyData.cardIcon;
+        // 등급에 따라 카드색 바꿔주기
+        backgroundImg.color = CardManager.instance.rarityColors[(int)MyData.rarity];
         StarSet();
     }
 

@@ -101,12 +101,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolType: 2
   killedDollar: 2
-  moveSpd: 3
+  moveSpd: 2
   baseMaxHp: 2
   maxHp: 0
   currentHp: 0
   baseCollDamage: 2
-  killedCoin: 100
+  killedCoin: 2
 --- !u!61 &3082797800593604026
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ MonoBehaviour:
   rarity: 2
   isGet: 0
   weight: 5
+  myColor: {r: 0, g: 0, b: 0, a: 0}
   curLv: 0
   MaxLv: 6
   value:
