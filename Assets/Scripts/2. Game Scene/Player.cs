@@ -291,26 +291,33 @@ public class Player : MonoBehaviour, IHit
             // 범위 내의 collider 모두 가져오기
             Collider2D[] colls = Physics2D.OverlapCircleAll(transform.position, Range / 10, enemyMask);
 
+            // 플레이어의 타겟들
             List<Target> targets = new List<Target>();
 
+            // 범위 내의 콜라이더를 Target 리스트에 넣어줌
             foreach (var coll in colls)
             {
+                // Target 클래스를 생성후 넣어줌
+                // coll와 적과 플레이어 사이의 거리
                 targets.Add(new Target(coll, Vector3.Distance(transform.position, coll.transform.position)));
             }
 
-            List<Target> sortedTraget = targets.OrderBy(x => x.distance).ToList();
+            // 람다식을 이용해 targets 리스트를 거리가 가까운 순으로 정렬 후 sortedTarget에 초기화
+            List<Target> sortedTarget = targets.OrderBy(x => x.distance).ToList();
 
-
-            if (sortedTraget.Count > 0)
+            // 적이 있으면
+            if (sortedTarget.Count > 0)
             {
+                // 멀티샷 확률을 적용하여 발사수를 정해줌
                 int shootCount = GameManager.instance.IsChanceTrue(MultiChance) ? MultiCount : 1;
 
-                if (shootCount > sortedTraget.Count) shootCount = sortedTraget.Count;
+                // 발사수가 범위내의 적보다 많으면 발사수 조정
+                if (shootCount > sortedTarget.Count) shootCount = sortedTarget.Count;
                
                 // 가까운 순으로 발사수(멀티샷 수)만큼 발사
                 for (int i = 0; i < shootCount; i++)
                 {
-                    Shoot(sortedTraget[i].collider.transform);
+                    Shoot(sortedTarget[i].collider.transform);
                 }
 
                 yield return new WaitForSeconds(1 / AtkSpd);
@@ -320,12 +327,20 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    /// <summary>
+    /// 총알 발사 함수
+    /// </summary>
+    /// <param name="target">타겟</param>
     void Shoot(Transform target)
     {
+        // 총알 생성
         Transform tempBullet = PoolManager.instance.GetPool(PoolObejectType.bullet).transform;
+        // 부모 설정
         tempBullet.SetParent(GameManager.instance.poolManager.GetChild(0));
+        // 초기 위치 설정
         tempBullet.position = transform.position;
         
+        // 바라볼 방향을 위해 Target 설정
         tempBullet.GetComponent<Bullet>().target = target;
     }
 

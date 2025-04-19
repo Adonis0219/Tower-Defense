@@ -47,6 +47,12 @@ public class MUpgradeButton : MonoBehaviour
     /// <returns></returns>
     public float Sale(MainRschType type)
     {
-        return 1 - (.005f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)type]);
+        return 1 - (.005f * PlayDataManager.Instance.playData.labResearchLevels
+            [(int)ResearchType.Main, (int)type]);
+    }
+
+    public virtual void SetUpType(int upType)
+    {
+
     }
 }

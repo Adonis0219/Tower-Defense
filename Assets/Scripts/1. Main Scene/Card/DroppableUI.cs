@@ -39,7 +39,7 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
     /// </summary>
     public void OnDrop(PointerEventData eventData)
     {
-        // 스크롤 뷰 드롭 무시
+        // 카드 슬롯 스크롤 뷰 드롭 무시
         if (eventData.pointerDrag.name == "Scroll View")
             return;
 
@@ -74,9 +74,6 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
         slotIndex = gameObject.GetComponent<CardSlot>().slotIndex;
         // 현재 장착중인 카드 정보에 현재 드래그한 카드 데이터 넣어주기
         PlayDataManager.Instance.playData.activedCardIDs[slotIndex] = myID;
-
-        // 슬롯 적용 확인용 프린트
-        // PrintName(eventData);
     }
 
     void PrintName(PointerEventData eventData)

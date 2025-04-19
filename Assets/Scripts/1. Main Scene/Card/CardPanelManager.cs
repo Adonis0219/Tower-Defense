@@ -114,6 +114,7 @@ public class CardPanelManager : MonoBehaviour
 
         card.MyData = CardManager.instance.cardDatas[index];
 
+        // 현재 개수 최신화
         card.CurCardCount = card.CurCardCount;
 
         // 카드를 얻은 상태라면

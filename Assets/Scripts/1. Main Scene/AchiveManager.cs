@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using TMPro;
 using UnityEngine;
 
 public enum Achive
@@ -36,7 +31,6 @@ public class AchiveManager : MonoBehaviour
                 OpenPanel(i);
         }
     }
-
 
     void OpenPanel(int index)
     {

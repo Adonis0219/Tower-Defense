@@ -76,6 +76,7 @@ public class PanelManager : MonoBehaviour
             panels[(int)type].SetActive(false);
 
             GameManager.instance.gameView.position = new Vector3(0, -4, 0);
+            // 앵커를 기준으로 y값만 변경
             infoPanel.anchoredPosition = new Vector3(0, -610, 0);
         }
         else
@@ -119,18 +120,22 @@ public class PanelManager : MonoBehaviour
     {
         List<Dictionary<string, object>> datas = CSVReader.Read(csv);
 
+        // 유틸 버튼을 만들어주는데, 만들 버튼이 없으면(작업장에서 유틸 업그레이드가 되지 않았다면)
         if (oriBt == utilUpBt && createCount != 0)
         {
+            // 게임 내 잠김 버튼 활성화
             utilLock.SetActive(false);
         }
 
+        // 업그레이드 버튼들 만들어주기
         for (int i = 0; i < createCount; i++)
         {
             UpgradeButton tempBt = Instantiate(oriBt, content);
 
-            tempBt.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
+            tempBt.SetData(datas[i][UPGRADE_NAME].ToString(), 
+                (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
 
-            tempBt.GetComponent<ISetUpType>().SetUpType(i);
+            tempBt.SetUpType(i);
         }
     }
 
@@ -140,8 +145,10 @@ public class PanelManager : MonoBehaviour
     public void MultiBtSet()
     {
         // 1. PDD의 연구 레벨 확인
-        int level = PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.승수];
+        int level = PlayDataManager.Instance.playData.
+            labResearchLevels[(int)ResearchType.Main, (int)MainRschType.승수];
 
+        // 2. 연구 레벨이 0일 때 현재 멀티 버튼도 꺼주기
         if (level != 0)
         {
             for (int i = 0; i < 3; i++)
@@ -150,6 +157,7 @@ public class PanelManager : MonoBehaviour
                 curMutliBts[i].SetActive(true);
             }
 
+            // 3. 연구 레벨이 1일 때 현재 멀티 버튼 켜주고 레벨에 해당하는 버튼까지 켜주기
             for (int i = 0; i < level; i++)
             {
                 multiBts[0].transform.GetChild(i + 1).gameObject.SetActive(true);
@@ -157,9 +165,6 @@ public class PanelManager : MonoBehaviour
                 multiBts[2].transform.GetChild(i + 1).gameObject.SetActive(true);
             }
         }
-
-        // 2. 연구 레벨이 0일 때 현재 멀티 버튼도 꺼주기
-        // 3. 연구 레벨이 1일 때 현재 멀티 버튼 켜주고 x5 버튼까지 켜주기 
     }
 
     /// <summary>

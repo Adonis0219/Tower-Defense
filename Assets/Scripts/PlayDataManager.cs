@@ -9,9 +9,10 @@ public class PlayData
 
     public int mainDia = 0;
 
-    public int di = 0;
-    public int bestWave = 0;
+    // 업적 비트마스크 활용
     public int achive = 0;
+
+    public int bestWave = 0;
     
     // 메인화면의 판넬 해제를 위한 총 벌어들인 코인 수
     public float totalEarnCoin = 0;
@@ -168,11 +169,6 @@ public partial class PlayDataManager : MonoBehaviour
             LabManager.instance.completeCountUI.GetComponentInChildren<TextMeshProUGUI>().text = playData.labCompleteCount.ToString();
         }
     }
-
-    /// <summary>
-    /// 종료 시간, 접속 시간 차이
-    /// </summary>
-    public TimeSpan timeDif;
     
     private void Awake()
     {
@@ -235,7 +231,8 @@ public partial class PlayDataManager : MonoBehaviour
             // 시간 갭 = 현재시간 - 시작 시간
             elapsedTime = DateTime.Now - playData.startTimes[labIndex];
 
-            playData.labRemainTime[labIndex] = playData.fixedLabRemainTime[labIndex] - (float)elapsedTime.TotalSeconds;
+            playData.labRemainTime[labIndex] = playData.fixedLabRemainTime[labIndex] 
+                - (float)elapsedTime.TotalSeconds;
 
             if (playData.labRemainTime[labIndex] < 0)
             {
@@ -252,7 +249,6 @@ public partial class PlayDataManager : MonoBehaviour
     {
         string loadJD = PlayerPrefs.GetString(SAVE_DATA_KEY, "");
         playData = JsonConvert.DeserializeObject<PlayData>(loadJD);
-       // playData = JsonUtility.FromJson<PlayData>(loadJD);
 
         if (playData == null)
         {
@@ -267,7 +263,6 @@ public partial class PlayDataManager : MonoBehaviour
         MainDia = 10000;
 
         string saveJD = JsonConvert.SerializeObject(playData); 
-        //string saveJD = JsonUtility.ToJson(playData);
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);
     }
 }

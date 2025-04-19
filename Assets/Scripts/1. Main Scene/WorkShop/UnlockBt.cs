@@ -44,10 +44,6 @@ public class UnlockBt : MUpgradeButton
         }
 
         unlockBtImg.color = baseColor;
-
-        //bt.interactable = PlayDataManager.Instance.MainCoin > upCost ? true : false;
-
-
     }
 
     public void OnClick()

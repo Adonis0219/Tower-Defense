@@ -88,36 +88,24 @@ public class MPanelManager : MonoBehaviour
 
     private void Start()
     {
+        // 첫 화면의 판넬 설정
         activeMainPanel = mainPanels[0];
         activeMainBt = mainBts[0];
 
+        // 작업장의 첫 판넬 설정
         activeUpPanel = upPanels[0];
         activeUpBt = upBts[0];
 
+        // 각 업그레이드 버튼들 세팅해주기
         UpgradeBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)PanelType.Attack, atkUpBt, atkContent);
         UpgradeBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)PanelType.Defense, defUpBt, defContent);
         UpgradeBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)PanelType.Utility, utilUpBt, utilContent);
     }
 
-
     /// <summary>
-    /// 메인화면의 판넬을 눌렀을 때 실행할 함수
+    /// 판넬의 Active 상태를 Set해주는 함수
     /// </summary>
-    /// <param name="pType">메인 판넬 타입</param>
-    [VisibleEnum(typeof(MainPanelType))]
-    public void PanelBtClick(int pType)
-    {
-        // 매개변수를 MainPanelType으로 바꿔줌
-        mainPanelType = (MainPanelType)pType;
-
-        // 자신의 판넬이 활성화 돼있다면 아래 실행하지 않음
-        if (mainPanels[(int)mainPanelType].activeSelf)
-            return;
-
-        SetPanels((int)mainPanelType);
-    }
-
-    // 판넬의 Active 상태를 Set해주는 함수
+    /// <param name="type"></param>
     void SetPanels(int type)
     {
         // 버튼 배경 기본 색상
@@ -138,20 +126,9 @@ public class MPanelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 작업장 판넬을 클릭 했을 때 실행할 함수
+    /// 작업장 판넬의 Active 상태를 Set해주는 함수
     /// </summary>
-    /// <param name="pType">작업장 판넬 타입</param>
-    [VisibleEnum(typeof(PanelType))]
-    public void UpPanelBtClick(int pType)
-    {
-        upPanelType = (PanelType)pType;
-
-        if (upPanels[(int)upPanelType].activeSelf)
-            return;
-
-        SetUpPanels((int)upPanelType);
-    }
-
+    /// <param name="type"></param>
     void SetUpPanels(int type)
     {
         // 버튼 켜주기
@@ -164,9 +141,12 @@ public class MPanelManager : MonoBehaviour
 
         baseColor.a = .15f;
 
+        // 꺼줄 버튼 원래 색상으로
         activeUpBt.color = baseColor;
 
+        // 활성화 버튼 바꿔주기
         activeUpBt = upBts[type];
+        // 켜진 색상으로 설정
         baseColor = activeUpBt.color;
 
         baseColor.a = 1;
@@ -203,49 +183,34 @@ public class MPanelManager : MonoBehaviour
             }
         }*/
 
+        // 버튼을 추가해줄 라인
         Transform btTargetLine = null;
 
+        // 만들어줄 버튼의 개수에 따라
         for (int i = 0; i < PlayDataManager.Instance.playData.totalCreatCounts[myType]; i++)
         {
+            // 개수가 0이거나 짝수일 때
             if (i % 2 == 0)
             {
+                // 라인을 하나 생성해주고 그것을 타겟 라인으로 초기화
                 btTargetLine = Instantiate(oriLine, content);
             }
+
+            // 버튼을 타겟 라인에 생성해줌
             MUpgradeButton temp = Instantiate(oriBt, btTargetLine);
 
             // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
             temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
             // curValue를 위한 초기화
             // 자식이 가진 ISetUpType을 사용할 수 있도록
-            temp.GetComponent<ISetUpType>().SetUpType(i);
+            temp.SetUpType(i);
         }
 
+        // 언락 버튼을 넣어줄 라인을 하나 더 만들어줌
         btTargetLine = Instantiate(oriLine, content);
 
+        // 언락 버튼을 만들어줌
         UnlockBtSet(unlockCsv, myType, btTargetLine);
-    }    
-
-    /// <summary>
-    /// UnlockBt을 클릭했을 때 버튼들을 만들어주는 함수
-    /// </summary>
-    /// <param name="myType">업그레이드 버튼의 타입</param>
-    /// <param name="createCount">만들 버튼의 개수</param>
-    public void OnUnlockClickCreate(int myType, int createCount)
-    {
-        switch (myType)
-        {   
-            case (int)PanelType.Attack:
-                AddUpBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)PanelType.Attack, createCount, atkUpBt, atkContent);
-                break;
-            case (int)PanelType.Defense:
-                AddUpBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)PanelType.Defense, createCount, defUpBt, defContent);
-                break;
-            case (int)PanelType.Utility:
-                AddUpBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)PanelType.Utility, createCount, utilUpBt, utilContent);
-                break;
-            default:
-                break;
-        }
     }
 
     /// <summary>
@@ -277,10 +242,11 @@ public class MPanelManager : MonoBehaviour
             MUpgradeButton temp = Instantiate(oriBt, btTargetLine);
 
             // 만들어준 버튼의 기본 정보를 SetData에 넘겨줌
-            temp.SetData(datas[totalCreateCount - createCount][UPGRADE_NAME].ToString(), (int)datas[totalCreateCount - createCount][UPGRADE_COST], (float)datas[totalCreateCount - createCount][UPGRADE_FACTOR]);
+            temp.SetData(datas[totalCreateCount - createCount][UPGRADE_NAME].ToString(), 
+                (int)datas[totalCreateCount - createCount][UPGRADE_COST], (float)datas[totalCreateCount - createCount][UPGRADE_FACTOR]);
             // curValue를 위한 초기화
             // 자식이 가진 ISetUpType을 사용할 수 있도록
-            temp.GetComponent<ISetUpType>().SetUpType(totalCreateCount - createCount);
+            temp.SetUpType(totalCreateCount - createCount);
 
             // 만들 버튼의 개수
             createCount--;
@@ -301,12 +267,35 @@ public class MPanelManager : MonoBehaviour
             temp.SetData(datas[i][UPGRADE_NAME].ToString(), (int)datas[i][UPGRADE_COST], (float)datas[i][UPGRADE_FACTOR]);
             // curValue를 위한 초기화
             // 자식이 가진 ISetUpType을 사용할 수 있도록
-            temp.GetComponent<ISetUpType>().SetUpType(i);
+            temp.SetUpType(i);
         }
 
         btTargetLine = Instantiate(oriLine, content);
 
         UnlockBtSet(unlockCsv, myType, btTargetLine);
+    }
+
+    /// <summary>
+    /// UnlockBt을 클릭했을 때 버튼들을 만들어주는 함수
+    /// </summary>
+    /// <param name="myType">업그레이드 버튼의 타입</param>
+    /// <param name="createCount">만들 버튼의 개수</param>
+    public void OnUnlockClickCreate(int myType, int createCount)
+    {
+        switch (myType)
+        {
+            case (int)PanelType.Attack:
+                AddUpBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)PanelType.Attack, createCount, atkUpBt, atkContent);
+                break;
+            case (int)PanelType.Defense:
+                AddUpBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)PanelType.Defense, createCount, defUpBt, defContent);
+                break;
+            case (int)PanelType.Utility:
+                AddUpBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)PanelType.Utility, createCount, utilUpBt, utilContent);
+                break;
+            default:
+                break;
+        }
     }
 
     /// <summary>
@@ -318,11 +307,43 @@ public class MPanelManager : MonoBehaviour
     public void UnlockBtSet(string unlockCsv, int myType, Transform content)
     {
         List<Dictionary<string, object>> datas = CSVReader.Read(unlockCsv);
-
+        
         UnlockBt tempUnlockBt = Instantiate(oriUnlockBt, content);
 
         int unlockCount = PlayDataManager.Instance.playData.lineOpenCounts[myType];
 
         tempUnlockBt.SetUnlockData(datas[unlockCount][UPGRADE_NAME].ToString(), (int)datas[unlockCount][UPGRADE_COST], (int)datas[unlockCount][CREATE_COUNT], myType);
+    }
+
+    /// <summary>
+    /// 작업장 판넬을 클릭 했을 때 실행할 함수
+    /// </summary>
+    /// <param name="pType">작업장 판넬 타입</param>
+    [VisibleEnum(typeof(PanelType))]
+    public void UpPanelBtClick(int pType)
+    {
+        upPanelType = (PanelType)pType;
+
+        if (upPanels[(int)upPanelType].activeSelf)
+            return;
+
+        SetUpPanels((int)upPanelType);
+    }
+
+    /// <summary>
+    /// 메인화면의 판넬을 눌렀을 때 실행할 함수
+    /// </summary>
+    /// <param name="pType">메인 판넬 타입</param>
+    [VisibleEnum(typeof(MainPanelType))]
+    public void PanelBtClick(int pType)
+    {
+        // 매개변수를 MainPanelType으로 바꿔줌
+        mainPanelType = (MainPanelType)pType;
+
+        // 자신의 판넬이 활성화 돼있다면 아래 실행하지 않음
+        if (mainPanels[(int)mainPanelType].activeSelf)
+            return;
+
+        SetPanels((int)mainPanelType);
     }
 }

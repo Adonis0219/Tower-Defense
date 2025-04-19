@@ -78,6 +78,7 @@ public class GachaManager : MonoBehaviour
 
     void Update()
     {
+        // 가챠 버튼들 보유 다이아에 따라 활성화 조정
         gachaBt1.interactable = PlayDataManager.Instance.MainDia >= 20 ? true : false;
         gachaBt10.interactable = PlayDataManager.Instance.MainDia >= 200 ? true : false;
     }
@@ -87,8 +88,10 @@ public class GachaManager : MonoBehaviour
     /// </summary>
     void OneGacha()
     {
+        // 가챠 UI 설정해주기
         GachaUI oneGacha = gachaUIs[0];
 
+        // 랜덤 카드 설정해주기
         Card card = CardManager.instance.RandomCard();
 
         SetCard(card, oneGacha);
@@ -119,6 +122,7 @@ public class GachaManager : MonoBehaviour
     /// <param name="UI"></param>
     void SetCard(Card card, GachaUI UI)
     {
+        // 카드를 얻은 적이 없다면 NEW 게임오브젝트 활성화
         UI.newGO.SetActive(!card.IsGet);
 
         // 얻은 적 없는 카드였다면      
@@ -127,6 +131,7 @@ public class GachaManager : MonoBehaviour
 
         CardData data = card.MyData;
 
+        // 카드 UI 정보 넣어주기
         UI.nameText.text = data.cardName;
         UI.rarityText.text = data.rarity.ToString();
         UI.DescText.text = data.cardDesc + data.value[data.curLv];
@@ -136,9 +141,9 @@ public class GachaManager : MonoBehaviour
 
         // 카드 개수 더해주고 출력
         card.CurCardCount++;
-
         UI.cur_nextText.text = data.curCardCount + "/" + reqCardCount[data.curLv];
 
+        // 나머지 UI 정보들 넣어주기
         UI.icon.sprite = data.cardIcon;
         UI.starImg.sprite = starSprites[data.curLv];
         UI.backgroundImg.color = CardManager.instance.rarityColors[(int)data.rarity];
@@ -247,6 +252,9 @@ public class GachaManager : MonoBehaviour
         else SetTotalResultPN();
     }
 
+    /// <summary>
+    /// 10뽑 스킵 버튼 클릭 시
+    /// </summary>
     public void OnSkipClk()
     {
         int lastCount = gachaCount;

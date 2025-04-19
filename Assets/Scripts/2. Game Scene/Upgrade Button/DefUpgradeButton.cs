@@ -15,7 +15,7 @@ public enum DefUpgradeType
 }   
 
 
-public class DefUpgradeButton : UpgradeButton, ISetUpType
+public class DefUpgradeButton : UpgradeButton
 {
     [SerializeField]
     public DefUpgradeType myUpType;
@@ -69,13 +69,14 @@ public class DefUpgradeButton : UpgradeButton, ISetUpType
         {
             // 업그레이드 버튼이 체력타입일 경우 현재 체력 올려주기
             if (myUpType == DefUpgradeType.체력)
-                GameManager.instance.player.CurrentHp += 5 * (1 + .03f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Defense, (int)DefRschType.체력]);
+                GameManager.instance.player.CurrentHp += 5 * 
+                    (1 + .03f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Defense, (int)DefRschType.체력]);
 
             upCost = Mathf.RoundToInt(upCost * upFactor);
         }
     }
 
-    public void SetUpType(int upType)
+    public override void SetUpType(int upType)
     {
         myUpType = (DefUpgradeType)upType;
     }

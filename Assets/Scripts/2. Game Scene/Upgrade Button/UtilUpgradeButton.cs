@@ -16,7 +16,7 @@ public enum UtilUpgradeType
     Length
 }
 
-public class UtilUpgradeButton : UpgradeButton, ISetUpType
+public class UtilUpgradeButton : UpgradeButton
 {
     [SerializeField]
     public UtilUpgradeType myUpType;
@@ -73,7 +73,7 @@ public class UtilUpgradeButton : UpgradeButton, ISetUpType
         }
     }
 
-    public void SetUpType(int upType)
+    public override void SetUpType(int upType)
     {
         myUpType = (UtilUpgradeType)upType;
     }

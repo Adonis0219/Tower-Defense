@@ -189,7 +189,8 @@ public class LabButton : MonoBehaviour
         if (!isOpen)
         {
             // 비용 감소
-            PlayDataManager.Instance.MainDia -= LabManager.instance.labOpenCost[PlayDataManager.Instance.playData.openLabCount];
+            PlayDataManager.Instance.MainDia -= 
+                LabManager.instance.labOpenCost[PlayDataManager.Instance.playData.openLabCount];
             
             PlayDataManager.Instance.playData.openLabCount++;
 

@@ -17,11 +17,6 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    private void Start()
-    {
-        
-    }
-
     /// <summary>
     /// 현재 오브젝트를 드래그 하기 시작할 때 1회 호출
     /// </summary>
@@ -31,6 +26,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (!gameObject.GetComponent<Card>().IsGet)
             return;
 
+        // 드래그 할 때 남을 카드를 복제
         InstantiateCard();
 
         // 드래그 직에 소속되어 있던 부모 Transform 정보 저장

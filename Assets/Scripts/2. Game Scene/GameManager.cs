@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI curDollarText;
 
+    // 게임 시작 시 초기 달러
     int initDollar = 0;
 
     public int InitDollar
@@ -52,8 +53,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 계속 갱신 되는 현재 달러
     float curDollar;
+    public float CurDollar
+    {
+        get
+        {
+            return curDollar;
+        }
+        set
+        {
+            curDollar = value;
+            curDollarText.text = "$" + curDollar.ToString("F0");
+        }
+    }
 
+    // 웨이브 당 달러 보너스
     float dollarWaveBonus;
 
     public float DollarWaveBonus
@@ -66,6 +81,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 달러 보너스 배율
     float dollarBonusFactor;
 
     public float DollarBonusFactor
@@ -82,6 +98,18 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     float curCoin;
+    public float CurCoin
+    {
+        get
+        {
+            return curCoin;
+        }
+        set
+        {
+            curCoin = value;
+            curCoinText.text = curCoin.ToString("F0");
+        }
+    }
 
     public float initCoin;     // 초기 코인
     public float earnCoin;     // 이번 게임 획득 코인
@@ -171,6 +199,10 @@ public class GameManager : MonoBehaviour
 
     int wave = 1;
 
+    // 웨이브 사이의 기다리는 시간인가?
+    public bool isWait = false;
+    public int waitTime = 3;
+
     [SerializeField]
     TextMeshProUGUI waveHpFactorText;
     [SerializeField]
@@ -187,32 +219,6 @@ public class GameManager : MonoBehaviour
     public float gameTime;
 
     public int[] curMultis = new int[3] { 1, 1, 1 };
-
-    ////// 프로퍼티
-    public float CurDollar
-    {
-        get
-        {
-            return curDollar;
-        }
-        set
-        {
-            curDollar = value;
-            curDollarText.text = "$" + curDollar.ToString("F0");
-        }
-    }
-    public float CurCoin
-    {
-        get
-        {
-            return curCoin;
-        }
-        set
-        {
-            curCoin = value;
-            curCoinText.text = curCoin.ToString("F0");
-        }
-    }
 
     public int Wave
     {
@@ -231,8 +237,7 @@ public class GameManager : MonoBehaviour
             CurDollar += PlayDataManager.Instance.DollarWaveFormula(SceneType.Game);
             CurCoin += PlayDataManager.Instance.CoinWaveFormula(SceneType.Game);
 
-            GoodsKillFactor(CoinWaveBonus, false);
-
+            // 각 무료 업그레이드 찬스 확인 후 업글
             if (IsChanceTrue(AtkFreeUpChance)) FreeUpgrade(PanelType.Attack);
             if (IsChanceTrue(DefFreeUpChance)) FreeUpgrade(PanelType.Defense);
             if (IsChanceTrue(UtilFreeUpChance)) FreeUpgrade(PanelType.Utility);
@@ -284,36 +289,69 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        WaveTimeUp();
+        GamePuaseCheck();
+        TimeControl();
+    }
+
+    /// <summary>
+    /// 웨이브 시간을 관리해주는 함수
+    /// </summary>
+    void WaveTimeUp()
+    {
         gameTime += Time.deltaTime;
 
-        if (gameTime > WaveTime)
+        if (!isWait)
         {
-            Wave++;
-            // 렉 방지 (초과시간 손실 방지)
-            gameTime -= WaveTime;
+            if (gameTime > WaveTime)
+            {
+                // 렉 방지 (초과시간 손실 방지)
+                gameTime -= WaveTime;
+                isWait = true;
+            }
         }
+        else
+        {
+            if (gameTime > waitTime)
+            {
+                // 렉 방지 (초과시간 손실 방지)
+                gameTime -= waitTime;
+                wave++;
+                isWait = false;
+            }
+        }
+    }
 
+    /// <summary>
+    /// ESC 클릭 체크
+    /// </summary>
+    void GamePuaseCheck()
+    {
+        // 일시정지 판넬 활성화 시
         if (puasePanel.activeSelf)
         {
+            // esc 누르면
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                OnPuaseClk(2);
+                // 계속하기
+                OnPuaseClk((int)ButtonType.resume);
             }
         }
         else
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                OnPuaseClk(3);
+                // 일시정지 판넬 활성화
+                OnPuaseClk((int)ButtonType.puase);
             }
         }
+    }
 
-        // 디버그 판넬 호출 키 입력
-        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.F1))
-        {
-            Debug.Log("디버그 판넬");
-        }
-
+    /// <summary>
+    /// 시간 조절 함수
+    /// </summary>
+    void TimeControl()
+    {        
         // 누르는 숫자에 따라 게임 속도 변경
         for (int i = 0; i < 10; i++)
         {
@@ -376,21 +414,22 @@ public class GameManager : MonoBehaviour
     /// <param name="type">업그레이드 타입</param>
     void FreeUpgrade(PanelType type)
     {
+        int max = PlayDataManager.Instance.playData.totalCreatCounts[(int)type];
+
         switch (type)
         {
             case PanelType.Attack:
-                atkDollarLevels[Random.Range(0, PlayDataManager.Instance.playData.totalCreatCounts[(int)type])]++;
+                atkDollarLevels[Random.Range(0, max)]++;
                 break;
             case PanelType.Defense:
-                defDollarLevels[Random.Range(0, PlayDataManager.Instance.playData.totalCreatCounts[(int)type])]++;
+                defDollarLevels[Random.Range(0, max)]++;
                 break;
             case PanelType.Utility:
-                utilDollarLevels[Random.Range(0, PlayDataManager.Instance.playData.totalCreatCounts[(int)type])]++;
+                utilDollarLevels[Random.Range(0, max)]++;
                 break;
             default:
                 break;
         }
-
     }
 
     /// <summary>
@@ -468,19 +507,6 @@ public class GameManager : MonoBehaviour
             return true;
         }
         else return false;
-    }
-
-    // 웨이브
-    public void GoodsKillFactor(float basicGoods, bool isDollar)
-    {
-        if (isDollar)
-        {
-            CurDollar += basicGoods * DollarBonusFactor;
-        }
-        else
-        {
-            CurCoin += basicGoods;
-        }
     }
 
     /// <summary>

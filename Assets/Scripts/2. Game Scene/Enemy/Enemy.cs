@@ -61,12 +61,6 @@ public class Enemy : PoolObject, IHit
     // 저속 오라 감지
     bool isSlowed = false;
 
-    
-    public void Hit(float damage)
-    {
-        CurrentHp -= damage;
-    }
-
     private void Awake()
     {
         player = GameManager.instance.player;
@@ -76,10 +70,10 @@ public class Enemy : PoolObject, IHit
 
     private void OnEnable()
     {
+        collDamage = baseCollDamage * GameManager.instance.waveDmgFactor;
         maxHp = BaseMaxHp * GameManager.instance.waveHpFactor;
         // 소환될 때 배수만큼 곱해주기
         CurrentHp = maxHp;
-        collDamage = baseCollDamage * GameManager.instance.waveDmgFactor;
     }
 
     // Update is called once per frame
@@ -101,6 +95,10 @@ public class Enemy : PoolObject, IHit
 
         // 앞으로 이동
         transform.Translate(Vector3.up * moveSpd * Time.deltaTime);
+    }
+    public void Hit(float damage)
+    {
+        CurrentHp -= damage;
     }
 
     IHit hitObj;
@@ -126,7 +124,7 @@ public class Enemy : PoolObject, IHit
         while (gameObject.activeSelf)
         {
             hitObj.Hit(collDamage);
-            // 가시 반사 대미지
+            // 가시 반사 대미지 (퍼센트값이므로 .01f하여 적용)
             CurrentHp -= maxHp * (player.ThronsPer * .01f);
 
             yield return new WaitForSeconds(2f);

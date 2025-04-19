@@ -61,6 +61,8 @@ public class Bullet : PoolObject
     Collider2D[] colliders;
     List<Collider2D> hitEnemies = new List<Collider2D>();
 
+    // 총알의 최종 대미지
+    float finalDmg;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -70,14 +72,7 @@ public class Bullet : PoolObject
         if (hitObj == null)
             return;
 
-        // 총알이 사라질 때 총알의 위치 = 적이 죽은 위치 
-        // 플레이어와의 거리 -> 데미지/미터 적용
-        float dist = Vector3.Distance(transform.position, player.transform.position) * 10;
-
-        // 거리 데미지 적용
-        float distDmg = bulletDmg * Mathf.Pow(player.DmgPerMeter, dist);
-        // 크리 데미지 적용
-        float finalDmg = isCritBullet ? distDmg * player.CritFactor : distDmg;
+        BulletDmgFormula();
 
         // hitObj의 Hit함수 실행
         hitObj.Hit(finalDmg);
@@ -91,55 +86,52 @@ public class Bullet : PoolObject
         // 부딪힌 적의 액티브가 꺼져있지 않다면 -> 살아있다면
         if (collision.transform.gameObject.activeSelf == true) SpawnUpText(finalDmg);
 
-        // 바운스 총알이고
+        // 바운스 총알이고, 바운스 횟수가 남아있다면
         if (isBouncBullet && bounceCount > 0)
         {
-            bounceCount--;
+            Bounce(collision);
+        }
+        else
+        {
+            ReturnPool();
+        }
+    }
 
-            // 바운스범위 내의 적 모두 찾기
-            colliders = Physics2D.OverlapCircleAll(transform.position, player.BounceRange / 10, player.enemyMask);
+    void Bounce(Collider2D collision)   
+    {
+        bounceCount--;
 
-            // 가까운 순으로 정렬
-            SortArrayByNearest();
+        // 바운스범위 내의 적 모두 찾기
+        colliders = Physics2D.OverlapCircleAll(transform.position, 
+            player.BounceRange / 10, player.enemyMask);
 
-            // 타겟이 없다면 리턴풀
-            if (colliders.Length == 0)
+        // 타겟이 없다면 리턴풀 후 얼리
+        if (colliders.Length == 0)
+        {
+            ReturnPool();
+            return;
+        }
+
+        // 가까운 순으로 정렬
+        SortArrayByNearest();
+
+        // 맞은 적이 죽지 않았다면
+        if (colliders[0] == collision)
+        {
+            // 범위 내에 죽지 않은 적이 처음 맞은 적밖에 없다면
+            if (colliders.Length == 1)
             {
                 ReturnPool();
-                return;
-            }
-
-            // 자신이 죽지 않았다면
-            if (colliders[0] == collision)
-            {
-                // 범위 내에 죽지 않은 자신밖에 없다면
-                if (colliders.Length == 1)
-                {
-                    ReturnPool();
-                }
-                else
-                {
-                    // 타겟을 우선 정해주고
-                    target = colliders[1].transform;
-
-                    // 그 타겟이 맞은 에너미인지 검사
-                    for (int i = 1; i < colliders.Length; i++)
-                    {
-                        // 이미 맞았던 적의 리스트에 들어있지 않다면
-                        if (!hitEnemies.Contains(colliders[i]))
-                        {
-                            target = colliders[i].transform;
-                            break;
-                        }
-                    }
-                }
             }
             else
             {
-                target = colliders[0].transform;
+                // 타겟을 우선 정해주고
+                target = colliders[1].transform;
 
-                for (int i = 0; i < colliders.Length; i++)
+                // 그 타겟이 맞은 에너미인지 검사
+                for (int i = 1; i < colliders.Length; i++)
                 {
+                    // 이미 맞았던 적의 리스트에 들어있지 않다면
                     if (!hitEnemies.Contains(colliders[i]))
                     {
                         target = colliders[i].transform;
@@ -148,10 +140,32 @@ public class Bullet : PoolObject
                 }
             }
         }
-        else
+        else // 맞은 적이 죽었다면
         {
-            ReturnPool();
+            // 다음 적으로 타겟 설정
+            target = colliders[0].transform;
+
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (!hitEnemies.Contains(colliders[i]))
+                {
+                    target = colliders[i].transform;
+                    break;
+                }
+            }
         }
+    }
+
+    void BulletDmgFormula()
+    {
+        // 총알이 사라질 때 총알의 위치 = 적이 죽은 위치
+        // 플레이어와의 거리 -> 데미지/미터 적용
+        float dist = Vector3.Distance(transform.position, player.transform.position) * 10;
+
+        // 거리 데미지 적용
+        float distDmg = bulletDmg * Mathf.Pow(player.DmgPerMeter, dist);
+        // 크리 데미지 적용
+        finalDmg = isCritBullet ? distDmg * player.CritFactor : distDmg;
     }
 
     void SpawnUpText(float dmg)
@@ -165,16 +179,14 @@ public class Bullet : PoolObject
     }
 
     void SortArrayByNearest()
-    {
-        if (colliders.Length == 0)
-            return;
-
+    {      
         Transform nearestTarget = colliders[0].transform;
         float nearestDist = Vector3.Distance(nearestTarget.position, transform.position);
         float checkDist;
 
         for (int i = 1; i < colliders.Length; i++)
         {
+            // 체크할 거리 설정
             checkDist = Vector3.Distance(colliders[i].transform.position, transform.position);
 
             // 체크 거리가 더 짧다면

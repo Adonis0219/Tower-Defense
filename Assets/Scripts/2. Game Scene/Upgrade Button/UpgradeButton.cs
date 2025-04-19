@@ -65,4 +65,9 @@ public class UpgradeButton : MonoBehaviour
 
         return cost;
     }
+
+    public virtual void SetUpType(int upType)
+    {
+
+    }
 }

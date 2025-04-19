@@ -22,9 +22,12 @@ public class CardSlot : MonoBehaviour
 
     public void OnSlotOpenClk()
     {
+        // 슬롯 인덱스 설정
         slotIndex = PlayDataManager.Instance.playData.curSlotCount;
+        // 가격 설정
         int cost = PlayDataManager.Instance.playData.slotOpneCost[slotIndex - 1];
 
+        // 다이아 부족 시 얼리 리턴
         if (PlayDataManager.Instance.MainDia < cost)
             return;
         
@@ -33,12 +36,13 @@ public class CardSlot : MonoBehaviour
         // 열린 슬롯만 드롭 가능하도록
         gameObject.AddComponent<DroppableUI>();
 
-        // DnD를 편하게 해주기 위해 열린 슬롯이 줄어들 일이 없으니 그냥 파괴
+        // DnD를 편하게 해주기 위해 열린 슬롯이 줄어들 일이 없으니
+        // 언락 판넬 삭제
         Destroy(transform.GetChild(0).gameObject);
 
         PlayDataManager.Instance.playData.curSlotCount++;
 
-        // 장비 해제 버튼 켜주기
+        // 장비/해제 버튼 켜주기
         // (한 프레임 내에 실행되어 아직 0번째 자식이 사라지기 전이므로 1)
         transform.GetChild(1).gameObject.SetActive(true);
 
@@ -47,8 +51,8 @@ public class CardSlot : MonoBehaviour
 
         // 최대 개수가 아니면 복제하여 가격 설정해주기
         if (PlayDataManager.Instance.playData.curSlotCount != PlayDataManager.Instance.playData.maxSlotCount)
-            Instantiate(CardPanelManager.instance.oriSlot, CardPanelManager.instance.activeSlotContent).GetComponent<CardSlot>().costText.text =
-                cost + " <sprite=0>";
+            Instantiate(CardPanelManager.instance.oriSlot, CardPanelManager.instance.activeSlotContent)
+                .GetComponent<CardSlot>().costText.text = cost + " <sprite=0>";
     }
 
     /// <summary>

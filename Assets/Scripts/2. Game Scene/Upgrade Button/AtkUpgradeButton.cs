@@ -15,7 +15,7 @@ public enum AtkUpgradeType
     Length
 }   
 
-public class AtkUpgradeButton : UpgradeButton, ISetUpType
+public class AtkUpgradeButton : UpgradeButton
 {
 
     [SerializeField]
@@ -85,7 +85,7 @@ public class AtkUpgradeButton : UpgradeButton, ISetUpType
         }
     }
 
-    public void SetUpType(int upType)
+    public override void SetUpType(int upType)
     {
         myUpType = (AtkUpgradeType)upType;
     }

@@ -30,6 +30,7 @@ public class PoolManager : MonoBehaviour
     {
         instance = this;
 
+        // 하이라이키의 PoolObject의 자식으로 각 풀오브젝트들의 부모 생성
         for (int i = 0; i < poolObjDatas.Length; i++)
         {
             // 새로운 empty를 만들어 그것을 오리지널의 이름으로 한다
@@ -61,6 +62,7 @@ public class PoolManager : MonoBehaviour
         }
     }
 
+    // 오브젝트 풀에 부족할 때 추가 생성해주는 함수
     GameObject CreateObject(int index)
     {
         // 만든 오브젝트
@@ -78,13 +80,13 @@ public class PoolManager : MonoBehaviour
         // 반환할 오브젝트
         GameObject returnObject;
 
-        // 큐에 반환할 오브젝트가 없다면 
+        // 큐에 반환할 수 있는 오브젝트가 없다면 
         if (objectQ[i].Count == 0)
         {
             // 새로 만들어서 반환해준다
             returnObject = CreateObject(i);
         }
-        // 큐에 ROB가 있다면
+        // 큐에 반환 가능한 오브젝트가 있다면
         else
         {
             // type의 큐에서 빼서 반환해주기
@@ -93,6 +95,7 @@ public class PoolManager : MonoBehaviour
 
         // 뺀 오브젝트 활성화 시켜주기
         returnObject.gameObject.SetActive(true);
+
         return returnObject;
     }
 
@@ -107,6 +110,7 @@ public class PoolManager : MonoBehaviour
 
         // 넣어줄 것이니 오브젝트를 꺼주기
         setObject.gameObject.SetActive(false);
+
         // 큐에 셋 오브젝트 넣어주기
         objectQ[i].Enqueue(setObject);
     }

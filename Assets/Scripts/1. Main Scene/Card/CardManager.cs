@@ -40,20 +40,27 @@ public class CardManager : MonoBehaviour
         SetCardWeight();
     }
 
-    // Update is called once per frame
-
+    /// <summary>
+    /// 카드를 랜덤으로 하나 뽑아줌
+    /// </summary>
+    /// <returns>랜덤으로 뽑힌 카드</returns>
     public Card RandomCard()
     {
         float weight = 0;
         float selectNum = 0;
 
+        // 총 Weight에서 0 ~ 1 사이의 비율로 뽑음
         selectNum = totalWeight * Random.Range(0.0f, 1.0f);
 
         for (int i = 0; i < cardDatas.Count; i++)
         {
+            // 카드의 중량을 계속 더해줌
             weight += cardDatas[i].weight;
+
+            // 뽑은 숫자보다 누적 중량이 커지면
             if (selectNum <= weight)
             {
+                // 그 카드를 리턴
                 return gachaDeck[i];
             }
         }
@@ -61,6 +68,9 @@ public class CardManager : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// 리스트 내의 각 등급 카드의 개수에 따라 카드의 Weight 설정해주는 함수
+    /// </summary>
     void SetCardWeight()
     {
         // Where 함수와 Count 함수를 이용해 리스트 안의 조건에 맞는 원소의 개수 구하기

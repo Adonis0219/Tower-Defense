@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class MUtilUpgradeButton : MUpgradeButton, ISetUpType
+public class MUtilUpgradeButton : MUpgradeButton
 {
     [SerializeField]
     public UtilUpgradeType myUpType;
@@ -56,7 +56,7 @@ public class MUtilUpgradeButton : MUpgradeButton, ISetUpType
         upCost = Mathf.RoundToInt(upCost * upFactor);
     }
 
-    public void SetUpType(int upType)
+    public override void SetUpType(int upType)
     {
         myUpType = (UtilUpgradeType)upType;
     }

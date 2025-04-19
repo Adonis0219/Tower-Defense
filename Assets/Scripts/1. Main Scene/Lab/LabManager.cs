@@ -67,17 +67,17 @@ public class LabManager : MonoBehaviour
         // 열어줄만큼 열어주고 데이터 넣어주기
         for (int i = 0; i < PlayDataManager.Instance.playData.openLabCount; i++)
         {
+            // 연구칸 생성 후 lab 목록에 넣기, 인덱스 설정
             LabButton temp = Instantiate(oriLabBt, labListContent);
             labs.Add(temp);
             temp.labIndex = i;
             temp.IsOpen = true;
 
-            if (PlayDataManager.Instance.playData.isResearchingData[i] == null)
-            {
-                temp.IsEmpty = true;
-            }
+            // 연구실 인덱스에 지금 연구중인 데이터가 없다면 연구실 = 빔
+            if (PlayDataManager.Instance.playData.isResearchingData[i] == null) temp.IsEmpty = true;
             else
             {
+                // 연구칸의 연구 데이터는 PDM에서 가져오기
                 temp.MyData = PlayDataManager.Instance.playData.isResearchingData[i];
                 temp.IsEmpty = false;
             }
@@ -87,8 +87,10 @@ public class LabManager : MonoBehaviour
         if (labs.Count == 5)
             return;
 
+        // 연구칸 생성 후 lab 목록에 넣기
         LabButton unlockTemp = Instantiate(oriLabBt, labListContent);
         labs.Add(unlockTemp);
+        // 인덱스 및 각종 상태 초기화
         unlockTemp.labIndex = PlayDataManager.Instance.playData.openLabCount;
         unlockTemp.IsEmpty = true;
         unlockTemp.IsOpen = false;
@@ -101,7 +103,6 @@ public class LabManager : MonoBehaviour
     void ResearchInitSet(ResearchType type)
     {
         List<ResearchData> datas = new List<ResearchData>();
-        //Transform createContent = null;
         Transform createContent = listPanels[(int)type].transform;
 
         switch (type)
@@ -210,19 +211,22 @@ public class LabManager : MonoBehaviour
         clickedBt.curResearchLevel = researchLevel;
 
         // 클릭했을 때 시간을 연구 시작 시간으로 넘겨줌
-
         // 코루틴 실행이 아닌 정보전달
         clickedBt.IsEmpty = false;
     }
 
     public int SaledCost(int cost)
     {
-        return Mathf.FloorToInt(cost * (1 - .003f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.연구실할인])); ;
+        return Mathf.FloorToInt(cost * 
+            (1 - .003f * PlayDataManager.Instance.playData.
+            labResearchLevels[(int)ResearchType.Main, (int)MainRschType.연구실할인]));
     }
 
     public float ReqTime(float reqTime)
     {
-        return reqTime / (1 + .02f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.연구실속도]);       
+        return reqTime / 
+            (1 + .02f * PlayDataManager.Instance.playData.
+            labResearchLevels[(int)ResearchType.Main, (int)MainRschType.연구실속도]);       
     }
 
     public string UpInfoStrSet(ResearchData data)

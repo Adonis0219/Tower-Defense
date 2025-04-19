@@ -6056,7 +6056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3954403, g: 0.35294116, b: 1, a: 1}
+  m_Color: {r: 0.4, g: 0.35, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7341,6 +7341,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  fill: {fileID: 848444679}
 --- !u!114 &1139252718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11221,6 +11222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  fill: {fileID: 0}
 --- !u!1 &1833173195
 GameObject:
   m_ObjectHideFlags: 0
@@ -12909,6 +12911,8 @@ MonoBehaviour:
     spawnIndex: 3
   - spawnTime: 1
     spawnIndex: 3
+  isWait: 0
+  waitTime: 3
   waveHpFactorText: {fileID: 1844743490}
   waveDmgFactorText: {fileID: 526780474}
   waveHpFactor: 2.5
