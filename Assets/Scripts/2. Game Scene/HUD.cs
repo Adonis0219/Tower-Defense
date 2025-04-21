@@ -35,7 +35,7 @@ public class HUD : MonoBehaviour
                 break;
             case InfoType.Wave:
                 // 웨이브 사이 시간이 아니라면
-                if (!GameManager.instance.isWait)
+                if (!GameManager.instance.IsWait)
                 {
                     fill.color = new Color(.4f, .35f, 1);
                     mySlider.value = GameManager.instance.gameTime / GameManager.instance.WaveTime;

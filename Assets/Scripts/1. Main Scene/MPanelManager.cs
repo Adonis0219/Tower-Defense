@@ -73,13 +73,13 @@ public class MPanelManager : MonoBehaviour
     /// </summary>
     const string CREATE_COUNT = "해금개수";
 
-    const string ATK_UPGRADE = "AtkCoinUpgrade";
-    const string DEF_UPGRADE = "DefCoinUpgrade";
-    const string UTIL_UPGRADE = "UtilUpgrade";
+    const string ATK_UPGRADE = "CSV Upgrade/AtkCoinUpgrade";
+    const string DEF_UPGRADE = "CSV Upgrade/DefCoinUpgrade";
+    const string UTIL_UPGRADE = "CSV Upgrade/UtilUpgrade";
 
-    const string ATK_UNLOCK = "AtkUnlock";
-    const string DEF_UNLOCK = "DefUnlock";
-    const string UTIL_UNLOCK = "UtilUnlock";
+    const string ATK_UNLOCK = "CSV Upgrade/AtkUnlock";
+    const string DEF_UNLOCK = "CSV Upgrade/DefUnlock";
+    const string UTIL_UNLOCK = "CSV Upgrade/UtilUnlock";
 
     private void Awake()
     {

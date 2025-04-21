@@ -42,9 +42,9 @@ public class PanelManager : MonoBehaviour
     GameObject[] upNameTexts;
 
 
-    const string ATK_UPGRADE = "AtkUpgrade";
-    const string DEF_UPGRADE = "DefUpgrade";
-    const string UTIL_UPGRADE = "UtilUpgrade";
+    const string ATK_UPGRADE = "CSV Upgrade/AtkUpgrade";
+    const string DEF_UPGRADE = "CSV Upgrade/DefUpgrade";
+    const string UTIL_UPGRADE = "CSV Upgrade/UtilUpgrade";
 
     const string UPGRADE_NAME = "이름";
     const string UPGRADE_COST = "비용";
@@ -195,6 +195,7 @@ public class PanelManager : MonoBehaviour
 
         int type = 0;
 
+        // 버튼의 종류를 부모의 이름으로 검사
         switch (clickedBt.transform.parent.name)
         {
             case ATK:
@@ -210,9 +211,12 @@ public class PanelManager : MonoBehaviour
                 break;
         }
 
+        // 각 버튼의 현재 배수 넘겨주기
         GameManager.instance.curMultis[type] = value;
-
+        
+        // 판넬 이름 꺼주기
         upNameTexts[type].SetActive(true);
+        // 버튼 목록 켜주기
         multiBts[type].SetActive(false);
     }
 }

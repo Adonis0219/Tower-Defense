@@ -53,12 +53,12 @@ public class UpgradeButton : MonoBehaviour
 
     protected int SetCost(int type)
     {
+        // 자체 비용은 바꾸면 안 되기 때문에
+        // 반환용 비용 선언
         int cost = upCost;
+        int multi = GameManager.instance.curMultis[type];
 
-        if (GameManager.instance.curMultis[type] == 1)
-            return cost;
-
-        for (int i = 0; i < GameManager.instance.curMultis[type]; i++)
+        for (int i = 0; i < multi; i++)
         {
             cost += Mathf.RoundToInt(cost * upFactor);
         }

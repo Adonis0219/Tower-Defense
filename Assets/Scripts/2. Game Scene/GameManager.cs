@@ -5,13 +5,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-[System.Serializable]
-public class WaveData
-{
-    public float spawnTime;
-    public int spawnIndex;
-}
-
 public class GameManager : MonoBehaviour
 {
     public enum ButtonType
@@ -36,6 +29,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public Transform textCanvas;
 
+    [SerializeField]
+    public EnemyData[] enemyDatas = new EnemyData[(int)EnemyType.Length];
+
     [Header("##  Goods")]
     [Header("# Dollar")]
     [SerializeField]
@@ -48,7 +44,8 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            initDollar = 5 * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.시작달러];
+            initDollar = 80 + 5 * PlayDataManager.Instance.playData.
+                labResearchLevels[(int)ResearchType.Main, (int)MainRschType.시작달러];
             return initDollar;
         }
     }
@@ -75,8 +72,8 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            dollarWaveBonus = 4 * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.달러웨이브] 
-                + utilDollarLevels[(int)UtilUpgradeType.달러웨이브]);
+            dollarWaveBonus = 4 * (PlayDataManager.Instance.playData.
+                utilCoinLevels[(int)UtilUpgradeType.달러웨이브] + utilDollarLevels[(int)UtilUpgradeType.달러웨이브]);
             return dollarWaveBonus;
         }
     }
@@ -142,8 +139,8 @@ public class GameManager : MonoBehaviour
         get
         {
             atkFreeUpChance = 100;
-            atkFreeUpChance = (.5f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.무료공격업] 
-                + utilDollarLevels[(int)UtilUpgradeType.무료공격업]));
+            atkFreeUpChance = (.5f * (PlayDataManager.Instance.playData.
+                utilCoinLevels[(int)UtilUpgradeType.무료공격업] + utilDollarLevels[(int)UtilUpgradeType.무료공격업]));
             return atkFreeUpChance;
         }
     }
@@ -154,8 +151,8 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            defFreeUpChance = (.5f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.무료방어업] 
-                + utilDollarLevels[(int)UtilUpgradeType.무료방어업]));
+            defFreeUpChance = (.5f * (PlayDataManager.Instance.playData.
+                utilCoinLevels[(int)UtilUpgradeType.무료방어업] + utilDollarLevels[(int)UtilUpgradeType.무료방어업]));
             return defFreeUpChance;
         }
     }
@@ -166,8 +163,8 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            utilFreeUpChance = (.5f * (PlayDataManager.Instance.playData.utilCoinLevels[(int)UtilUpgradeType.무료유틸업] 
-                + utilDollarLevels[(int)UtilUpgradeType.무료유틸업]));
+            utilFreeUpChance = (.5f * (PlayDataManager.Instance.playData.
+                utilCoinLevels[(int)UtilUpgradeType.무료유틸업] + utilDollarLevels[(int)UtilUpgradeType.무료유틸업]));
             return utilFreeUpChance;
         }
     }
@@ -190,36 +187,34 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI timeScaleText;
 
+    float curTimeScale = 1.0f;
+    public float CurTimeScale
+    {
+        get { return curTimeScale; }
+        set
+        {
+            curTimeScale = value;
+            timeScaleText.text = "x" + curTimeScale;
+            Time.timeScale = curTimeScale;
+        }
+    }
+
     float maxTimeScale = 1.5f;
 
-    float curTimeScale = 1.0f;
+    public float MaxTimeScale
+    {
+        get
+        {
+            maxTimeScale = 1.5f + .5f * PlayDataManager.Instance.playData.
+                labResearchLevels[(int)ResearchType.Main, (int)MainRschType.게임속도];
+            return maxTimeScale;
+        }
+    }
 
     [Header("# Wave Control")]
-    public WaveData[] waveDatas;
 
+    [SerializeField]
     int wave = 1;
-
-    // 웨이브 사이의 기다리는 시간인가?
-    public bool isWait = false;
-    public int waitTime = 3;
-
-    [SerializeField]
-    TextMeshProUGUI waveHpFactorText;
-    [SerializeField]
-    TextMeshProUGUI waveDmgFactorText;
-
-    [SerializeField]
-    public float waveHpFactor = 2.5f;
-    [SerializeField]
-    public float waveDmgFactor = 1.2f;
-
-    public int WaveTime { get; private set; } = 10;
-
-    [HideInInspector]
-    public float gameTime;
-
-    public int[] curMultis = new int[3] { 1, 1, 1 };
-
     public int Wave
     {
         get { return wave; }
@@ -244,32 +239,57 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public float CurTimeScale
-    {
-        get { return curTimeScale; }
-        set
-        {
-            curTimeScale = value;
-            timeScaleText.text = "x" + curTimeScale;
-            Time.timeScale = curTimeScale;
-        }
-    }
+    // 웨이브 사이의 기다리는 시간인가?
+    bool isWait;
 
-    public float MaxTimeScale
+    Coroutine coru;
+    public int waitTime = 9;
+
+    public bool IsWait
     {
         get
         {
-            maxTimeScale = 1.5f + .5f * PlayDataManager.Instance.playData.labResearchLevels[(int)ResearchType.Main, (int)MainRschType.게임속도];
-            return maxTimeScale;
+            return isWait;
+        }
+        set
+        {
+            isWait = value;
+
+            if (!IsWait)
+                coru = StartCoroutine(SpawnNormal());
+                //coru = StartCoroutine(SpawnSpeed());
+            else
+            {
+                StopCoroutine(coru);
+                Debug.Log(spawnCount);
+            }
         }
     }
+
+
+    [SerializeField]
+    TextMeshProUGUI waveHpFactorText;
+    [SerializeField]
+    TextMeshProUGUI waveDmgFactorText;
+
+    [SerializeField]
+    public float waveHpFactor = 2.5f;
+    [SerializeField]
+    public float waveDmgFactor = 1.2f;
+
+    public int WaveTime { get; private set; } = 30;
+
+    [HideInInspector]
+    public float gameTime;
+
+    public int[] curMultis = new int[3] { 1, 1, 1 };
 
     private void Awake()
     {
         instance = this;
 
-        //CurDollar = InitDollar;
-        CurDollar = 9999999;
+        CurDollar = InitDollar;
+        //CurDollar = 9999999;
 
         InitLevelSet();
     }
@@ -284,8 +304,11 @@ public class GameManager : MonoBehaviour
         // 게임 종료 시 벌어들인 코인개수 계산을 위해 미리 초기화
         initCoin = CurCoin;
 
-        StartCoroutine(SpawnEnemy());
+        // 첫 스폰을 위한 초기화
+        IsWait = false;
     }
+
+
 
     private void Update()
     {
@@ -301,13 +324,13 @@ public class GameManager : MonoBehaviour
     {
         gameTime += Time.deltaTime;
 
-        if (!isWait)
+        if (!IsWait)
         {
             if (gameTime > WaveTime)
             {
                 // 렉 방지 (초과시간 손실 방지)
                 gameTime -= WaveTime;
-                isWait = true;
+                IsWait = true;
             }
         }
         else
@@ -317,7 +340,7 @@ public class GameManager : MonoBehaviour
                 // 렉 방지 (초과시간 손실 방지)
                 gameTime -= waitTime;
                 wave++;
-                isWait = false;
+                IsWait = false;
             }
         }
     }
@@ -372,40 +395,73 @@ public class GameManager : MonoBehaviour
         utilDollarLevels = new int[(int)UtilUpgradeType.Length];
     }
 
-    /// <summary>
-    /// 적을 소환해주는 코루틴
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator SpawnEnemy()
+    [SerializeField]
+    int n_SpawnCount;
+    [SerializeField]
+    int s_SpawnCount;
+
+    int spawnCount = 0;
+
+    IEnumerator SpawnNormal()
     {
-        int spawnIndex;     // 소환해줄 적의 index(타입)
+        n_SpawnCount = Mathf.FloorToInt(15f * Mathf.Pow(wave, 0.23f));
 
-        // 웨이브 데이터의 길이 -> 총 웨이브 수
-        while (Wave < waveDatas.Length)
+        if (n_SpawnCount > 120) n_SpawnCount = 120;
+
+        WaitForSeconds n_wait = new WaitForSeconds((float)WaveTime / n_SpawnCount);
+
+        spawnCount = 0;
+
+        // 대기 시간이 아니라면 계속 소환
+        while (!IsWait)
         {
-            // 원형 소환
-            float t = Random.Range(0f, 2 * Mathf.PI);
+            SpawnEnemy(1);
 
-            Vector3 circlePos;
-            circlePos.x = Mathf.Sin(t * Mathf.Rad2Deg);
-            circlePos.y = Mathf.Cos(t * Mathf.Rad2Deg);
-            circlePos.z = 0;
+            yield return n_wait;
+        }       
+    }
 
-            Vector3 spawnPos = circlePos * 7 + player.transform.position;
+    IEnumerator SpawnSpeed()
+    {
+        s_SpawnCount = Mathf.FloorToInt(3.15f * Mathf.Pow(wave, 0.23f));
 
-            spawnIndex = waveDatas[Wave-1].spawnIndex;
+        if (s_SpawnCount > 25) s_SpawnCount = 25;
 
-            Transform tempEnemy = PoolManager.instance.GetPool((PoolObejectType)spawnIndex).transform;
+        WaitForSeconds s_wait = new WaitForSeconds((float)WaveTime / s_SpawnCount);
 
-            tempEnemy.SetParent(poolManager.GetChild(spawnIndex));
-            // 랜덤한 위치에 생성
-            tempEnemy.position = spawnPos;
-            // 적이 플레이어 방향 바라보게
-            tempEnemy.up = player.transform.position - spawnPos;
+        spawnCount = 0;
 
-            //yield return new WaitForSeconds(1);
-            yield return new WaitForSeconds(3);
+        // 대기 시간이 아니라면 계속 소환
+        while (!IsWait)
+        {
+            SpawnEnemy(2);
+            yield return s_wait;
         }
+    }
+
+    /// <summary>
+    /// 적을 소환해주는 함수
+    /// </summary>
+    /// <param name="index">소환할 적의 인덱스</param>
+    void SpawnEnemy(int index)
+    {
+        // 원형 소환
+        float t = Random.Range(0f, 2 * Mathf.PI);
+
+        Vector3 circlePos;
+        circlePos.x = Mathf.Sin(t * Mathf.Rad2Deg);
+        circlePos.y = Mathf.Cos(t * Mathf.Rad2Deg);
+        circlePos.z = 0;
+
+        Vector3 spawnPos = circlePos * 7 + player.transform.position;
+
+        Transform tempEnemy = PoolManager.instance.GetPool((PoolObejectType)index).transform;
+
+        tempEnemy.SetParent(poolManager.GetChild(index));
+        // 랜덤한 위치에 생성
+        tempEnemy.position = spawnPos;
+        // 적이 플레이어 방향 바라보게
+        tempEnemy.up = player.transform.position - spawnPos;
     }
 
     /// <summary>

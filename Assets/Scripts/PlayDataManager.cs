@@ -166,7 +166,8 @@ public partial class PlayDataManager : MonoBehaviour
 
             LabManager.instance.completeCountUI.SetActive(playData.labCompleteCount == 0 ? false : true);
 
-            LabManager.instance.completeCountUI.GetComponentInChildren<TextMeshProUGUI>().text = playData.labCompleteCount.ToString();
+            LabManager.instance.completeCountUI.GetComponentInChildren<TextMeshProUGUI>().text
+                = playData.labCompleteCount.ToString();
         }
     }
     

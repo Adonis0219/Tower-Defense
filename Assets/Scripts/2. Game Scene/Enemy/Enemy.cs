@@ -4,9 +4,28 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum EnemyType
+{
+    Normal, Speed, Range, Tank, Boss, Length
+}
+
 public class Enemy : PoolObject, IHit
 {
-    [SerializeField]
+    EnemyData myData;
+
+    public EnemyData MyData
+    {
+        get
+        {
+            return myData;
+        }
+        set
+        {
+            myData = value;
+
+            InitSet();
+        }
+    }
     protected float killedDollar = 1;
 
     [SerializeField]
@@ -96,6 +115,12 @@ public class Enemy : PoolObject, IHit
         // 앞으로 이동
         transform.Translate(Vector3.up * moveSpd * Time.deltaTime);
     }
+
+    void InitSet()
+    {
+
+    }
+
     public void Hit(float damage)
     {
         CurrentHp -= damage;

@@ -12883,6 +12883,12 @@ MonoBehaviour:
   poolManager: {fileID: 1017047986}
   gameView: {fileID: 1880545990}
   textCanvas: {fileID: 0}
+  enemyDatas:
+  - {fileID: 11400000, guid: de56c3f2c9ca47d4197f635607b392e3, type: 2}
+  - {fileID: 11400000, guid: d051f518da54c6f499cc1b9e9039dff8, type: 2}
+  - {fileID: 11400000, guid: bbd673f719af26d4198c3e26c88257cf, type: 2}
+  - {fileID: 11400000, guid: 165167c8da74d1c4dbe9ff7fc7b9cd5c, type: 2}
+  - {fileID: 11400000, guid: 54cbdd4ebb279e34c9f9036dbba06b85, type: 2}
   curDollarText: {fileID: 1618057254}
   curCoinText: {fileID: 1112580043}
   curCoin: 10
@@ -12894,24 +12900,7 @@ MonoBehaviour:
   puasePanel: {fileID: 877997332}
   resultPanel: {fileID: 298072916}
   timeScaleText: {fileID: 863058361}
-  waveDatas:
-  - spawnTime: 3
-    spawnIndex: 1
-  - spawnTime: 1
-    spawnIndex: 2
-  - spawnTime: 1
-    spawnIndex: 3
-  - spawnTime: 1
-    spawnIndex: 3
-  - spawnTime: 1
-    spawnIndex: 3
-  - spawnTime: 1
-    spawnIndex: 3
-  - spawnTime: 1
-    spawnIndex: 3
-  - spawnTime: 1
-    spawnIndex: 3
-  isWait: 0
+  wave: 1
   waitTime: 3
   waveHpFactorText: {fileID: 1844743490}
   waveDmgFactorText: {fileID: 526780474}
@@ -12919,6 +12908,8 @@ MonoBehaviour:
   waveDmgFactor: 1.2
   gameTime: 0
   curMultis: 010000000100000001000000
+  n_SpawnCount: 0
+  s_SpawnCount: 0
 --- !u!1 &2021020389
 GameObject:
   m_ObjectHideFlags: 0
