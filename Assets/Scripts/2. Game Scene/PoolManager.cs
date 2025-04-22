@@ -12,7 +12,7 @@ public class PoolObjectData
 // 생성할 풀 오브젝트의 타입 열거형
 public enum PoolObejectType
 {
-    bullet, normal, speed, range, tank, dollarText, coinText, damageText
+    Bullet, Normal, Speed, Range, Tank, Boss, DollarText, CoinText, DamageText
 }
 
 public class PoolManager : MonoBehaviour
@@ -36,7 +36,8 @@ public class PoolManager : MonoBehaviour
             // 새로운 empty를 만들어 그것을 오리지널의 이름으로 한다
             GameObject parent = new GameObject();
             parent.transform.SetParent(transform);
-            parent.name = poolObjDatas[i].original.name;
+            //parent.name = poolObjDatas[i].original.name;
+            parent.name = ((PoolObejectType)i).ToString();
         }
 
         Init();
@@ -68,6 +69,7 @@ public class PoolManager : MonoBehaviour
         // 만든 오브젝트
         // PoolDatas 배열의 index 번째의 원본을 복제하여 자신의 자식으로 설정한 후 반환한다
         GameObject createObject = Instantiate(poolObjDatas[index].original, transform.GetChild(index));
+        createObject.name = ((PoolObejectType)index).ToString();
 
         return createObject;
     }

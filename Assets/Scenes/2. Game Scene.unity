@@ -6862,14 +6862,16 @@ MonoBehaviour:
   poolObjDatas:
   - initCount: 10
     original: {fileID: 2807232047416724531, guid: 2e293d35d05fff94bb5e8b4513199251, type: 3}
+  - initCount: 20
+    original: {fileID: 4377328187883335764, guid: aacc34befd00f5f4badc8fd4ae6c38fb, type: 3}
+  - initCount: 15
+    original: {fileID: 4377328187883335764, guid: aacc34befd00f5f4badc8fd4ae6c38fb, type: 3}
+  - initCount: 10
+    original: {fileID: 4377328187883335764, guid: aacc34befd00f5f4badc8fd4ae6c38fb, type: 3}
   - initCount: 3
     original: {fileID: 4377328187883335764, guid: aacc34befd00f5f4badc8fd4ae6c38fb, type: 3}
-  - initCount: 5
-    original: {fileID: 4377328187883335764, guid: db0892259aae64f4fb4e1030b78c5121, type: 3}
-  - initCount: 5
-    original: {fileID: 4377328187883335764, guid: e39d09ee61ed2d049ac200caf8367c5e, type: 3}
-  - initCount: 3
-    original: {fileID: 4377328187883335764, guid: de86556b9e6b97d40adc004a914ef94e, type: 3}
+  - initCount: 1
+    original: {fileID: 4377328187883335764, guid: aacc34befd00f5f4badc8fd4ae6c38fb, type: 3}
   - initCount: 5
     original: {fileID: 10048564170191881, guid: b2bd9354b3e7d0e47b6846d838ae7153, type: 3}
   - initCount: 5
@@ -12908,8 +12910,6 @@ MonoBehaviour:
   waveDmgFactor: 1.2
   gameTime: 0
   curMultis: 010000000100000001000000
-  n_SpawnCount: 0
-  s_SpawnCount: 0
 --- !u!1 &2021020389
 GameObject:
   m_ObjectHideFlags: 0

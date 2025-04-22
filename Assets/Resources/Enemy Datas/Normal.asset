@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Normal
   m_EditorClassIdentifier: 
   type: 0
-  killedDollar: 1
-  moveSpeed: 1
-  baseMaxHp: 2
-  baseDmg: 1
-  spawnRate: 1
+  spawnRate: 15
   maxSpawnCount: 120
+  sprite: {fileID: 21300000, guid: 6ce8c9e72a781b94698a525348201bd2, type: 3}
+  scale: 0.25
+  killedDollar: 1
+  killedCoin: 0
+  moveSpeed: 1
+  baseMaxHp: 1
+  baseDmg: 1

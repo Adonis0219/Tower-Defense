@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum EnemyType
 {
@@ -11,6 +12,12 @@ public enum EnemyType
 
 public class Enemy : PoolObject, IHit
 {
+    Player player;
+    Rigidbody2D rb;
+    WaitForSeconds wait;
+
+    [Header("# Info")]
+    [SerializeField]
     EnemyData myData;
 
     public EnemyData MyData
@@ -26,7 +33,16 @@ public class Enemy : PoolObject, IHit
             InitSet();
         }
     }
-    protected float killedDollar = 1;
+    
+    public EnemyType myType;
+
+    [SerializeField]
+    public SpriteRenderer sprRen;
+
+    [Header("# Status")]
+    public float killedDollar;
+
+    public float killedCoin;
 
     [SerializeField]
     public float moveSpd;
@@ -34,8 +50,6 @@ public class Enemy : PoolObject, IHit
     [SerializeField]
     float baseMaxHp;
     
-    Player player;
-
     public float BaseMaxHp
     {
         get { return baseMaxHp; }
@@ -68,14 +82,12 @@ public class Enemy : PoolObject, IHit
     /// 기본 충돌 데미지
     /// </summary>
     [SerializeField]
-    float baseCollDamage;
+    float baseDamage;
 
-    float collDamage;
+    float damage;
 
     ////////// 넉백
     bool isKnockBack = false;
-    Rigidbody2D rb;
-    WaitForSeconds wait;
 
     // 저속 오라 감지
     bool isSlowed = false;
@@ -84,12 +96,13 @@ public class Enemy : PoolObject, IHit
     {
         player = GameManager.instance.player;
         rb = GetComponent<Rigidbody2D>();
+        sprRen = GetComponent<SpriteRenderer>();
         wait = new WaitForSeconds(.1f);
     }
 
     private void OnEnable()
     {
-        collDamage = baseCollDamage * GameManager.instance.waveDmgFactor;
+        damage = baseDamage * GameManager.instance.waveDmgFactor;
         maxHp = BaseMaxHp * GameManager.instance.waveHpFactor;
         // 소환될 때 배수만큼 곱해주기
         CurrentHp = maxHp;
@@ -118,7 +131,15 @@ public class Enemy : PoolObject, IHit
 
     void InitSet()
     {
+        myType = MyData.type;
+        sprRen.sprite = MyData.sprite;
+        transform.localScale = Vector3.one * MyData.scale;
 
+        killedDollar = MyData.killedDollar;
+        killedCoin = MyData.killedCoin;
+        moveSpd = MyData.moveSpeed;
+        BaseMaxHp = MyData.baseMaxHp;
+        baseDamage = MyData.baseDmg;
     }
 
     public void Hit(float damage)
@@ -128,7 +149,7 @@ public class Enemy : PoolObject, IHit
 
     IHit hitObj;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
         hitObj = collision.gameObject.GetComponent<IHit>();
 
@@ -148,22 +169,12 @@ public class Enemy : PoolObject, IHit
     {
         while (gameObject.activeSelf)
         {
-            hitObj.Hit(collDamage);
+            hitObj.Hit(damage);
             // 가시 반사 대미지 (퍼센트값이므로 .01f하여 적용)
             CurrentHp -= maxHp * (player.ThronsPer * .01f);
 
             yield return new WaitForSeconds(2f);
         }
-    }
-
-    protected virtual void OnDead()
-    {
-        // 코루틴이 끝나기 전에 죽으면 isKnockback이 true 상태
-        isKnockBack = false;
-
-        // Dollar 획득
-        GameManager.instance.GoodsFactor(killedDollar, this.transform, true);
-        ReturnPool();
     }
 
     IEnumerator KnockBack()
@@ -175,5 +186,17 @@ public class Enemy : PoolObject, IHit
 
         rb.velocity = Vector2.zero;
         isKnockBack = false;
+    }
+
+    public void OnDead()
+    {
+        // 코루틴이 끝나기 전에 죽으면 isKnockback이 true 상태
+        isKnockBack = false;
+
+        // Dollar 획득
+        GameManager.instance.GoodsFactor(killedDollar, this.transform, true);
+        // Coin 획득
+        GameManager.instance.GoodsFactor(killedCoin, this.transform, false);
+        ReturnPool();
     }
 }

@@ -64,7 +64,7 @@ public class Bullet : PoolObject
     // 총알의 최종 대미지
     float finalDmg;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         // 맞은 상대방에게서 IHit을 가져온다
         IHit hitObj = collision.GetComponent<IHit>();
@@ -170,7 +170,7 @@ public class Bullet : PoolObject
 
     void SpawnUpText(float dmg)
     {
-        GameObject tempDamageText = PoolManager.instance.GetPool(PoolObejectType.damageText);
+        GameObject tempDamageText = PoolManager.instance.GetPool(PoolObejectType.DamageText);
         tempDamageText.transform.position = this.transform.position;
 
         TextMeshPro tempDamageTextMesh = tempDamageText.GetComponent<TextMeshPro>();

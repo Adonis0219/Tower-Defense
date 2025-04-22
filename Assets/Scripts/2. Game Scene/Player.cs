@@ -334,7 +334,7 @@ public class Player : MonoBehaviour, IHit
     void Shoot(Transform target)
     {
         // 총알 생성
-        Transform tempBullet = PoolManager.instance.GetPool(PoolObejectType.bullet).transform;
+        Transform tempBullet = PoolManager.instance.GetPool(PoolObejectType.Bullet).transform;
         // 부모 설정
         tempBullet.SetParent(GameManager.instance.poolManager.GetChild(0));
         // 초기 위치 설정

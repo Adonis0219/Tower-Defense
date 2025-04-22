@@ -11,9 +11,11 @@ public class MUtilUpgradeButton : MUpgradeButton
 
     private void Update()
     {
-        bt.interactable = PlayDataManager.Instance.MainCoin > upCost ? true : false;
+        float cost = Mathf.FloorToInt(upCost * Sale(MainRschType.유틸할인));
 
-        costText.text = "<sprite=12>" + Mathf.FloorToInt(upCost * Sale(MainRschType.유틸할인));
+        bt.interactable = PlayDataManager.Instance.MainCoin > cost ? true : false;
+
+        costText.text = "<sprite=12>" + cost;
 
         switch (myUpType)
         {

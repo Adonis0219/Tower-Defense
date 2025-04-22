@@ -29,8 +29,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public Transform textCanvas;
 
+
+    [Header("# Enemy")]
     [SerializeField]
     public EnemyData[] enemyDatas = new EnemyData[(int)EnemyType.Length];
+
+    int spawnCount;
+
+    Coroutine[] enemyCorus = new Coroutine[4];
 
     [Header("##  Goods")]
     [Header("# Dollar")]
@@ -256,16 +262,11 @@ public class GameManager : MonoBehaviour
             isWait = value;
 
             if (!IsWait)
-                coru = StartCoroutine(SpawnNormal());
-                //coru = StartCoroutine(SpawnSpeed());
+                StartSpawn();
             else
-            {
-                StopCoroutine(coru);
-                Debug.Log(spawnCount);
-            }
+                StopSpawn();
         }
     }
-
 
     [SerializeField]
     TextMeshProUGUI waveHpFactorText;
@@ -339,7 +340,7 @@ public class GameManager : MonoBehaviour
             {
                 // 렉 방지 (초과시간 손실 방지)
                 gameTime -= waitTime;
-                wave++;
+                Wave++;
                 IsWait = false;
             }
         }
@@ -394,48 +395,50 @@ public class GameManager : MonoBehaviour
         defDollarLevels = new int[(int)DefUpgradeType.Length];
         utilDollarLevels = new int[(int)UtilUpgradeType.Length];
     }
-
-    [SerializeField]
-    int n_SpawnCount;
-    [SerializeField]
-    int s_SpawnCount;
-
-    int spawnCount = 0;
-
-    IEnumerator SpawnNormal()
+  
+    /// <summary>
+    /// 소환 시작
+    /// </summary>
+    void StartSpawn()
     {
-        n_SpawnCount = Mathf.FloorToInt(15f * Mathf.Pow(wave, 0.23f));
-
-        if (n_SpawnCount > 120) n_SpawnCount = 120;
-
-        WaitForSeconds n_wait = new WaitForSeconds((float)WaveTime / n_SpawnCount);
-
-        spawnCount = 0;
-
-        // 대기 시간이 아니라면 계속 소환
-        while (!IsWait)
+        for (int i = 0; i < 4; i++)
         {
-            SpawnEnemy(1);
-
-            yield return n_wait;
-        }       
+            enemyCorus[i] = StartCoroutine(OnSpawnEnemy(i));
+        }
     }
 
-    IEnumerator SpawnSpeed()
+    /// <summary>
+    /// 소환 정지
+    /// </summary>
+    void StopSpawn()
     {
-        s_SpawnCount = Mathf.FloorToInt(3.15f * Mathf.Pow(wave, 0.23f));
+        for (int i = 0; i < 4; i++)
+        {
+            StopCoroutine(enemyCorus[i]);
+        }
+    }
 
-        if (s_SpawnCount > 25) s_SpawnCount = 25;
+    /// <summary>
+    /// 각 적을 소환해주는 코루틴
+    /// </summary>
+    /// <param name="index">소환할 적의 인덱스 번호</param>
+    /// <returns></returns>
+    IEnumerator OnSpawnEnemy(int index)
+    {
+        EnemyData data = enemyDatas[index];
 
-        WaitForSeconds s_wait = new WaitForSeconds((float)WaveTime / s_SpawnCount);
+        spawnCount = Mathf.FloorToInt(data.spawnRate * Mathf.Pow(wave, .23f));
 
-        spawnCount = 0;
+        if (spawnCount > data.maxSpawnCount) spawnCount = data.maxSpawnCount;
+
+        WaitForSeconds wait = new WaitForSeconds((float)WaveTime / spawnCount);
 
         // 대기 시간이 아니라면 계속 소환
         while (!IsWait)
         {
-            SpawnEnemy(2);
-            yield return s_wait;
+            yield return wait;
+
+            SpawnEnemy(index);
         }
     }
 
@@ -455,9 +458,11 @@ public class GameManager : MonoBehaviour
 
         Vector3 spawnPos = circlePos * 7 + player.transform.position;
 
-        Transform tempEnemy = PoolManager.instance.GetPool((PoolObejectType)index).transform;
+        Transform tempEnemy = PoolManager.instance.GetPool((PoolObejectType)(index + 1)).transform;
+        // 적 정보 넣어주기
+        tempEnemy.GetComponent<Enemy>().MyData = enemyDatas[index];
 
-        tempEnemy.SetParent(poolManager.GetChild(index));
+        tempEnemy.SetParent(poolManager.GetChild(index + 1));
         // 랜덤한 위치에 생성
         tempEnemy.position = spawnPos;
         // 적이 플레이어 방향 바라보게
@@ -575,7 +580,7 @@ public class GameManager : MonoBehaviour
     {
         // UpText 복사하여 죽은 위치에 올려주기
         // 달러라면 dollar의 풀오브젝트 가져오기
-        GameObject tempUpText = PoolManager.instance.GetPool(isDollar ? PoolObejectType.dollarText : PoolObejectType.coinText);
+        GameObject tempUpText = PoolManager.instance.GetPool(isDollar ? PoolObejectType.DollarText : PoolObejectType.CoinText);
 
         // 생성한 글자를 가져와서 글자와 색을 변경
         TextMeshPro tempUpTextMesh = tempUpText.GetComponent<TextMeshPro>();
@@ -600,6 +605,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
+    /// <summary>
+    /// 배속 조절 클릭 시 실행하는 함수
+    /// </summary>
+    /// <param name="isUp">증가인지 감소인지 확인</param>
     public void OnScaleUpClick(bool isUp)
     {
         if (CurTimeScale == MaxTimeScale)

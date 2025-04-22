@@ -38,7 +38,7 @@ public class UpText : PoolObject
 
         while (a > 0)
         {
-            if (poolType != PoolObejectType.damageText)
+            if (poolType != PoolObejectType.DamageText)
             {
                 // 점점 올라감
                 transform.position += Vector3.up * upSpeed * Time.deltaTime;

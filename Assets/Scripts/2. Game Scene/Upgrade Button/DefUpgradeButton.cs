@@ -22,7 +22,7 @@ public class DefUpgradeButton : UpgradeButton
 
     private void Update()
     {
-        bt.interactable = GameManager.instance.CurDollar < upCost ? false : true;
+        bt.interactable = GameManager.instance.CurDollar < SetCost(1) ? false : true;
 
         SetMultiText(1);
 
