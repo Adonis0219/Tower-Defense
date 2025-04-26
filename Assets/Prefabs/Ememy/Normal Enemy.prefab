@@ -101,10 +101,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolType: 1
   myData: {fileID: 0}
-  myType: 0
+  myType: 1
   sprRen: {fileID: 0}
+  killedDollar: 0
+  killedCoin: 0
   moveSpd: 1
-  baseMaxHp: 2
+  baseMaxHp: 1
   maxHp: 0
   currentHp: 0
   baseDamage: 0

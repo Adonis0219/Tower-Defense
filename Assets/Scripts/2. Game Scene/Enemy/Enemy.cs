@@ -5,11 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum EnemyType
-{
-    Normal, Speed, Range, Tank, Boss, Length
-}
-
 public class Enemy : PoolObject, IHit
 {
     Player player;
@@ -33,8 +28,6 @@ public class Enemy : PoolObject, IHit
             InitSet();
         }
     }
-    
-    public EnemyType myType;
 
     [SerializeField]
     public SpriteRenderer sprRen;
@@ -86,6 +79,9 @@ public class Enemy : PoolObject, IHit
 
     float damage;
 
+    // 플레이어와의 거리
+    float range;
+
     ////////// 넉백
     bool isKnockBack = false;
 
@@ -102,6 +98,8 @@ public class Enemy : PoolObject, IHit
 
     private void OnEnable()
     {
+        MyData = GameManager.instance.enemyDatas[(int)poolType - 1];
+
         damage = baseDamage * GameManager.instance.waveDmgFactor;
         maxHp = BaseMaxHp * GameManager.instance.waveHpFactor;
         // 소환될 때 배수만큼 곱해주기
@@ -111,19 +109,21 @@ public class Enemy : PoolObject, IHit
     // Update is called once per frame
     void Update()
     {
-        if (isKnockBack) return;
+        if (player == null || isKnockBack) return;
 
-        float range = Vector2.Distance(player.transform.position, this.transform.position);
 
+        range = Vector2.Distance(player.transform.position, this.transform.position);
+
+
+        // 슬로우 카드 장착돼있고
         // 슬로우가 안 걸렸고, 범위 내에 들어오면 슬로우 적용
-        if (!isSlowed && (player.Range / 10 > range))
+        if (PlayDataManager.Instance.CheckCard(CardID.저속오라) && !isSlowed && (player.Range / 10 > range))
         {
-            CardData card = CardManager.instance.cardDatas[(int)CardID.저속오라];
-
-            moveSpd *= (1 - (card.value[card.curLv] / 100));
-
-            isSlowed = true;
+            Slow();
         }
+
+        // 방향 지속적으로 설정
+        transform.up = player.transform.position - transform.position;
 
         // 앞으로 이동
         transform.Translate(Vector3.up * moveSpd * Time.deltaTime);
@@ -131,7 +131,7 @@ public class Enemy : PoolObject, IHit
 
     void InitSet()
     {
-        myType = MyData.type;
+        poolType = MyData.type;
         sprRen.sprite = MyData.sprite;
         transform.localScale = Vector3.one * MyData.scale;
 
@@ -149,11 +149,14 @@ public class Enemy : PoolObject, IHit
 
     IHit hitObj;
 
-    private void OnCollisionStay2D(Collision2D collision)
+    Coroutine atkCoru;
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         hitObj = collision.gameObject.GetComponent<IHit>();
 
-        if (hitObj != null) StartCoroutine(Attack());
+        // 적끼리 부딪혔을 때 발생 x
+        if (hitObj != null && collision.transform.name == "Tower") atkCoru = StartCoroutine(Attack());
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -188,15 +191,34 @@ public class Enemy : PoolObject, IHit
         isKnockBack = false;
     }
 
+    void Slow()
+    {
+        CardData card = CardManager.instance.cardDatas[(int)CardID.저속오라];
+
+        moveSpd *= (1 - (card.value[card.curLv] / 100));
+
+        isSlowed = true;
+    }
+
     public void OnDead()
     {
+        if (atkCoru != null)
+            // 죽으면 공격 작동하지 않도록 멈추기
+            StopCoroutine(atkCoru); 
+
         // 코루틴이 끝나기 전에 죽으면 isKnockback이 true 상태
         isKnockBack = false;
 
         // Dollar 획득
         GameManager.instance.GoodsFactor(killedDollar, this.transform, true);
-        // Coin 획득
-        GameManager.instance.GoodsFactor(killedCoin, this.transform, false);
+
+        // 일반적이 아닐 때
+        if (killedCoin != 0)
+        {
+            // Coin 획득
+            GameManager.instance.GoodsFactor(killedCoin, this.transform, false);
+        }
+
         ReturnPool();
     }
 }

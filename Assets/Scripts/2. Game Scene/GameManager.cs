@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     [Header("# Enemy")]
     [SerializeField]
-    public EnemyData[] enemyDatas = new EnemyData[(int)EnemyType.Length];
+    public EnemyData[] enemyDatas = new EnemyData[5];
 
     int spawnCount;
 
@@ -297,6 +297,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        InitReset();
+    }
+
+    /// <summary>
+    /// 초기 실행 시 각 정보들을 초기화 해주기 위해 실행하는 함수
+    /// </summary>
+    void InitReset()
+    {
         CurTimeScale = 1f;
 
         CurCoin = PlayDataManager.Instance.MainCoin;
@@ -307,8 +315,10 @@ public class GameManager : MonoBehaviour
 
         // 첫 스폰을 위한 초기화
         IsWait = false;
-    }
 
+        waveDmgFactorText.text = waveDmgFactor.ToString("F2");
+        waveHpFactorText.text = waveHpFactor.ToString("F2");
+    }
 
 
     private void Update()
@@ -431,7 +441,7 @@ public class GameManager : MonoBehaviour
 
         if (spawnCount > data.maxSpawnCount) spawnCount = data.maxSpawnCount;
 
-        WaitForSeconds wait = new WaitForSeconds((float)WaveTime / spawnCount);
+        WaitForSeconds wait = new WaitForSeconds((float)(WaveTime + 1) / spawnCount);
 
         // 대기 시간이 아니라면 계속 소환
         while (!IsWait)
@@ -459,14 +469,12 @@ public class GameManager : MonoBehaviour
         Vector3 spawnPos = circlePos * 7 + player.transform.position;
 
         Transform tempEnemy = PoolManager.instance.GetPool((PoolObejectType)(index + 1)).transform;
-        // 적 정보 넣어주기
-        tempEnemy.GetComponent<Enemy>().MyData = enemyDatas[index];
 
         tempEnemy.SetParent(poolManager.GetChild(index + 1));
         // 랜덤한 위치에 생성
         tempEnemy.position = spawnPos;
-        // 적이 플레이어 방향 바라보게
-        tempEnemy.up = player.transform.position - spawnPos;
+        //// 적이 플레이어 방향 바라보게
+        //tempEnemy.up = player.transform.position - spawnPos;
     }
 
     /// <summary>

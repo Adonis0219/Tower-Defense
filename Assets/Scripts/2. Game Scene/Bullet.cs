@@ -1,76 +1,119 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : PoolObject
 {
     [SerializeField]
+    TextMeshPro damageText;
+    Player player;
+    public Transform target;
+
+    [Header("# Info")]
+    [SerializeField]
     float speed;
 
-    [SerializeField]
-    TextMeshPro damageText;
-
-    Player player;
-
     bool isCritBullet = false;
-    bool isBouncBullet;
+    bool isBouncBullet = false;
+
+
     int bounceCount;
 
+    // 총알의 기본 대미지
     float bulletDmg;
+    // 총알의 최종 대미지
+    float finalDmg;
 
-    public Transform target;
+    [Header("# Detect")]
+    // 이전 프레임 위치 저장
+    Vector3 prePos;
+    
+    Collider2D enemy;
+
+    // 탐지된 적들
+    Collider2D[] detectedEnemies;
+
+    [SerializeField]
+    /// <summary>
+    /// 이미 맞은 적들
+    /// </summary>
+    List<Collider2D> hitEnemies = new List<Collider2D>();
+
 
     private void Awake()
     {
         player = GameManager.instance.player;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        StartCoroutine(Delete());
-
-        speed = 15;
+        speed = 5;
 
         isBouncBullet = GameManager.instance.IsChanceTrue(player.BounceChance);
         // 매개변수로 크확을 넣었으므로 -> 크리티컬인가?
         isCritBullet = GameManager.instance.IsChanceTrue(player.CritChance);
+
         bulletDmg = player.Damage;
 
         bounceCount = player.BounceCount;
+
+        // 맞은 적 초기화 해주기
+        hitEnemies.Clear();
     }
 
-    [SerializeField]
-    //float lineSize = 1000f;
+    // 감지된 적의 인덱스
+    int detectedIndex;
 
     // Update is called once per frame
     void Update()
     {
-        transform.up = target.position - transform.position;
+        // 날아가는 도중에 타겟이 사라진다면
+        if (!target.gameObject.activeSelf)
+            ReturnPool();
+
+        //if (!target.gameObject.activeSelf)
+        //{
+        //    // 바운스 총알이 아니라면 없어지기
+        //    if (!isBouncBullet) ReturnPool();
+        //    else // 바운스 총알이라면 다음 타겟 찾아가기
+        //    {
+        //        detectedEnemies = Physics2D.OverlapCircleAll(transform.position,
+        //                            player.BounceRange / 10, player.enemyMask);
+        //        target = detectedEnemies[0].transform;
+        //    }
+        //}
+
+            transform.up = target.position - transform.position;
+
         transform.Translate(Vector3.up * speed * Time.deltaTime);
+
+        Vector3 posChange = prePos - transform.position;
+
+        // 이전 프레임과 현재 프레임 사이의 레이에 맞는 물체 찾기
+        RaycastHit2D[] hitObjs = 
+            Physics2D.RaycastAll(transform.position, posChange, Vector2.Distance(prePos, transform.position));
+
+        // 맞은 물체 중 적이 있다면
+        if (Array.Find(hitObjs, x => x.transform.tag == "Enemy"))
+        {
+            // 적의 collider2d를 빼와서 저장
+            enemy = Array.Find(hitObjs, x => x.transform.tag == "Enemy").transform.GetComponent<Collider2D>();
+            EnemyHit();
+        }
     }
 
-    // 2초 뒤에 자신을 삭제
-    IEnumerator Delete()
+    private void LateUpdate()
     {
-        yield return new WaitForSeconds(4f);
-        ReturnPool();
+        prePos = transform.position;
     }
 
-    Collider2D[] colliders;
-    List<Collider2D> hitEnemies = new List<Collider2D>();
-
-    // 총알의 최종 대미지
-    float finalDmg;
-
-    private void OnTriggerStay2D(Collider2D collision)
+    void EnemyHit()
     {
-        // 맞은 상대방에게서 IHit을 가져온다
-        IHit hitObj = collision.GetComponent<IHit>();
-
-        if (hitObj == null)
-            return;
+        IHit hitObj = enemy.GetComponent<IHit>();
 
         BulletDmgFormula();
 
@@ -78,18 +121,18 @@ public class Bullet : PoolObject
         hitObj.Hit(finalDmg);
 
         // 이미 맞은 적에 자신 추가
-        hitEnemies.Add(collision);
+        hitEnemies.Add(enemy);
 
         // 플레이어 흡혈 발동
         player.LifeSteal(finalDmg);
 
         // 부딪힌 적의 액티브가 꺼져있지 않다면 -> 살아있다면
-        if (collision.transform.gameObject.activeSelf == true) SpawnUpText(finalDmg);
+        if (enemy.transform.gameObject.activeSelf == true) SpawnUpText(finalDmg);
 
         // 바운스 총알이고, 바운스 횟수가 남아있다면
         if (isBouncBullet && bounceCount > 0)
         {
-            Bounce(collision);
+            Bounce(enemy);
         }
         else
         {
@@ -99,14 +142,17 @@ public class Bullet : PoolObject
 
     void Bounce(Collider2D collision)   
     {
+        // 총알 속도 올려주기
+        speed = 10;
+
         bounceCount--;
 
         // 바운스범위 내의 적 모두 찾기
-        colliders = Physics2D.OverlapCircleAll(transform.position, 
+        detectedEnemies = Physics2D.OverlapCircleAll(transform.position, 
             player.BounceRange / 10, player.enemyMask);
 
         // 타겟이 없다면 리턴풀 후 얼리
-        if (colliders.Length == 0)
+        if (detectedEnemies.Length == 0)
         {
             ReturnPool();
             return;
@@ -116,25 +162,25 @@ public class Bullet : PoolObject
         SortArrayByNearest();
 
         // 맞은 적이 죽지 않았다면
-        if (colliders[0] == collision)
+        if (detectedEnemies[0] == collision)
         {
             // 범위 내에 죽지 않은 적이 처음 맞은 적밖에 없다면
-            if (colliders.Length == 1)
+            if (detectedEnemies.Length == 1)
             {
                 ReturnPool();
             }
             else
             {
                 // 타겟을 우선 정해주고
-                target = colliders[1].transform;
+                target = detectedEnemies[1].transform;
 
                 // 그 타겟이 맞은 에너미인지 검사
-                for (int i = 1; i < colliders.Length; i++)
+                for (int i = 1; i < detectedEnemies.Length; i++)
                 {
                     // 이미 맞았던 적의 리스트에 들어있지 않다면
-                    if (!hitEnemies.Contains(colliders[i]))
+                    if (!hitEnemies.Contains(detectedEnemies[i]))
                     {
-                        target = colliders[i].transform;
+                        target = detectedEnemies[i].transform;
                         break;
                     }
                 }
@@ -143,13 +189,14 @@ public class Bullet : PoolObject
         else // 맞은 적이 죽었다면
         {
             // 다음 적으로 타겟 설정
-            target = colliders[0].transform;
+            target = detectedEnemies[0].transform;
 
-            for (int i = 0; i < colliders.Length; i++)
+            for (int i = 0; i < detectedEnemies.Length; i++)
             {
-                if (!hitEnemies.Contains(colliders[i]))
+                if (!hitEnemies.Contains(detectedEnemies[i]))
                 {
-                    target = colliders[i].transform;
+                    target = detectedEnemies[i].transform;
+                    detectedIndex = i;
                     break;
                 }
             }
@@ -180,14 +227,14 @@ public class Bullet : PoolObject
 
     void SortArrayByNearest()
     {      
-        Transform nearestTarget = colliders[0].transform;
+        Transform nearestTarget = detectedEnemies[0].transform;
         float nearestDist = Vector3.Distance(nearestTarget.position, transform.position);
         float checkDist;
 
-        for (int i = 1; i < colliders.Length; i++)
+        for (int i = 1; i < detectedEnemies.Length; i++)
         {
             // 체크할 거리 설정
-            checkDist = Vector3.Distance(colliders[i].transform.position, transform.position);
+            checkDist = Vector3.Distance(detectedEnemies[i].transform.position, transform.position);
 
             // 체크 거리가 더 짧다면
             if (checkDist < nearestDist)
@@ -200,8 +247,8 @@ public class Bullet : PoolObject
 
     void Swap(int swapIndex)
     {
-        Collider2D temp = colliders[0];
-        colliders[0] = colliders[swapIndex];
-        colliders[swapIndex] = temp;
+        Collider2D temp = detectedEnemies[0];
+        detectedEnemies[0] = detectedEnemies[swapIndex];
+        detectedEnemies[swapIndex] = temp;
     }
 }

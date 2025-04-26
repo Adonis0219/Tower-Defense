@@ -40,12 +40,19 @@ public class MUpgradeButton : MonoBehaviour
         costText.text = "$" + cost;
     }
 
+    protected void SetCost(int type)
+    {
+        int cost = upCost;
+
+        Mathf.FloorToInt(cost * Sale(MainRschType.공격할인));
+    }
+
     /// <summary>
     /// 작업장 할인 함수
     /// </summary>
     /// <param name="type">할인할 작업장</param>
     /// <returns></returns>
-    public float Sale(MainRschType type)
+    protected float Sale(MainRschType type)
     {
         return 1 - (.005f * PlayDataManager.Instance.playData.labResearchLevels
             [(int)ResearchType.Main, (int)type]);

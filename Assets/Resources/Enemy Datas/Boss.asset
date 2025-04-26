@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 797ddde441c83a244861342c2d6433ce, type: 3}
   m_Name: Boss
   m_EditorClassIdentifier: 
-  type: 4
+  type: 5
   spawnRate: 0
   maxSpawnCount: 1
   sprite: {fileID: 21300000, guid: 067fae93e8c3dbc4299847abc3a033f6, type: 3}
   scale: 1.2
   killedDollar: 1
+  killedCoin: 0
   moveSpeed: 1
   baseMaxHp: 2
   baseDmg: 1

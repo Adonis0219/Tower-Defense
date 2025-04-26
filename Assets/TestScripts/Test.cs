@@ -7,5 +7,12 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Test : TestManager
 {
-    
+    private void Start()
+    {
+        Debug.Log("Start");
+    }
+    private void OnEnable()
+    {
+        Debug.Log("OnEnable");
+    }
 }

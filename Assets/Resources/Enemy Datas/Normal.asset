@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 797ddde441c83a244861342c2d6433ce, type: 3}
   m_Name: Normal
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   spawnRate: 15
   maxSpawnCount: 120
   sprite: {fileID: 21300000, guid: 6ce8c9e72a781b94698a525348201bd2, type: 3}

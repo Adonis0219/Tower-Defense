@@ -300,6 +300,21 @@ public class Print
         Debug.Log(printStr);
     }
 
+    public static void Array(RaycastHit2D[] arr)
+    {
+#if !UNITY_EDITOR
+    return;
+#endif
+        string printStr = "";
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            printStr += arr[i].transform.name + " ";
+        }
+
+        Debug.Log(printStr);
+    }
+
     public static void Array2D(int[,] arr)
     {
 #if !UNITY_EDITOR

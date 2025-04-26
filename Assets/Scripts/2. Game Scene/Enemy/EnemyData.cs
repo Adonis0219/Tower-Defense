@@ -7,7 +7,7 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     [Header("# Enemy Info")]
-    public EnemyType type;
+    public PoolObejectType type;
     public float spawnRate;
     public int maxSpawnCount;
     public Sprite sprite;

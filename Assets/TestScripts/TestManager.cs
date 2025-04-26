@@ -5,8 +5,4 @@ using UnityEngine;
 
 public class TestManager : Singleton<TestManager>
 {
-    private void Update()
-    {
-        Debug.Log("1");
-    }
 }

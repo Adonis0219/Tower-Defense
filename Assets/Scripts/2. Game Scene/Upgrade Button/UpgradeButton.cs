@@ -58,7 +58,7 @@ public class UpgradeButton : MonoBehaviour
         int cost = upCost;
         int multi = GameManager.instance.curMultis[type];
 
-        for (int i = 0; i < multi; i++)
+        for (int i = 1; i < multi; i++)
         {
             cost += Mathf.RoundToInt(cost * upFactor);
         }

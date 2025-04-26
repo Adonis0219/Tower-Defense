@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 797ddde441c83a244861342c2d6433ce, type: 3}
   m_Name: Tank
   m_EditorClassIdentifier: 
-  type: 3
+  type: 4
   spawnRate: 0.625
   maxSpawnCount: 5
   sprite: {fileID: 21300000, guid: 2081ab43ab5d4b34fa29cc63be5b8750, type: 3}

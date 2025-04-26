@@ -7,6 +7,7 @@ public class Player : MonoBehaviour, IHit
 {
     [Header("# Player Status")]
     [Header("  # ATTACK")]
+    [SerializeField]
     float damage;
 
     public float Damage
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour, IHit
         // 외부에선 설정할 필요가 없으므로 Set은 없다
     }
 
+    [SerializeField]
     float critChance;
 
     public float CritChance
@@ -30,6 +32,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float critFactor;
 
     public float CritFactor
@@ -40,6 +43,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float atkSpd;
 
     public float AtkSpd
@@ -50,6 +54,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float range;
 
     /// <summary>
@@ -63,6 +68,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float dmgPerMeter;
 
     public float DmgPerMeter
@@ -75,6 +81,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float multiChance;
 
     public float MultiChance
@@ -83,10 +90,12 @@ public class Player : MonoBehaviour, IHit
         {
             multiChance = .5f * (PlayDataManager.Instance.playData.atkCoinLevels[(int)AtkUpgradeType.멀티샷확률] 
                 + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.멀티샷확률]);
-            return multiChance;
+            //return multiChance;
+            return 100;
         }
     }
 
+    [SerializeField]
     int multiCount;
 
     public int MultiCount
@@ -99,6 +108,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float bounceChance;
 
     public float BounceChance
@@ -107,10 +117,12 @@ public class Player : MonoBehaviour, IHit
         {
             bounceChance = .5f * (PlayDataManager.Instance.playData.atkCoinLevels[(int)AtkUpgradeType.바운스샷확률] 
                 + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.바운스샷확률]);
-            return bounceChance;
+            //return bounceChance;
+            return 100;
         }
     }
 
+    [SerializeField]
     int bounceCount;
 
     public int BounceCount
@@ -123,6 +135,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float bounceRange;
 
     /// <summary>
@@ -194,6 +207,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float absDef;
     public float AbsDef
     {
@@ -203,6 +217,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float thronsPer;
     /// <summary>
     /// 가시 대미지 퍼센트
@@ -217,6 +232,7 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
+    [SerializeField]
     float lifeStealPer;
 
     /// <summary>
@@ -231,7 +247,6 @@ public class Player : MonoBehaviour, IHit
             return lifeStealPer;
         }
     }
-
 
     [SerializeField]
     float knockbackChance;
@@ -339,7 +354,9 @@ public class Player : MonoBehaviour, IHit
         tempBullet.SetParent(GameManager.instance.poolManager.GetChild(0));
         // 초기 위치 설정
         tempBullet.position = transform.position;
-        
+
+        tempBullet.up = target.position - transform.position;
+
         // 바라볼 방향을 위해 Target 설정
         tempBullet.GetComponent<Bullet>().target = target;
     }
@@ -363,8 +380,8 @@ public class Player : MonoBehaviour, IHit
 
     void Dead()
     {
-        GameManager.instance.ResultPanelSetActive(true);
         Time.timeScale = 0;
+        GameManager.instance.ResultPanelSetActive(true);
         Destroy(gameObject);
     }
 

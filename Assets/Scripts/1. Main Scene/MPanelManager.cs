@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MPanelManager : MonoBehaviour
 {
@@ -25,6 +26,9 @@ public class MPanelManager : MonoBehaviour
     // 색상을 바꿔줄 메인 버튼들의 이미지 배열
     [SerializeField]
     Image[] mainBts;
+
+    [SerializeField]
+    GameObject optionPanel;
 
     // 현재 활성화된 버튼의 이미지
     Image activeMainBt;
@@ -345,5 +349,17 @@ public class MPanelManager : MonoBehaviour
             return;
 
         SetPanels((int)mainPanelType);
+    }
+
+    public void OnOptionClk(bool isOpen)
+    {
+        optionPanel.SetActive(isOpen);
+    }
+
+    public void OnResetClk()
+    {
+        PlayDataManager.Instance.playData = new PlayData();
+        //PlayerPrefs.DeleteAll(); -> 이거 왜 안 됨?
+        SceneManager.LoadScene(0);
     }
 }
