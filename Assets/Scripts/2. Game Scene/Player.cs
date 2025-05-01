@@ -90,8 +90,7 @@ public class Player : MonoBehaviour, IHit
         {
             multiChance = .5f * (PlayDataManager.Instance.playData.atkCoinLevels[(int)AtkUpgradeType.¸ÖÆ¼¼¦È®·ü] 
                 + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.¸ÖÆ¼¼¦È®·ü]);
-            //return multiChance;
-            return 100;
+            return multiChance;
         }
     }
 
@@ -117,8 +116,7 @@ public class Player : MonoBehaviour, IHit
         {
             bounceChance = .5f * (PlayDataManager.Instance.playData.atkCoinLevels[(int)AtkUpgradeType.¹Ù¿î½º¼¦È®·ü] 
                 + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.¹Ù¿î½º¼¦È®·ü]);
-            //return bounceChance;
-            return 100;
+            return bounceChance;
         }
     }
 

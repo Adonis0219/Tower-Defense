@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class MAtkUpgradeButton : MUpgradeButton
 {
     [SerializeField]
     public AtkUpgradeType myUpType;
 
+    int cost;
+
     private void Update()
     {
-        float cost = Mathf.FloorToInt(upCost * Sale(MainRschType.공격할인));
+        cost = Mathf.FloorToInt(SetCost(0, (int)myUpType));
 
         bt.interactable = PlayDataManager.Instance.MainCoin > cost ? true : false;
 
@@ -62,12 +65,12 @@ public class MAtkUpgradeButton : MUpgradeButton
     // 업그레이드 버튼을 눌렀을 때 실행할 함수
     public void OnUpBtClk()
     {
-        PlayDataManager.Instance.MainCoin -= Mathf.FloorToInt(upCost * Sale(MainRschType.공격할인));
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.UpBtClk);
+
+        PlayDataManager.Instance.MainCoin -= cost;
 
         PlayDataManager.Instance.playData.atkCoinLevels[(int)myUpType]++;
-
-        upCost = Mathf.RoundToInt(upCost * upFactor);
-    }
+    }   
 
     public override void SetUpType(int upType)
     {

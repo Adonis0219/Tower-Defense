@@ -280,12 +280,14 @@ public class MPanelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// UnlockBt을 클릭했을 때 버튼들을 만들어주는 함수
+    /// 작업장에서 UnlockBt을 클릭했을 때 버튼들을 만들어주는 함수
     /// </summary>
     /// <param name="myType">업그레이드 버튼의 타입</param>
     /// <param name="createCount">만들 버튼의 개수</param>
     public void OnUnlockClickCreate(int myType, int createCount)
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.UpBtClk);
+
         switch (myType)
         {
             case (int)PanelType.Attack:
@@ -320,13 +322,15 @@ public class MPanelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 작업장 판넬을 클릭 했을 때 실행할 함수
+    /// 작업장 안에서 각 판넬을 클릭 했을 때 실행할 함수
     /// </summary>
     /// <param name="pType">작업장 판넬 타입</param>
     [VisibleEnum(typeof(PanelType))]
     public void UpPanelBtClick(int pType)
     {
         upPanelType = (PanelType)pType;
+
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.PanelBtClk);
 
         if (upPanels[(int)upPanelType].activeSelf)
             return;
@@ -344,6 +348,8 @@ public class MPanelManager : MonoBehaviour
         // 매개변수를 MainPanelType으로 바꿔줌
         mainPanelType = (MainPanelType)pType;
 
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.PanelBtClk);
+
         // 자신의 판넬이 활성화 돼있다면 아래 실행하지 않음
         if (mainPanels[(int)mainPanelType].activeSelf)
             return;
@@ -353,11 +359,15 @@ public class MPanelManager : MonoBehaviour
 
     public void OnOptionClk(bool isOpen)
     {
+        AudioManager.instance.PlaySfx(isOpen ? AudioManager.Sfx.Click : AudioManager.Sfx.NoClk);
+
         optionPanel.SetActive(isOpen);
     }
 
     public void OnResetClk()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
+
         PlayDataManager.Instance.playData = new PlayData();
         //PlayerPrefs.DeleteAll(); -> 이거 왜 안 됨?
         SceneManager.LoadScene(0);

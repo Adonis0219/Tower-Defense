@@ -9,9 +9,11 @@ public class MUtilUpgradeButton : MUpgradeButton
     [SerializeField]
     public UtilUpgradeType myUpType;
 
+    int cost;
+
     private void Update()
     {
-        float cost = Mathf.FloorToInt(upCost * Sale(MainRschType.유틸할인));
+        cost = Mathf.FloorToInt(SetCost(2, (int)myUpType));
 
         bt.interactable = PlayDataManager.Instance.MainCoin > cost ? true : false;
 
@@ -51,11 +53,11 @@ public class MUtilUpgradeButton : MUpgradeButton
 
     public void OnUpBtClk()
     {
-        PlayDataManager.Instance.MainCoin -= Mathf.FloorToInt(upCost * Sale(MainRschType.유틸할인));
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.UpBtClk);
+
+        PlayDataManager.Instance.MainCoin -= cost;
 
         PlayDataManager.Instance.playData.utilCoinLevels[(int)myUpType]++;
-
-        upCost = Mathf.RoundToInt(upCost * upFactor);
     }
 
     public override void SetUpType(int upType)

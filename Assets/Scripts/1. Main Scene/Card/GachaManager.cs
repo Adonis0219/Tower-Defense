@@ -209,6 +209,8 @@ public class GachaManager : MonoBehaviour
     /// <param name="count">연차</param>
     public void OnGachaBtClk(int count)
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
+
         // 가챠 횟수 정해주기
         gachaCount = count;
 
@@ -223,6 +225,8 @@ public class GachaManager : MonoBehaviour
     /// <param name="isReGacha">재뽑기 버튼인가?</param>
     public void OnYesClk(bool isReGacha)
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.OkClk);
+
         PlayDataManager.Instance.MainDia -= 20 * gachaCount;
 
         // 재뽑기가 아닐 때만
@@ -242,6 +246,8 @@ public class GachaManager : MonoBehaviour
 
     public void OnNoClk()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.NoClk);
+
         gachaChkPN.SetActive(false);
     }
 
@@ -269,6 +275,8 @@ public class GachaManager : MonoBehaviour
 
     public void OnGetClk(GameObject gameObject)
     {
+
+
         gameObject.SetActive(false);
     }
 }

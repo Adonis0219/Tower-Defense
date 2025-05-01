@@ -37,14 +37,41 @@ public class MUpgradeButton : MonoBehaviour
         upCost = cost;
         upFactor = factor;
 
-        costText.text = "$" + cost;
+        //costText.text = "$" + cost;
     }
 
-    protected void SetCost(int type)
+    /// <summary>
+    /// 가격을 설정해주는 함수
+    /// </summary>
+    /// <param name="type">공, 방, 유</param>
+    /// <param name="upType">각 업그레이드에서 몇 번째인지</param>
+    protected float SetCost(int type, int upTypeIndex)
     {
-        int cost = upCost;
+        float cost = upCost;
+        int level = 0;
 
-        Mathf.FloorToInt(cost * Sale(MainRschType.공격할인));
+        switch (type)
+        {
+            case 0:
+                level = PlayDataManager.Instance.playData.atkCoinLevels[upTypeIndex];
+                cost *= Mathf.Pow(upFactor, level);
+                cost = Mathf.FloorToInt(cost * Sale(MainRschType.공격할인));
+                break;
+            case 1:
+                level = PlayDataManager.Instance.playData.defCoinLevels[upTypeIndex];
+                cost *= Mathf.Pow(upFactor, level);
+                cost = Mathf.FloorToInt(cost * Sale(MainRschType.방어할인));
+                break;
+            case 2:
+                level = PlayDataManager.Instance.playData.utilCoinLevels[upTypeIndex];
+                cost *= Mathf.Pow(upFactor, level);
+                cost = Mathf.FloorToInt(cost * Sale(MainRschType.유틸할인));
+                break;
+            default:
+                break;
+        }
+
+        return cost;
     }
 
     /// <summary>

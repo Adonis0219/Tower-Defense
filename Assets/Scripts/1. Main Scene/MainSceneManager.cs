@@ -27,10 +27,21 @@ public class MainSceneManager : MonoBehaviour
     {
         coinText.text = PlayDataManager.Instance.MainCoin.ToString();
         diaText.text = PlayDataManager.Instance.MainDia.ToString();
+
+        AudioManager.instance.PlayBgm(true);
     }
 
     public void OnStartBtClk()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.GameStart);
+
+        StartCoroutine(Wait_Start());
+    }
+
+    IEnumerator Wait_Start()
+    {
+        yield return new WaitForSeconds(0.7f);
+
         SceneManager.LoadScene(1);
         Time.timeScale = 1.0f;
     }
@@ -51,6 +62,8 @@ public class MainSceneManager : MonoBehaviour
             default:
                 break;
         }
+
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.NoClk);
 
         StartCoroutine(LockTextActive());
     }

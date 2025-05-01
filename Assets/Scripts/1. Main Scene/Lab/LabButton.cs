@@ -177,6 +177,8 @@ public class LabButton : MonoBehaviour
     /// </summary>
     public void EmptyLabClick()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
+
         // 비어있지 않다면 -> 연구중이라면
         if (!isEmpty)
             return;
@@ -231,6 +233,8 @@ public class LabButton : MonoBehaviour
     /// </summary>
     void ResearchComplete()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Complete);
+
         // 연구완료 버튼 꺼주기
         transform.GetChild(4).gameObject.SetActive(false);
         // 연구완료 개수 줄여주기

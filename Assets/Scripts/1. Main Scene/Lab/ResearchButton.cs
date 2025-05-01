@@ -82,6 +82,8 @@ public class ResearchButton : MonoBehaviour
 
     public void OnBtClk()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
+
         LabManager.instance.researchListPN.SetActive(false);
         LabManager.instance.checkPN.SetActive(true);
 

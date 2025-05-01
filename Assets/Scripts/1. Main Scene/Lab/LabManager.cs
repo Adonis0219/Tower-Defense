@@ -154,6 +154,8 @@ public class LabManager : MonoBehaviour
     /// <param name="type"></param>
     public void ListNameBtClk(int type)
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
+
         listPanels[type].SetActive(listPanels[type].activeSelf ? false : true);
         listPanelArrows[type].SetActive(listPanels[type].activeSelf ? false : true);
     }
@@ -164,6 +166,8 @@ public class LabManager : MonoBehaviour
     /// <param name="go">꺼줄 게임오브젝트</param>
     public void OnCloseBtClk(GameObject go)
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.NoClk);
+
         go.SetActive(false);
     }
 
@@ -172,6 +176,7 @@ public class LabManager : MonoBehaviour
     /// </summary>
     public void OnChkExitClk()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.NoClk);
         // 체크 판넬 꺼주기
         checkPN.SetActive(false);
         // 연구 리스트 판넬 켜주기
@@ -186,6 +191,8 @@ public class LabManager : MonoBehaviour
     /// </summary>
     public void OnChkResearchClk()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.OkClk);
+
         // 연구 전 연구 레벨 가져오기
         researchLevel = PlayDataManager.Instance.playData.labResearchLevels[(int)myData.researchType, myData.researchID];
 
@@ -234,31 +241,41 @@ public class LabManager : MonoBehaviour
         string upInfoStr = "";
         researchLevel = PlayDataManager.Instance.playData.labResearchLevels[(int)data.researchType, data.researchID];
 
+        float cur = data.oriValue + researchLevel * data.increaseValue;
+        float next = data.oriValue + (researchLevel + 1) * data.increaseValue;
+
         switch (data.researchType)
         {
             case ResearchType.Main:
                 switch (data.researchID)
                 {
                     case 0:
-                        upInfoStr = "x" + (data.oriValue + researchLevel * data.increaseValue).ToString("F1") + " >> " + "x" + (data.oriValue + (researchLevel + 1) * data.increaseValue).ToString("F1");
+                        upInfoStr = "x" + cur.ToString("F1") + "  >>  " + "x" + next.ToString("F1");
                         break;
                     case 1:
-                        upInfoStr = (data.oriValue + researchLevel * data.increaseValue) + " >> " + (data.oriValue + (researchLevel + 1) * data.increaseValue);
+                        upInfoStr = cur + "  >>  " + next;
                         break;
-                    case 3:
-                        upInfoStr = (data.oriValue + researchLevel * data.increaseValue).ToString("F2") + "% >> " + (data.oriValue + (researchLevel + 1) * data.increaseValue).ToString("F2") + "%";
+                    case 2: case 3: case 4: case 5: case 6:
+                            upInfoStr = cur.ToString("F2") + "%  >>  " + next.ToString("F2") + "%";
+                            break;
+                    case 7:
+                        if (researchLevel == 0) upInfoStr = "1  >>  5";
+                        else if (researchLevel == 1) upInfoStr = "5  >>  10";
+                        else if (researchLevel == 2) upInfoStr = "10  >>  100";
                         break;
                     default:
                         break;
-                }
+                        }
                 break;
-            case ResearchType.Attak:
-                break;
-            case ResearchType.Defense:
-                break;
-            case ResearchType.Utility:
-                break;
+            // 나중에 Research Data가 더 쌓이면 따로 설정해주기 위해
+            //case ResearchType.Attak:
+            //    break;
+            //case ResearchType.Defense:
+            //    break;
+            //case ResearchType.Utility:                
+            //    break;
             default:
+                upInfoStr = "x" + cur.ToString("F2") + "  >>  " + "x" + next.ToString("F2");
                 break;
         }
 
