@@ -35,7 +35,7 @@ public class ResearchButton : MonoBehaviour
             curResearchData.UpInfoStr = LabManager.instance.UpInfoStrSet(data);
             //curResearchData.ReqTimeStr = LabManager.instance.DisplayTime(data.reqTimes[Level]).ToString();
             curResearchData.ReqTimeStr = LabManager.instance.DisplayTime(LabManager.instance.ReqTime(data.reqTimes[Level])).ToString();
-            curResearchData.CostStr = LabManager.instance.SaledCost(data.costs[Level]) + "<sprite=12>";
+            curResearchData.CostStr = Change.Num(LabManager.instance.SaledCost(data.costs[Level])) + "<sprite=12>";
         }
     }
 
@@ -82,7 +82,7 @@ public class ResearchButton : MonoBehaviour
 
     public void OnBtClk()
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
 
         LabManager.instance.researchListPN.SetActive(false);
         LabManager.instance.checkPN.SetActive(true);

@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singleton<AudioManager>
 {
-    public static AudioManager instance;
-
     [Header("# BGM")]
-    public AudioClip bgmClip;
-    public float bgmVolume;
+    public AudioClip[] bgmClip;
+    public float[] bgmVolume;
     AudioSource bgmPlayer;
 
     [Header("# SFX")]
@@ -20,14 +18,17 @@ public class AudioManager : MonoBehaviour
 
     public enum Sfx
     {
-        GameStart, Click, OkClk, NoClk, PanelBtClk, UpBtClk, LabBtClk, Complete, CardEqu
+        GameStart, Click, OkClk, NoClk, GetClk, UnlockClk,
+        PanelBtClk, UpBtClk, Complete, Cursor, CardEqu,
+
+        Fire, Hit, Die, PlayerHit, PlayerDie
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        instance = this;
-
         Init();
+
+        base.Awake();
     }
 
     void Init()
@@ -37,8 +38,6 @@ public class AudioManager : MonoBehaviour
         bgmObj.transform.parent = transform;
         bgmPlayer = bgmObj.AddComponent<AudioSource>();
         bgmPlayer.loop = true;
-        bgmPlayer.volume = bgmVolume;
-        bgmPlayer.clip = bgmClip;
 
         // 효과음 플레이어 초기화
         GameObject sfxObj = new GameObject("SfxPlayer");
@@ -53,10 +52,11 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayBgm(bool isPlay)
+    public void PlayBgm(SceneType type)
     {
-        if (isPlay) bgmPlayer.Play();
-        else bgmPlayer.Stop();
+        bgmPlayer.clip = bgmClip[(int)type];
+        bgmPlayer.volume = bgmVolume[(int)type];
+        bgmPlayer.Play();
     }
 
     public void PlaySfx(Sfx sfx)

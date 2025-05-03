@@ -23,7 +23,7 @@ public class UnlockBt : MUpgradeButton
         }
         else
         {
-            costText.text = "<sprite=12>" + cost;
+            costText.text = "<sprite=12>" + Change.Num(cost);
         }
         upCost = cost;
     }
@@ -48,6 +48,8 @@ public class UnlockBt : MUpgradeButton
 
     public void OnClick()
     {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.UnlockClk);
+
         // 비용만큼 차감
         PlayDataManager.Instance.MainCoin -= upCost;
 

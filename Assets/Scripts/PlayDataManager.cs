@@ -79,7 +79,7 @@ public partial class PlayDataManager : MonoBehaviour
                 if (instance == null)
                 {
                     GameObject temp = new GameObject();
-                    temp.name = "PlayData";
+                    temp.name = "PlayDataManager";
                     instance = temp.AddComponent<PlayDataManager>();
 
                     // 파괴 불가 오브젝트로 만들기
@@ -87,6 +87,7 @@ public partial class PlayDataManager : MonoBehaviour
                     DontDestroyOnLoad(temp);
                 }
             }
+
             return instance; 
         }
     }
@@ -173,7 +174,7 @@ public partial class PlayDataManager : MonoBehaviour
     
     private void Awake()
     {
-        if( instance == null)
+        if(instance == null)
         {
             instance = this;
             // 파괴 불가 오브젝트로 만들기
@@ -366,5 +367,37 @@ public class Print
         }
 
         Debug.Log(printStr);
+    }
+}
+
+public class Change
+{
+    public static string Num(double num)
+    {
+        string strNum = num.ToString();
+        string retStr = "";
+
+        char[] symbols = { 'K', 'M', 'B', 'T' };
+        // 단위
+        int unit = 0;
+
+        while (strNum.Length > 6)
+        {
+            unit++;
+            strNum = strNum.Substring(0, strNum.Length - 3);
+        }
+
+        if (strNum.Length > 3)
+        {
+            int newInt = int.Parse(strNum);
+
+            retStr = (newInt / 1000f).ToString("0.00") + symbols[unit];
+
+            return retStr;
+        }
+        else
+        {
+            return strNum;
+        }
     }
 }

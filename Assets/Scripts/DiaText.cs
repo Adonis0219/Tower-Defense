@@ -17,6 +17,7 @@ public class DiaText : MonoBehaviour
 
     void ChangeText(int dia)
     {
-        changeText.text = dia.ToString("F0");
+        changeText.text = Change.Num(dia);
+        //changeText.text = dia.ToString("F0");
     }
 }

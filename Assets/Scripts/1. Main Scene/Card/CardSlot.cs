@@ -20,8 +20,13 @@ public class CardSlot : MonoBehaviour
             return;
     }
 
+    /// <summary>
+    /// 잠긴 카드 슬롯을 오픈할 때 실행할 함수
+    /// </summary>
     public void OnSlotOpenClk()
     {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.UnlockClk);
+
         // 슬롯 인덱스 설정
         slotIndex = PlayDataManager.Instance.playData.curSlotCount;
         // 가격 설정
@@ -63,6 +68,8 @@ public class CardSlot : MonoBehaviour
         // 장착된 카드가 없다면 리턴
         if (transform.childCount == 1)
             return;
+
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
 
         // 카드 지워주고
         Destroy(transform.GetChild(0).gameObject);

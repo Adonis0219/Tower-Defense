@@ -18,7 +18,7 @@ public class MAtkUpgradeButton : MUpgradeButton
 
         bt.interactable = PlayDataManager.Instance.MainCoin > cost ? true : false;
 
-        costText.text = "<sprite=12>" + cost;
+        costText.text = "<sprite=12>" + Change.Num(cost);
 
         switch (myUpType)
         {
@@ -63,9 +63,9 @@ public class MAtkUpgradeButton : MUpgradeButton
     }
 
     // 업그레이드 버튼을 눌렀을 때 실행할 함수
-    public void OnUpBtClk()
+    public override void OnUpBtClk()
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.UpBtClk);
+        base.OnUpBtClk();
 
         PlayDataManager.Instance.MainCoin -= cost;
 

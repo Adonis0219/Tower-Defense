@@ -14,7 +14,7 @@ public enum CardID
 }
 
 [System.Serializable]
-public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
 {
     CardData myData;
 
@@ -49,6 +49,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public Sprite[] starSprites;
     [SerializeField]
     public Image backgroundImg;
+
+    GameObject infoPN;
+
+    public bool isInfoOpen = false;
 
     public int CurCardCount
     {
@@ -137,9 +141,16 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
     }
 
+    private void Awake()
+    {
+        infoPN = CardPanelManager.instance.cardInfoPanel;
+    }
+
     private void Update()
     {
         IsUsed = PlayDataManager.Instance.CheckCard((CardID)myData.cardID) ? true : false;
+
+        isInfoOpen = infoPN.activeSelf;
 
         cur_nextText.text = CurCardCount + "/" + reqCardCount[MyData.curLv];
 
@@ -184,8 +195,17 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (coru == null) return;
+
         StopCoroutine(coru);
     }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (coru == null) return;
+
+        StopCoroutine(coru);
+    }
+
     IEnumerator MouseDownTime()
     {
         yield return new WaitForSeconds(1f);
@@ -195,13 +215,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void OpenCardInfo()
     {
-        GameObject infoPN = CardPanelManager.instance.cardInfoPanel;
-
         // 인포판넬 켜주기
         infoPN.SetActive(true);
 
         // 인포판넬에 기본 정보 전달하기
-        //infoPN.GetComponent<CardInfoPanel>().InitSet(MyData.rarity.ToString(), MyData.cardDesc, MyData.curLv);
         infoPN.GetComponent<CardInfoPanel>().InitSet(MyData, starSprites[CurLv]);
     }
 }

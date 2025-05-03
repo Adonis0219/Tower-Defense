@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         set
         {
             curDollar = value;
-            curDollarText.text = "$" + curDollar.ToString("F0");
+            curDollarText.text = "$" + Change.Num(curDollar);
         }
     }
 
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
         set
         {
             curCoin = value;
-            curCoinText.text = curCoin.ToString("F0");
+            curCoinText.text = Change.Num(curCoin);
         }
     }
 
@@ -200,12 +200,17 @@ public class GameManager : MonoBehaviour
         set
         {
             curTimeScale = value;
-            timeScaleText.text = "x" + curTimeScale;
+
+            if (curTimeScale == minTimeScale)
+                timeScaleText.text = "Puase";
+            else
+                timeScaleText.text = "x" + curTimeScale;
             Time.timeScale = curTimeScale;
         }
     }
 
     float maxTimeScale = 1.5f;
+    float minTimeScale = 0;
 
     public float MaxTimeScale
     {
@@ -289,14 +294,16 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        CurDollar = InitDollar;
-        //CurDollar = 9999999;
+        //CurDollar = InitDollar;
+        CurDollar = 9999999;
 
         InitLevelSet();
     }
 
     private void Start()
     {
+        AudioManager.Instance.PlayBgm(SceneType.Game);
+
         InitReset();
     }
 
@@ -368,7 +375,7 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 // 계속하기
-                OnPuaseClk((int)ButtonType.resume);
+                OnUIBtClk((int)ButtonType.resume);
             }
         }
         else
@@ -376,7 +383,7 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 // 일시정지 판넬 활성화
-                OnPuaseClk((int)ButtonType.puase);
+                OnUIBtClk((int)ButtonType.puase);
             }
         }
     }
@@ -502,34 +509,39 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 일시정지를 눌렀을 때 나오는 버튼들을 눌렀을 때 실행할 함수
+    /// 각종 버튼들을 눌렀을 때 실행할 함수
     /// </summary>
     /// <param name="pType">버튼의 타입</param>
     [VisibleEnum(typeof(ButtonType))]
-    public void OnPuaseClk(int pType)
+    public void OnUIBtClk(int pType)
     {
         buttonType = (ButtonType)pType;
 
         switch (buttonType)
         {
             case ButtonType.yes:
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.OkClk);
                 puasePanel.SetActive(false);
                 ResultPanelSetActive(true);
                 break;
             case ButtonType.exit:
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.NoClk);
                 puasePanel.SetActive(false);
                 ResultPanelSetActive(false);
                 ChangeScene(0);
                 break;
             case ButtonType.resume:
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.NoClk);
                 puasePanel.SetActive(false);
                 Time.timeScale = 1;
                 break;
             case ButtonType.puase:
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
                 puasePanel.SetActive(true);
                 Time.timeScale = 0;
                 break;
             case ButtonType.retry:
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.GameStart);
                 resultPanel.SetActive(false);
                 ChangeScene(1);
                 Time.timeScale = 1;
@@ -619,9 +631,13 @@ public class GameManager : MonoBehaviour
     /// <param name="isUp">증가인지 감소인지 확인</param>
     public void OnScaleUpClick(bool isUp)
     {
-        if (CurTimeScale == MaxTimeScale)
+        if ((isUp && CurTimeScale == MaxTimeScale) || (!isUp && CurTimeScale == minTimeScale))
+        {
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.NoClk);
             return;
+        }
 
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
         // isUp(Plus) 버튼이면 .5를 더해주고, 아니면 .5를 빼준다
         CurTimeScale += isUp ? .5f : -.5f;
         Time.timeScale = CurTimeScale;

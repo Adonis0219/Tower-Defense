@@ -67,6 +67,8 @@ public class PanelManager : MonoBehaviour
     [VisibleEnum(typeof(PanelType))]
     public void PanelBtClick(int pType)
     {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.PanelBtClk);
+
         type = (PanelType)pType;
 
         // 클릭을 했을 때 자신의 판넬의 SetActive가 True이면

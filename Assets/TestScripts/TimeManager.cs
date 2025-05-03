@@ -7,7 +7,7 @@ public class TimeData
     public string exitTime;
 }
 
-public class TimeManager : Singleton<TestManager>
+public class TimeManager : MonoBehaviour
 {
     TimeData timeData;
 
@@ -26,7 +26,7 @@ public class TimeManager : Singleton<TestManager>
 
         timeDif = accessTime - exitTime;
 
-        Debug.Log(DisplayTime((int)timeDif.TotalSeconds));
+       // Debug.Log(DisplayTime((int)timeDif.TotalSeconds));
     }
 
     public string DisplayTime(float reqTime)

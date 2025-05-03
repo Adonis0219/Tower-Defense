@@ -26,7 +26,7 @@ public class DefUpgradeButton : UpgradeButton
 
         SetMultiText(1);
 
-        costText.text = "$" + SetCost(1);
+        costText.text = "$" + Change.Num(SetCost(1));
 
         switch (myUpType)
         {
@@ -59,7 +59,7 @@ public class DefUpgradeButton : UpgradeButton
         }
     }
 
-    public void OnUpBtClk()
+    public override void OnUpBtClk()
     {
         GameManager.instance.CurDollar -= SetCost(1);
 
@@ -75,6 +75,8 @@ public class DefUpgradeButton : UpgradeButton
 
             upCost = Mathf.RoundToInt(upCost * upFactor);
         }
+
+        base.OnUpBtClk();
     }
 
     public override void SetUpType(int upType)

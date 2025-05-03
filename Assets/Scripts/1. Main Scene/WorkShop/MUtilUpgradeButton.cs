@@ -17,7 +17,7 @@ public class MUtilUpgradeButton : MUpgradeButton
 
         bt.interactable = PlayDataManager.Instance.MainCoin > cost ? true : false;
 
-        costText.text = "<sprite=12>" + cost;
+        costText.text = "<sprite=12>" + Change.Num(cost);
 
         switch (myUpType)
         {
@@ -51,9 +51,11 @@ public class MUtilUpgradeButton : MUpgradeButton
         }
     }
 
-    public void OnUpBtClk()
+    public override void OnUpBtClk()
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.UpBtClk);
+        base.OnUpBtClk();
+
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.UpBtClk);
 
         PlayDataManager.Instance.MainCoin -= cost;
 

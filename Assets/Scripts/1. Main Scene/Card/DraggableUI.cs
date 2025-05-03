@@ -9,6 +9,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     CanvasGroup canvasGroup;     // UI의 알파값과 상호작용 제어를 위한 CanvasGroup
 
     Transform tempCard;            // 드래그 시작 시 복사된 Card
+    Card dragCard;
 
     public void Awake()
     {
@@ -22,12 +23,26 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     /// </summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
+        dragCard = gameObject.GetComponent<Card>();
+
         // 잠겨 있는 카드라면 드래그 불가능
-        if (!gameObject.GetComponent<Card>().IsGet)
+        // 인포 판넬이 열려있다면 드래그 불가능
+        if (!dragCard.IsGet || dragCard.isInfoOpen)
             return;
+
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
 
         // 드래그 할 때 남을 카드를 복제
         InstantiateCard();
+        DragCardSet();        
+    }
+
+    void DragCardSet()
+    {
+        // 체크표시, 업그레이드표시, 보유현황 파괴
+        Destroy(dragCard.checkMark);
+        Destroy(dragCard.upgradeMark);
+        Destroy(dragCard.cur_nextText.gameObject);
 
         // 드래그 직에 소속되어 있던 부모 Transform 정보 저장
         previousParent = transform.parent;
@@ -48,6 +63,9 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     /// </summary>
     public void OnDrag(PointerEventData eventData)
     {
+
+        if (dragCard.isInfoOpen) return;
+
         // 현재 스크린상의 마우스 위치를 UI의 Rect위치로 설정 (UI가 마우스를 쫓아다니는 상태)
         rect.position = eventData.position;
     }

@@ -85,6 +85,11 @@ public class MUpgradeButton : MonoBehaviour
             [(int)ResearchType.Main, (int)type]);
     }
 
+    public virtual void OnUpBtClk()
+    {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.UpBtClk);
+    }
+
     public virtual void SetUpType(int upType)
     {
 

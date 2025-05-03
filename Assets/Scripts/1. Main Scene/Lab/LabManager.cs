@@ -154,7 +154,7 @@ public class LabManager : MonoBehaviour
     /// <param name="type"></param>
     public void ListNameBtClk(int type)
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
 
         listPanels[type].SetActive(listPanels[type].activeSelf ? false : true);
         listPanelArrows[type].SetActive(listPanels[type].activeSelf ? false : true);
@@ -166,7 +166,7 @@ public class LabManager : MonoBehaviour
     /// <param name="go">꺼줄 게임오브젝트</param>
     public void OnCloseBtClk(GameObject go)
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.NoClk);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.NoClk);
 
         go.SetActive(false);
     }
@@ -176,7 +176,7 @@ public class LabManager : MonoBehaviour
     /// </summary>
     public void OnChkExitClk()
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.NoClk);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.NoClk);
         // 체크 판넬 꺼주기
         checkPN.SetActive(false);
         // 연구 리스트 판넬 켜주기
@@ -191,7 +191,7 @@ public class LabManager : MonoBehaviour
     /// </summary>
     public void OnChkResearchClk()
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.OkClk);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.OkClk);
 
         // 연구 전 연구 레벨 가져오기
         researchLevel = PlayDataManager.Instance.playData.labResearchLevels[(int)myData.researchType, myData.researchID];

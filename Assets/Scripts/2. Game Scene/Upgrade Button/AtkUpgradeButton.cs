@@ -23,13 +23,11 @@ public class AtkUpgradeButton : UpgradeButton
 
     private void Update()
     {
-        //bt.interactable = GameManager.instance.CurDollar < SetCost(0) ? false : true;
-        bt.interactable = GameManager.instance.CurDollar < upCost ? false : true;
+        bt.interactable = GameManager.instance.CurDollar < SetCost(0) ? false : true;
 
         SetMultiText(0);
 
-        //costText.text = "$" + SetCost(0);
-        costText.text = "$" + upCost;
+        costText.text = "$" + Change.Num(SetCost(0));
 
         switch (myUpType)
         {
@@ -72,7 +70,7 @@ public class AtkUpgradeButton : UpgradeButton
         }
     }
 
-    public void OnUpBtClk()
+    public override void OnUpBtClk()
     {
         // 현재 달러를 비용만큼 차감해주기
         GameManager.instance.CurDollar -= SetCost(0);
@@ -85,6 +83,8 @@ public class AtkUpgradeButton : UpgradeButton
         {
             upCost = Mathf.RoundToInt(upCost * upFactor);
         }
+
+        base.OnUpBtClk();
     }
 
     public override void SetUpType(int upType)

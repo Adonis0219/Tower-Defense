@@ -122,7 +122,7 @@ public class LabButton : MonoBehaviour
             // 잠긴 연구실이면
             if (!IsOpen)
             {
-                unlockText.text = (labIndex + 1) + "번째 실험실잠금해제\n" + LabManager.instance.labOpenCost[labIndex] + "<sprite=0>";
+                unlockText.text = (labIndex + 1) + "번째 실험실잠금해제\n" + Change.Num(LabManager.instance.labOpenCost[labIndex]) + "<sprite=0>";
             }
         }
     }
@@ -177,7 +177,7 @@ public class LabButton : MonoBehaviour
     /// </summary>
     public void EmptyLabClick()
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
 
         // 비어있지 않다면 -> 연구중이라면
         if (!isEmpty)
@@ -233,7 +233,7 @@ public class LabButton : MonoBehaviour
     /// </summary>
     void ResearchComplete()
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Complete);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Complete);
 
         // 연구완료 버튼 꺼주기
         transform.GetChild(4).gameObject.SetActive(false);

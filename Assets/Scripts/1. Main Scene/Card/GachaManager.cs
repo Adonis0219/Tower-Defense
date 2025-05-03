@@ -209,7 +209,7 @@ public class GachaManager : MonoBehaviour
     /// <param name="count">¿¬Â÷</param>
     public void OnGachaBtClk(int count)
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Click);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
 
         // °¡Ã­ È½¼ö Á¤ÇØÁÖ±â
         gachaCount = count;
@@ -225,7 +225,7 @@ public class GachaManager : MonoBehaviour
     /// <param name="isReGacha">Àç»Ì±â ¹öÆ°ÀÎ°¡?</param>
     public void OnYesClk(bool isReGacha)
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.OkClk);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.OkClk);
 
         PlayDataManager.Instance.MainDia -= 20 * gachaCount;
 
@@ -246,13 +246,15 @@ public class GachaManager : MonoBehaviour
 
     public void OnNoClk()
     {
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.NoClk);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.NoClk);
 
         gachaChkPN.SetActive(false);
     }
 
     public void OnNextClk()
     {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
+
         if (gachaCount != 0)
             OneGachaInTen(10 - gachaCount);
         else SetTotalResultPN();
@@ -263,6 +265,8 @@ public class GachaManager : MonoBehaviour
     /// </summary>
     public void OnSkipClk()
     {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click);
+
         int lastCount = gachaCount;
 
         // ³²Àº »Ì±â È½¼ö¸¸Å­ »Ì¾ÆÁÖ°í
@@ -275,7 +279,7 @@ public class GachaManager : MonoBehaviour
 
     public void OnGetClk(GameObject gameObject)
     {
-
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.GetClk);
 
         gameObject.SetActive(false);
     }

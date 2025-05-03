@@ -346,6 +346,9 @@ public class Player : MonoBehaviour, IHit
     /// <param name="target">鸥百</param>
     void Shoot(Transform target)
     {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Fire);
+
+
         // 醚舅 积己
         Transform tempBullet = PoolManager.instance.GetPool(PoolObejectType.Bullet).transform;
         // 何葛 汲沥
@@ -373,11 +376,13 @@ public class Player : MonoBehaviour, IHit
 
     public void Hit(float damage)
     {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.PlayerHit);
         CurrentHp -= (damage * (1 - Def)) - AbsDef;
     }
 
     void Dead()
     {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.PlayerDie);
         Time.timeScale = 0;
         GameManager.instance.ResultPanelSetActive(true);
         Destroy(gameObject);

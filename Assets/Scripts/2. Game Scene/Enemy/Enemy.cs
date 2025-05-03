@@ -144,6 +144,9 @@ public class Enemy : PoolObject, IHit
 
     public void Hit(float damage)
     {
+        // 맞을 땐 맞는 소리
+        if (gameObject.activeSelf)
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Hit);
         CurrentHp -= damage;
     }
 
@@ -204,7 +207,10 @@ public class Enemy : PoolObject, IHit
     {
         if (atkCoru != null)
             // 죽으면 공격 작동하지 않도록 멈추기
-            StopCoroutine(atkCoru); 
+            StopCoroutine(atkCoru);
+
+        // 죽을 땐 죽는 소리
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Die);
 
         // 코루틴이 끝나기 전에 죽으면 isKnockback이 true 상태
         isKnockBack = false;

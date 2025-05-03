@@ -125,9 +125,10 @@ public class CardPanelManager : MonoBehaviour
         // 슬롯에 생성되는 카드라면
         if (parent != inventoryContent)
         {
-            // 체크, 업그레이드 마크 제거
-            Destroy(temp.GetComponent<Card>().checkMark);
-            Destroy(temp.GetComponent<Card>().upgradeMark);
+            // 체크, 업그레이드 마크, 보유량 제거
+            Destroy(card.checkMark);
+            Destroy(card.upgradeMark);
+            Destroy(card.cur_nextText.gameObject);
         }
         // 인벤토리에 생성되는 카드라면
         else

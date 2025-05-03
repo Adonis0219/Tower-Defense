@@ -66,6 +66,11 @@ public class UpgradeButton : MonoBehaviour
         return cost;
     }
 
+    public virtual void OnUpBtClk()
+    {
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.UpBtClk);
+    }
+
     public virtual void SetUpType(int upType)
     {
 

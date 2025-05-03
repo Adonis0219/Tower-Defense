@@ -22,6 +22,8 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
+        //AudioManager.instance.PlaySfx(AudioManager.Sfx.Cursor);
+
         // 아이템 슬롯 색상을 빨간색으로 변경
         img.color = Color.red;
     }
@@ -51,6 +53,8 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
         if ((eventData.pointerDrag == null) || (PlayDataManager.Instance.CheckCard((CardID)myID)))
             return;
 
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.CardEqu);
+
         // 이미 슬롯에 카드가 있다면
         if (transform.childCount > 1)
         {
@@ -68,19 +72,10 @@ public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IP
         // 체크 마크 제거
         Destroy(eventData.pointerDrag.GetComponent<Card>().checkMark);
         Destroy(eventData.pointerDrag.GetComponent<Card>().upgradeMark);
-        Destroy(eventData.pointerDrag.GetComponent<Card>().cur_nextText.gameObject);
 
         // 슬롯의 인덱스를 정해준다
         slotIndex = gameObject.GetComponent<CardSlot>().slotIndex;
         // 현재 장착중인 카드 정보에 현재 드래그한 카드 데이터 넣어주기
         PlayDataManager.Instance.playData.activedCardIDs[slotIndex] = myID;
-    }
-
-    void PrintName(PointerEventData eventData)
-    {
-        string name = eventData.pointerDrag.GetComponent<Card>().MyData.cardName;
-
-        Debug.Log(slotIndex + "번째 카드 슬롯에 " + name + " 카드 장착");
-        Print.Array(PlayDataManager.Instance.playData.activedCardIDs);
     }
 }
