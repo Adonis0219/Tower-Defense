@@ -100,16 +100,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolType: 1
-  myData: {fileID: 0}
-  myType: 1
-  sprRen: {fileID: 0}
-  killedDollar: 0
+  myData: {fileID: 11400000, guid: de56c3f2c9ca47d4197f635607b392e3, type: 2}
+  killedDollar: 1
   killedCoin: 0
   moveSpd: 1
   baseMaxHp: 1
-  maxHp: 0
+  maxHp: 1
   currentHp: 0
-  baseDamage: 0
+  baseDamage: 1
 --- !u!61 &3082797800593604026
 BoxCollider2D:
   m_ObjectHideFlags: 0

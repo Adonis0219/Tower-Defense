@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     public Transform textCanvas;
 
 
-    [Header("# Enemy")]
+    [Header("## Enemy")]
     [SerializeField]
     public EnemyData[] enemyDatas = new EnemyData[5];
 
@@ -38,8 +38,17 @@ public class GameManager : MonoBehaviour
 
     Coroutine[] enemyCorus = new Coroutine[4];
 
+    [Header("   # BOSS")]
+    [SerializeField]
+    public GameObject bossHpPanel;
+
+    public Enemy boss;
+
+    public int bossKillCount;
+    int bossKillDia = 3;
+
     [Header("##  Goods")]
-    [Header("# Dollar")]
+    [Header("   # Dollar")]
     [SerializeField]
     TextMeshProUGUI curDollarText;
 
@@ -95,7 +104,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [Header("# Coin")]
+    [Header("   # Coin")]
     [SerializeField]
     TextMeshProUGUI curCoinText;
 
@@ -115,7 +124,6 @@ public class GameManager : MonoBehaviour
     }
 
     public float initCoin;     // 초기 코인
-    public float earnCoin;     // 이번 게임 획득 코인
 
     float coinKillBonus;
 
@@ -183,13 +191,13 @@ public class GameManager : MonoBehaviour
     public int[] utilDollarLevels;
 
     [Header("##  ManageMent")]
-    [Header("# GamePuase")]
+    [Header("   # GamePuase")]
     [SerializeField]
     GameObject puasePanel;
     [SerializeField]
     public GameObject resultPanel;
 
-    [Header("# GameTimeScale")]
+    [Header("   # GameTimeScale")]
     [SerializeField]
     TextMeshProUGUI timeScaleText;
 
@@ -222,7 +230,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [Header("# Wave Control")]
+    [Header("   # Wave Control")]
 
     [SerializeField]
     int wave = 1;
@@ -233,20 +241,19 @@ public class GameManager : MonoBehaviour
         {
             wave = value;
 
-            // 웨이브가 10의 배수인가 ? 1.5f : 1.2f
-            waveDmgFactor *= wave % 10 == 0 ? 1.5f : 1.15f;
-            waveHpFactor *= wave % 10 == 0 ? 1.5f : 1.20f;
+            WaveFactor();
 
-            waveDmgFactorText.text = waveDmgFactor.ToString("F2");
-            waveHpFactorText.text = waveHpFactor.ToString("F2");
+            // 10단위 웨이브 마다 보스 소환
+            if (wave % 10 == 0)
+            {
+                SpawnEnemy(4);
+                bossHpPanel.SetActive(true);
+            }
 
             CurDollar += PlayDataManager.Instance.DollarWaveFormula(SceneType.Game);
             CurCoin += PlayDataManager.Instance.CoinWaveFormula(SceneType.Game);
 
-            // 각 무료 업그레이드 찬스 확인 후 업글
-            if (IsChanceTrue(AtkFreeUpChance)) FreeUpgrade(PanelType.Attack);
-            if (IsChanceTrue(DefFreeUpChance)) FreeUpgrade(PanelType.Defense);
-            if (IsChanceTrue(UtilFreeUpChance)) FreeUpgrade(PanelType.Utility);
+            FreeUpgrade();
         }
     }
 
@@ -267,20 +274,17 @@ public class GameManager : MonoBehaviour
             isWait = value;
 
             if (!IsWait)
+                //StartCoroutine(OnSpawnEnemy(1));
                 StartSpawn();
             else
                 StopSpawn();
         }
     }
 
-    [SerializeField]
-    TextMeshProUGUI waveHpFactorText;
-    [SerializeField]
-    TextMeshProUGUI waveDmgFactorText;
-
-    [SerializeField]
+    [HideInInspector]
     public float waveHpFactor = 2.5f;
-    [SerializeField]
+
+    [HideInInspector]
     public float waveDmgFactor = 1.2f;
 
     public int WaveTime { get; private set; } = 30;
@@ -294,8 +298,8 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        //CurDollar = InitDollar;
-        CurDollar = 9999999;
+        CurDollar = InitDollar;
+        //CurDollar = 9999999;
 
         InitLevelSet();
     }
@@ -322,9 +326,6 @@ public class GameManager : MonoBehaviour
 
         // 첫 스폰을 위한 초기화
         IsWait = false;
-
-        waveDmgFactorText.text = waveDmgFactor.ToString("F2");
-        waveHpFactorText.text = waveHpFactor.ToString("F2");
     }
 
 
@@ -361,6 +362,27 @@ public class GameManager : MonoBehaviour
                 IsWait = false;
             }
         }
+    }
+
+    /// <summary>
+    /// 웨이브 배수 묶어놓은 함수
+    /// </summary>
+    void WaveFactor()
+    {
+        // 웨이브가 10의 배수인가 ? 1.5f : 1.2f
+        waveDmgFactor *= wave % 10 == 0 ? 1.5f : 1.15f;
+        waveHpFactor *= wave % 10 == 0 ? 1.5f : 1.20f;
+    }
+
+    /// <summary>
+    /// 무료 업그레이드 묶어놓은 함수
+    /// </summary>
+    void FreeUpgrade()
+    {
+        // 각 무료 업그레이드 찬스 확인 후 업글
+        if (IsChanceTrue(AtkFreeUpChance)) FreeUpgrade(PanelType.Attack);
+        if (IsChanceTrue(DefFreeUpChance)) FreeUpgrade(PanelType.Defense);
+        if (IsChanceTrue(UtilFreeUpChance)) FreeUpgrade(PanelType.Utility);
     }
 
     /// <summary>
@@ -480,8 +502,12 @@ public class GameManager : MonoBehaviour
         tempEnemy.SetParent(poolManager.GetChild(index + 1));
         // 랜덤한 위치에 생성
         tempEnemy.position = spawnPos;
-        //// 적이 플레이어 방향 바라보게
-        //tempEnemy.up = player.transform.position - spawnPos;
+
+        // 보스라면
+        if (index == 4)
+        {
+            boss = tempEnemy.GetComponent<Enemy>();   
+        }
     }
 
     /// <summary>
@@ -559,14 +585,19 @@ public class GameManager : MonoBehaviour
     {
         if (isActive)
         {
+            float earnCoin;     // 이번 게임 획득 코인
+            int earnDia = bossKillCount * bossKillDia;
             earnCoin = CurCoin - initCoin;
             TextMeshProUGUI[] texts = resultPanel.GetComponentsInChildren<TextMeshProUGUI>();
             // 현재 웨이브가 최고기록을 넘겼는가를 검사
-            PlayDataManager.Instance.BestWave = Wave;
+            // 현재 웨이브 이전 웨이브가 최고기록
+            PlayDataManager.Instance.BestWave = Wave - 1;
             PlayDataManager.Instance.TotalEarnCoin += earnCoin;
+            PlayDataManager.Instance.playData.mainDia += earnDia;
 
             texts[0].text = "티어 1\n웨이브 " + Wave + "\n최고 웨이브 : " + PlayDataManager.Instance.BestWave;
-            texts[1].text = "코인 획득량 : " + earnCoin + "<sprite=12>";
+            texts[1].text = "코인 획득량 : " + earnCoin + " <sprite=12>";
+            texts[2].text = "다이아 획득량 : " + earnDia + " <sprite=0>";
         }
 
         resultPanel.SetActive(isActive);

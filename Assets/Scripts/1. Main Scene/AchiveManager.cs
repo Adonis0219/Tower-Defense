@@ -11,9 +11,12 @@ public enum Achive
 // 잠금해제 조건들
 public class UnlockConditions
 {
-    public const int BEST_WAVE = 0;
-    public const float TOTAL_EARN_COIN = 0;
-    public const int BEST_WAVE_CARD = 0;
+    /// <summary>
+    /// 한 판하면 열림
+    /// </summary>
+    public const int BEST_WAVE_WORKSHOP = 0;
+    public const float LAB_OPEN_COIN = 100;
+    public const int BEST_WAVE_CARD = 80;
 }
 
 public class AchiveManager : MonoBehaviour

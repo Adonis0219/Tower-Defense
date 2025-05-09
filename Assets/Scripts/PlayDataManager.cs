@@ -108,7 +108,7 @@ public partial class PlayDataManager : MonoBehaviour
                 playData.bestWave = value ;
 
                 // 작업장 열어주기
-                if (playData.bestWave >= UnlockConditions.BEST_WAVE)
+                if (playData.bestWave >= UnlockConditions.BEST_WAVE_WORKSHOP)
                     playData.achive |= 1 << (int)Achive.UnlockWorkShop;
 
                 // 카드 열어주기
@@ -131,7 +131,6 @@ public partial class PlayDataManager : MonoBehaviour
         }
     }
    
-
     public float TotalEarnCoin
     {
         get { return playData.totalEarnCoin; }
@@ -139,7 +138,7 @@ public partial class PlayDataManager : MonoBehaviour
         {
             playData.totalEarnCoin = value;
 
-            if (playData.totalEarnCoin >= UnlockConditions.TOTAL_EARN_COIN)
+            if (playData.totalEarnCoin >= UnlockConditions.LAB_OPEN_COIN)
                 playData.achive |= 1 << (int)Achive.UnlockLabs;
         }
     }
@@ -261,8 +260,8 @@ public partial class PlayDataManager : MonoBehaviour
     public void SaveData(float coin, float dia)
     {
        //MainCoin = coin;
-        MainCoin = 99999;
-        MainDia = 10000;
+        MainCoin = (int)coin;
+        MainDia = (int)dia;
 
         string saveJD = JsonConvert.SerializeObject(playData); 
         PlayerPrefs.SetString(SAVE_DATA_KEY, saveJD);
@@ -391,7 +390,8 @@ public class Change
         {
             int newInt = int.Parse(strNum);
 
-            retStr = (newInt / 1000f).ToString("0.00") + symbols[unit];
+            // ToString("0.00") 남는 숫자 자동 반올림
+            retStr = (newInt / 1000f).ToString("0.000") + symbols[unit];
 
             return retStr;
         }

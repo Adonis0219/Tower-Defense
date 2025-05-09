@@ -36,8 +36,10 @@ public class HUDText : MonoBehaviour
                 myText.text = GameManager.instance.Wave + "¿þÀÌºê";
                 break;
             case InfoType.EnemyHealth:
+                myText.text = GameManager.instance.waveHpFactor.ToString("F2");
                 break;
             case InfoType.EnemyDamage:
+                myText.text = GameManager.instance.waveDmgFactor.ToString("F2");
                 break;
             default:
                 break;

@@ -36,7 +36,6 @@ public class PoolManager : MonoBehaviour
             // 새로운 empty를 만들어 그것을 오리지널의 이름으로 한다
             GameObject parent = new GameObject();
             parent.transform.SetParent(transform);
-            //parent.name = poolObjDatas[i].original.name;
             parent.name = ((PoolObejectType)i).ToString();
         }
 

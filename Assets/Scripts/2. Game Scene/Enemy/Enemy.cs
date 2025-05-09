@@ -15,22 +15,7 @@ public class Enemy : PoolObject, IHit
     [SerializeField]
     EnemyData myData;
 
-    public EnemyData MyData
-    {
-        get
-        {
-            return myData;
-        }
-        set
-        {
-            myData = value;
-
-            InitSet();
-        }
-    }
-
-    [SerializeField]
-    public SpriteRenderer sprRen;
+    public bool isBoss = false;
 
     [Header("# Status")]
     public float killedDollar;
@@ -92,18 +77,12 @@ public class Enemy : PoolObject, IHit
     {
         player = GameManager.instance.player;
         rb = GetComponent<Rigidbody2D>();
-        sprRen = GetComponent<SpriteRenderer>();
         wait = new WaitForSeconds(.1f);
     }
 
     private void OnEnable()
     {
-        MyData = GameManager.instance.enemyDatas[(int)poolType - 1];
-
-        damage = baseDamage * GameManager.instance.waveDmgFactor;
-        maxHp = BaseMaxHp * GameManager.instance.waveHpFactor;
-        // 소환될 때 배수만큼 곱해주기
-        CurrentHp = maxHp;
+        InitSet();
     }
 
     // Update is called once per frame
@@ -131,15 +110,16 @@ public class Enemy : PoolObject, IHit
 
     void InitSet()
     {
-        poolType = MyData.type;
-        sprRen.sprite = MyData.sprite;
-        transform.localScale = Vector3.one * MyData.scale;
+        killedDollar = myData.killedDollar;
+        killedCoin = myData.killedCoin;
+        moveSpd = myData.moveSpeed;
+        BaseMaxHp = myData.baseMaxHp;
+        baseDamage = myData.baseDmg;
 
-        killedDollar = MyData.killedDollar;
-        killedCoin = MyData.killedCoin;
-        moveSpd = MyData.moveSpeed;
-        BaseMaxHp = MyData.baseMaxHp;
-        baseDamage = MyData.baseDmg;
+        damage = baseDamage * GameManager.instance.waveDmgFactor;
+        maxHp = BaseMaxHp * GameManager.instance.waveHpFactor;
+        // 소환될 때 배수만큼 곱해주기
+        CurrentHp = maxHp;
     }
 
     public void Hit(float damage)
@@ -209,8 +189,20 @@ public class Enemy : PoolObject, IHit
             // 죽으면 공격 작동하지 않도록 멈추기
             StopCoroutine(atkCoru);
 
-        // 죽을 땐 죽는 소리
-        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Die);
+        // 보스가 죽었을 때
+        if (isBoss)
+        {
+            // 보스 죽는 소리
+            GameManager.instance.boss = null;
+            GameManager.instance.bossKillCount++;
+            GameManager.instance.bossHpPanel.SetActive(false);
+        }
+        else
+        {
+            // 죽을 땐 죽는 소리
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Die);
+        }
+
 
         // 코루틴이 끝나기 전에 죽으면 isKnockback이 true 상태
         isKnockBack = false;
@@ -220,10 +212,9 @@ public class Enemy : PoolObject, IHit
 
         // 일반적이 아닐 때
         if (killedCoin != 0)
-        {
             // Coin 획득
             GameManager.instance.GoodsFactor(killedCoin, this.transform, false);
-        }
+
 
         ReturnPool();
     }

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
-    public enum InfoType { Health, Wave }
+    public enum InfoType { Health, Wave, Boss }
 
     public InfoType type;
 
@@ -44,6 +44,13 @@ public class HUD : MonoBehaviour
                 {
                     fill.color = Color.yellow;
                     mySlider.value = GameManager.instance.gameTime / GameManager.instance.waitTime;
+                }
+                break;
+            case InfoType.Boss:
+                if (GameManager.instance.boss != null)
+                {
+                    Enemy boss = GameManager.instance.boss;
+                    mySlider.value = boss.CurrentHp / boss.maxHp;
                 }
                 break;
             default:
