@@ -13,6 +13,8 @@ public class NotificationsManager : MonoBehaviour
 
     public void Show()
     {
+        if (Application.isPlaying) return;
+
         // 채널 등록
         var channel = new AndroidNotificationChannel()
         {
