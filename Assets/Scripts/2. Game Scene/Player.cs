@@ -7,7 +7,6 @@ public class Player : MonoBehaviour, IHit
 {
     [Header("# Player Status")]
     [Header("  # ATTACK")]
-    [SerializeField]
     float damage;
 
     public float Damage
@@ -19,7 +18,6 @@ public class Player : MonoBehaviour, IHit
         // 외부에선 설정할 필요가 없으므로 Set은 없다
     }
 
-    [SerializeField]
     float critChance;
 
     public float CritChance
@@ -32,7 +30,6 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    [SerializeField]
     float critFactor;
 
     public float CritFactor
@@ -43,7 +40,6 @@ public class Player : MonoBehaviour, IHit
         }
     }
 
-    [SerializeField]
     float atkSpd;
 
     public float AtkSpd

@@ -205,6 +205,10 @@ public class Bullet : PoolObject
 
     void BulletDmgFormula()
     {
+        // 플레이어가 존재할 때만 계산
+        if (player == null)
+            return;
+
         // 총알이 사라질 때 총알의 위치 = 적이 죽은 위치
         // 플레이어와의 거리 -> 데미지/미터 적용
         float dist = Vector3.Distance(transform.position, player.transform.position) * 10;

@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class MPanelManager : MonoBehaviour
-{
-    public static MPanelManager instance;
-
     // 메인 화면의 업그레이드 판넬
     public enum MainPanelType 
     {
-        Battle, Workshop, Lab, Cards
+        Battle, Workshop, Cards, Lab
     }
+
+public class MPanelManager : MonoBehaviour
+{
+    public static MPanelManager instance;
 
     MainPanelType mainPanelType;
 
@@ -355,6 +355,14 @@ public class MPanelManager : MonoBehaviour
             return;
 
         SetPanels((int)mainPanelType);
+
+        // 배틀 판넬 제외
+        if (pType == 0) return;
+
+        if ((PlayDataManager.Instance.playData.alreadyTuto >> pType - 1) % 2 == 0)
+        {
+            TutorialManager.instance.OpenTutoPanel(pType - 1);
+        }
     }
 
     public void OnOptionClk(bool isOpen)

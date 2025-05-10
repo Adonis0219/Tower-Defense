@@ -27,8 +27,7 @@ public class GameManager : MonoBehaviour
     public Transform gameView;
 
     [SerializeField]
-    public Transform textCanvas;
-
+    GameObject puaseText;
 
     [Header("## Enemy")]
     [SerializeField]
@@ -43,6 +42,8 @@ public class GameManager : MonoBehaviour
     public GameObject bossHpPanel;
 
     public Enemy boss;
+
+    public int bossAppearWave = 10;
 
     public int bossKillCount;
     int bossKillDia = 3;
@@ -226,6 +227,9 @@ public class GameManager : MonoBehaviour
         {
             maxTimeScale = 1.5f + .5f * PlayDataManager.Instance.playData.
                 labResearchLevels[(int)ResearchType.Main, (int)MainRschType.게임속도];
+            if (PlayDataManager.Instance.playData.isAdmin)
+                maxTimeScale = 10;
+
             return maxTimeScale;
         }
     }
@@ -244,7 +248,7 @@ public class GameManager : MonoBehaviour
             WaveFactor();
 
             // 10단위 웨이브 마다 보스 소환
-            if (wave % 10 == 0)
+            if (wave % bossAppearWave == 0)
             {
                 SpawnEnemy(4);
                 bossHpPanel.SetActive(true);
@@ -298,8 +302,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        CurDollar = InitDollar;
-        //CurDollar = 9999999;
+        CurDollar = PlayDataManager.Instance.playData.isAdmin ? 9999999 : InitDollar;
 
         InitLevelSet();
     }
@@ -672,6 +675,8 @@ public class GameManager : MonoBehaviour
         // isUp(Plus) 버튼이면 .5를 더해주고, 아니면 .5를 빼준다
         CurTimeScale += isUp ? .5f : -.5f;
         Time.timeScale = CurTimeScale;
+
+        puaseText.SetActive(CurTimeScale == 0 ? true : false);
     }
 
     private void OnApplicationQuit()

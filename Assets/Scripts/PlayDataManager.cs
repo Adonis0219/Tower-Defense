@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 public class PlayData
 {
+    public bool isAdmin = false;
+
     // 플레이어가 가진 코인수
     public int haveCoin = 0;
 
@@ -11,6 +13,8 @@ public class PlayData
 
     // 업적 비트마스크 활용
     public int achive = 0;
+    // 이미 튜토리얼을 완료 했는가
+    public int alreadyTuto = 0;
 
     public int bestWave = 0;
     
@@ -62,36 +66,8 @@ public class PlayData
 }
 
 // 어떤 씬에서든 PlayData 참조 가능하도록
-public partial class PlayDataManager : MonoBehaviour
+public partial class PlayDataManager : Singleton<PlayDataManager>
 {
-    static PlayDataManager instance = null;
-
-    public static PlayDataManager Instance
-    {
-        get 
-        {
-            //
-            if (instance == null)
-            {
-                // PlayData를 가진 GameObject 검색 후 instance에 초기화
-                instance = FindObjectOfType<PlayDataManager>();
-
-                if (instance == null)
-                {
-                    GameObject temp = new GameObject();
-                    temp.name = "PlayDataManager";
-                    instance = temp.AddComponent<PlayDataManager>();
-
-                    // 파괴 불가 오브젝트로 만들기
-                    // 생성자에서 호출 불가
-                    DontDestroyOnLoad(temp);
-                }
-            }
-
-            return instance; 
-        }
-    }
-
     public PlayData playData;
 
     const string SAVE_DATA_KEY = "SaveData";
@@ -114,6 +90,10 @@ public partial class PlayDataManager : MonoBehaviour
                 // 카드 열어주기
                 if (playData.bestWave >= UnlockConditions.BEST_WAVE_CARD)
                     playData.achive |= 1 << (int)Achive.UnlockCards;
+
+                // 연구실 열어주기
+                if (playData.bestWave >= UnlockConditions.BEST_WAVE_LAB)
+                    playData.achive |= 1 << (int)Achive.UnlockLabs;
             }
         }
     }
@@ -137,9 +117,6 @@ public partial class PlayDataManager : MonoBehaviour
         set
         {
             playData.totalEarnCoin = value;
-
-            if (playData.totalEarnCoin >= UnlockConditions.LAB_OPEN_COIN)
-                playData.achive |= 1 << (int)Achive.UnlockLabs;
         }
     }
 
@@ -173,21 +150,6 @@ public partial class PlayDataManager : MonoBehaviour
     
     private void Awake()
     {
-        if(instance == null)
-        {
-            instance = this;
-            // 파괴 불가 오브젝트로 만들기
-            // 생성자에서 호출 불가
-            DontDestroyOnLoad(this.gameObject);
-        }
-        // 항상 하나만 존재하게 하기 위해
-        // 이미 만들어진 instance가 존재
-        else
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-
         // 프레임 고정
         Application.targetFrameRate = 60;
 

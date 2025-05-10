@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -79,13 +80,13 @@ public class PanelManager : MonoBehaviour
 
             GameManager.instance.gameView.position = new Vector3(0, -4, 0);
             // 앵커를 기준으로 y값만 변경
-            infoPanel.anchoredPosition = new Vector3(0, -610, 0);
+            infoPanel.anchoredPosition = new Vector3(0, 510, 0);
         }
         else
         {
             SetPanels((int)type);
             GameManager.instance.gameView.position = Vector3.zero;
-            infoPanel.anchoredPosition = new Vector3(0, 150,0);
+            infoPanel.anchoredPosition = new Vector3(0, 1235,0);
         }
     }
 

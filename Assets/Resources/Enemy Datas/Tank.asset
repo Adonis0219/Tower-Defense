@@ -17,8 +17,8 @@ MonoBehaviour:
   maxSpawnCount: 5
   sprite: {fileID: 21300000, guid: 2081ab43ab5d4b34fa29cc63be5b8750, type: 3}
   scale: 0.7
-  killedDollar: 1
-  killedCoin: 4
+  killedDollar: 4
+  killedCoin: 3
   moveSpeed: 0.5
   baseMaxHp: 5
   baseDmg: 1

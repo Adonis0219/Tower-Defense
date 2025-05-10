@@ -3,8 +3,8 @@ using UnityEngine;
 public enum Achive
 {
     UnlockWorkShop, 
-    UnlockLabs,
     UnlockCards,
+    UnlockLabs,
     Length
 }
 
@@ -15,8 +15,8 @@ public class UnlockConditions
     /// 한 판하면 열림
     /// </summary>
     public const int BEST_WAVE_WORKSHOP = 0;
-    public const float LAB_OPEN_COIN = 100;
-    public const int BEST_WAVE_CARD = 80;
+    public const int BEST_WAVE_CARD = 10;
+    public const float BEST_WAVE_LAB = 30;
 }
 
 public class AchiveManager : MonoBehaviour
@@ -39,5 +39,16 @@ public class AchiveManager : MonoBehaviour
     {
         lockPanels[index].SetActive(false);
         unlockPanels[index].SetActive(true);
+
+        ChkTuto(index);
+    }
+
+    void ChkTuto(int index)
+    {
+        // 이미 해당 튜토리얼을 완료 했다면 얼리
+        if ((PlayDataManager.Instance.playData.alreadyTuto >> index) % 2 == 1)
+            return;
+
+        TutorialManager.instance.tutoArrows[index].SetActive(true);
     }
 }

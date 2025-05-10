@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Atk Formula
-public partial class PlayDataManager : MonoBehaviour
+public partial class PlayDataManager : Singleton<PlayDataManager>
 {
     // AtkFormula 함수만 가지고 있음
 
@@ -85,11 +85,11 @@ public partial class PlayDataManager : MonoBehaviour
 
         if (type == SceneType.Main)
         {
-            range = 20 + (.5f * playData.atkCoinLevels[(int)AtkUpgradeType.범위]);
+            range = 25 + (.5f * playData.atkCoinLevels[(int)AtkUpgradeType.범위]);
         }
         else
         {
-            range = 20 + .5f * (playData.atkCoinLevels[(int)AtkUpgradeType.범위]
+            range = 25 + .5f * (playData.atkCoinLevels[(int)AtkUpgradeType.범위]
                 + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.범위]);
         }
 
@@ -107,7 +107,7 @@ public partial class PlayDataManager : MonoBehaviour
     }
 }
 
-public partial class PlayDataManager : MonoBehaviour
+public partial class PlayDataManager : Singleton<PlayDataManager>
 {
     // DefFormula 함수만 가지고 있음
     public float HpFormula(SceneType type)
@@ -185,7 +185,7 @@ public partial class PlayDataManager : MonoBehaviour
     }
 }
 
-public partial class PlayDataManager : MonoBehaviour
+public partial class PlayDataManager : Singleton<PlayDataManager>
 {
     // UtilFormula 함수만 가지고 있음
     public float DollarBonusFormula(SceneType type)
