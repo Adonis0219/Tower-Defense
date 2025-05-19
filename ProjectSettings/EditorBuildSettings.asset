@@ -9,15 +9,15 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/1. Main Scene.unity
+    path: Assets/01. Scenes/1. Main Scene.unity
     guid: f47ef2e5b43f38a4f88111b0f751e785
   - enabled: 1
-    path: Assets/Scenes/2. Game Scene.unity
+    path: Assets/01. Scenes/2. Game Scene.unity
     guid: caa0dac5144f6eb41ba6272d49043134
   - enabled: 0
-    path: Assets/Scenes/Test.unity
+    path: Assets/01. Scenes/Test.unity
     guid: 0d231d030f1499c41966a4d7370d8e17
   - enabled: 0
-    path: Assets/Scenes/Test2.unity
+    path: Assets/01. Scenes/Test2.unity
     guid: a427c675346cd0749b3019c6de60ffc5
   m_configObjects: {}
