@@ -21,6 +21,7 @@ public class PlayData
     // 메인화면의 판넬 해제를 위한 총 벌어들인 코인 수
     public float totalEarnCoin = 0;
     
+    [Header("# WorkShop")]
     // 공격 업그레이드 타입의 개수만큼 배열 
     public int[] atkCoinLevels = new int[(int)AtkUpgradeType.Length];
     public int[] defCoinLevels = new int[(int)DefUpgradeType.Length];

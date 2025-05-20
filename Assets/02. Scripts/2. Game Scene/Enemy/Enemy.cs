@@ -90,9 +90,7 @@ public class Enemy : PoolObject, IHit
     {
         if (player == null || isKnockBack) return;
 
-
         range = Vector2.Distance(player.transform.position, this.transform.position);
-
 
         // 슬로우 카드 장착돼있고
         // 슬로우가 안 걸렸고, 범위 내에 들어오면 슬로우 적용
