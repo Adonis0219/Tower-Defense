@@ -5,6 +5,7 @@ public partial class PlayDataManager : Singleton<PlayDataManager>
 {
     // AtkFormula 함수만 가지고 있음
 
+    // ReSharper disable Unity.PerformanceAnalysis
     public float DmgFormula(SceneType type)
     {
         float damage = 0;
@@ -20,7 +21,8 @@ public partial class PlayDataManager : Singleton<PlayDataManager>
         }
 
         // 연구 적용
-        damage *= (1 + .02f * playData.labResearchLevels[(int)ResearchType.Attak, (int)AtkRschType.데미지]);
+        damage *= (1 + .02f * playData.labResearchLevels
+            [(int)ResearchType.Attak, (int)AtkRschType.데미지]);
 
         // 카드 적용
         if (CheckCard(CardID.대미지))

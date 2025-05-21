@@ -291,13 +291,16 @@ public class MPanelManager : MonoBehaviour
         switch (myType)
         {
             case (int)PanelType.Attack:
-                AddUpBtSet(ATK_UPGRADE, ATK_UNLOCK, (int)PanelType.Attack, createCount, atkUpBt, atkContent);
+                AddUpBtSet(ATK_UPGRADE, ATK_UNLOCK, 
+                    (int)PanelType.Attack, createCount, atkUpBt, atkContent);
                 break;
             case (int)PanelType.Defense:
-                AddUpBtSet(DEF_UPGRADE, DEF_UNLOCK, (int)PanelType.Defense, createCount, defUpBt, defContent);
+                AddUpBtSet(DEF_UPGRADE, DEF_UNLOCK, 
+                    (int)PanelType.Defense, createCount, defUpBt, defContent);
                 break;
             case (int)PanelType.Utility:
-                AddUpBtSet(UTIL_UPGRADE, UTIL_UNLOCK, (int)PanelType.Utility, createCount, utilUpBt, utilContent);
+                AddUpBtSet(UTIL_UPGRADE, UTIL_UNLOCK, 
+                    (int)PanelType.Utility, createCount, utilUpBt, utilContent);
                 break;
             default:
                 break;

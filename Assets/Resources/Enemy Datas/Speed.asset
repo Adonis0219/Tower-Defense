@@ -15,6 +15,7 @@ MonoBehaviour:
   type: 2
   spawnRate: 3.15
   maxSpawnCount: 25
+  appearWave: 5
   sprite: {fileID: 21300000, guid: a7b7460cef16fa2498b34c6de96bbf15, type: 3}
   scale: 0.25
   killedDollar: 1

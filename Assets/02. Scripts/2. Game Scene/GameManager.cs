@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using TMPro;
 using UnityEngine;
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     int spawnCount;
 
-    Coroutine[] enemyCorus = new Coroutine[4];
+    private List<Coroutine> enemyCorus = new List<Coroutine>();
 
     [Header("   # BOSS")]
     [SerializeField]
@@ -278,13 +279,12 @@ public class GameManager : MonoBehaviour
             isWait = value;
 
             if (!IsWait)
-                //StartCoroutine(OnSpawnEnemy(1));
                 StartSpawn();
             else
                 StopSpawn();
         }
     }
-
+    
     [HideInInspector]
     public float waveHpFactor = 2.5f;
 
@@ -433,11 +433,13 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void InitLevelSet()
     {
+        // 해금된 업그레이드들의 개수가 각각 다르므로
+        // PlayDataManager의 개수만큼 배열의 길이 설정
         atkDollarLevels = new int[(int)AtkUpgradeType.Length];
         defDollarLevels = new int[(int)DefUpgradeType.Length];
         utilDollarLevels = new int[(int)UtilUpgradeType.Length];
     }
-  
+
     /// <summary>
     /// 소환 시작
     /// </summary>
@@ -445,7 +447,11 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            enemyCorus[i] = StartCoroutine(OnSpawnEnemy(i));
+            // 각 타입의 적의 소환 웨이브가 아니라면 리턴
+            if (Wave >= enemyDatas[i].appearWave)
+            {
+                enemyCorus.Add(StartCoroutine(OnSpawnEnemy(i)));
+            }
         }
     }
 
@@ -454,12 +460,13 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void StopSpawn()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < enemyCorus.Count; i++)
         {
             StopCoroutine(enemyCorus[i]);
         }
     }
 
+    
     /// <summary>
     /// 각 적을 소환해주는 코루틴
     /// </summary>
@@ -468,11 +475,14 @@ public class GameManager : MonoBehaviour
     IEnumerator OnSpawnEnemy(int index)
     {
         EnemyData data = enemyDatas[index];
-
+        
+        // 스폰수 공식 대입
         spawnCount = Mathf.FloorToInt(data.spawnRate * Mathf.Pow(wave, .23f));
 
+        // 최대 스폰 수 설정
         if (spawnCount > data.maxSpawnCount) spawnCount = data.maxSpawnCount;
 
+        // 소환 주기 설정
         WaitForSeconds wait = new WaitForSeconds((float)(WaveTime + 1) / spawnCount);
 
         // 대기 시간이 아니라면 계속 소환
@@ -483,7 +493,7 @@ public class GameManager : MonoBehaviour
             SpawnEnemy(index);
         }
     }
-
+    
     /// <summary>
     /// 적을 소환해주는 함수
     /// </summary>

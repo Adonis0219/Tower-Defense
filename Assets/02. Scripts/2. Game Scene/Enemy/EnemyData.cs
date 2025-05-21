@@ -10,6 +10,7 @@ public class EnemyData : ScriptableObject
     public PoolObejectType type;
     public float spawnRate;
     public int maxSpawnCount;
+    public int appearWave;
     public Sprite sprite;
     public float scale;
     

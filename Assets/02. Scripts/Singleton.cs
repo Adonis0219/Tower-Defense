@@ -20,11 +20,9 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 {
                     GameObject obj = new GameObject(typeof(T).Name, typeof(T));
                     instance = obj.GetComponent<T>();
-
                     DontDestroyOnLoad(obj);
                 }
             }
-
             return instance;
         }
     }
@@ -35,7 +33,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             instance = (T)FindObjectOfType(typeof(T));
             // 파괴 불가 오브젝트로 만들기
-            // 생성자에서 호출 불가
             // 부모가 존재하고, 최상위가 존재한다면
             if (transform.parent != null && transform.root != null)
             {
@@ -46,8 +43,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 DontDestroyOnLoad(this.gameObject);
             }
         }
-        // 항상 하나만 존재하게 하기 위해
-        // 이미 만들어진 instance가 존재
+        // 항상 하나만 존재하게 하기 위해 이미 만들어진 instance가 존재
         else
         {
             Destroy(this.gameObject);

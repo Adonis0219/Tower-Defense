@@ -76,7 +76,8 @@ public class AtkUpgradeButton : UpgradeButton
         GameManager.instance.CurDollar -= SetCost(0);
 
         // 해당 업그레이드 버튼에 해당하는 달러 레벨 올려주기
-        GameManager.instance.atkDollarLevels[(int)myUpType] += GameManager.instance.curMultis[0];
+        GameManager.instance.atkDollarLevels[(int)myUpType] 
+            += GameManager.instance.curMultis[0];
 
         // 업그레이드 비용 올려주기
         for (int i = 0; i < GameManager.instance.curMultis[0]; i++)

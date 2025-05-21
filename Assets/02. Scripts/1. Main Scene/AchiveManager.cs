@@ -15,8 +15,10 @@ public class UnlockConditions
     /// 한 판하면 열림
     /// </summary>
     public const int BEST_WAVE_WORKSHOP = 0;
-    public const int BEST_WAVE_CARD = 10;
-    public const float BEST_WAVE_LAB = 30;
+    public const int BEST_WAVE_CARD = 0;
+    //public const int BEST_WAVE_CARD = 10;
+    public const float BEST_WAVE_LAB = 0;
+    //public const float BEST_WAVE_LAB = 30;
 }
 
 public class AchiveManager : MonoBehaviour

@@ -20,7 +20,7 @@ MonoBehaviour:
   isGet: 0
   weight: 15
   myColor: {r: 0, g: 0, b: 0, a: 0}
-  curLv: 0
+  curLv: 1
   MaxLv: 6
   value:
   - 13
