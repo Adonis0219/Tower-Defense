@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class DroppableUI : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler
 {
-    Image img;
+    public Image img;
     RectTransform rect;
     Color oriColor;     // 카드 슬롯의 원래 색상
 

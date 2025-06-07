@@ -12,10 +12,12 @@ public partial class PlayDataManager : Singleton<PlayDataManager>
 
         if (type == SceneType.Main)
         {
+            // 작업장 적용
             damage = 3 * (playData.atkCoinLevels[(int)AtkUpgradeType.데미지] + 1);
         }
         else
         {
+            // 작업장 및 게임 내 업그레이드 적용
             damage = 3 * (playData.atkCoinLevels[(int)AtkUpgradeType.데미지]
                + GameManager.instance.atkDollarLevels[(int)AtkUpgradeType.데미지] + 1);
         }
@@ -30,7 +32,6 @@ public partial class PlayDataManager : Singleton<PlayDataManager>
             CardData myCard = CardManager.instance.cardDatas[(int)CardID.대미지];
             damage *= myCard.value[myCard.curLv];
         }
-
         return damage;
     }
 

@@ -34,6 +34,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
         // 드래그 할 때 남을 카드를 복제
         InstantiateCard();
+        // 드래그하는 카드의 변경 내용
         DragCardSet();        
     }
 

@@ -193,8 +193,10 @@ public partial class PlayDataManager : Singleton<PlayDataManager>
         if (playData.labRemainTime[labIndex] > 0)
         {
             // 시간 갭 = 현재시간 - 시작 시간
+            // 재접속 시에도 따로 계산할 필요 없음
             elapsedTime = DateTime.Now - playData.startTimes[labIndex];
 
+            // 각 연구실 남은 시간 = 총 필요시간 - 시간 갭
             playData.labRemainTime[labIndex] = playData.fixedLabRemainTime[labIndex] 
                 - (float)elapsedTime.TotalSeconds;
 

@@ -6,7 +6,8 @@ public enum CardRarity
 }
 
 [System.Serializable]
-[CreateAssetMenu(fileName = "Card Data", menuName = "Scriptable Object/Card Data")]
+[CreateAssetMenu(fileName = "Card Data", 
+    menuName = "Scriptable Object/Card Data")]
 public class CardData : ScriptableObject
 {
     [Header("# Card Info")]
@@ -15,7 +16,7 @@ public class CardData : ScriptableObject
     public string cardDesc;
     public Sprite cardIcon;
     public CardRarity rarity;
-    public bool isGet = false;              // 얻은 적이 있는지
+    public bool isGet = false;
     public float weight;
     public Color myColor;
 
@@ -23,5 +24,5 @@ public class CardData : ScriptableObject
     public int curLv;
     public int MaxLv;
     public float[] value;
-    public int curCardCount;        // 현재 가지고 있는 카드 개수
+    public int curCardCount;
 }
